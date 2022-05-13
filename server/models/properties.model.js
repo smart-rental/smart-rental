@@ -7,7 +7,10 @@ const propertiesModel = mongoose.Schema({
     propertyValue: { type: String, required: true },
     rentPerMonth: { type: Number, required: true },
     maxCapacity: { type: Number, required: true },
-    tenant: { type: String, default: "" },
+    propertyImage: { type: String, required: true },
+    parkingStalls: { type: Number, required: true },
+    pets: { type: Boolean, required: true },
+    utilities: { type: Boolean, required: true },
     contract: [
         {
             image: String
