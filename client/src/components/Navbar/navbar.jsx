@@ -9,30 +9,20 @@ import MenuIcon from '@mui/icons-material/Menu';
 import Container from '@mui/material/Container';
 import Button from '@mui/material/Button';
 import MenuItem from '@mui/material/MenuItem';
-import AdbIcon from '@mui/icons-material/Adb';
 import { Link } from 'react-router-dom';
 
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 const ResponsiveAppBar = () => {
     const [anchorElNav, setAnchorElNav] = React.useState(null);
-    const [anchorElUser, setAnchorElUser] = React.useState(null);
 
     const linkStyling = {color: "white", textDecoration: "none"};
     
     const handleOpenNavMenu = (event) => {
         setAnchorElNav(event.currentTarget);
     };
-    const handleOpenUserMenu = (event) => {
-        setAnchorElUser(event.currentTarget);
-    };
 
     const handleCloseNavMenu = () => {
         setAnchorElNav(null);
-    };
-
-    const handleCloseUserMenu = () => {
-        setAnchorElUser(null);
     };
 
     return (
@@ -112,21 +102,29 @@ const ResponsiveAppBar = () => {
                         <Link to="/" style={linkStyling}>Rental</Link>
                     </Typography>
                     <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-                        <Button>
-                            <Typography textAlign="center" fontFamily="Noto Sans"><Link style={linkStyling} to="/">Who are we?</Link></Typography>
-                        </Button>
-                        <Button>
-                            <Typography textAlign="center" fontFamily="Noto Sans"><Link style={linkStyling} to="/">Info</Link></Typography>
-                        </Button>
+                        <Link style={linkStyling} to="/">
+                            <Button style={{ marginRight: "20px" }} size="large">
+                                <Typography textAlign="center" style={{color: "white"}} fontFamily="Noto Sans">Who are we?</Typography>
+                            </Button>
+                        </Link>
+                        <Link style={linkStyling} to="/">
+                            <Button style={{ marginRight: "20px" }} size="large">
+                                <Typography textAlign="center" style={{color: "white"}} fontFamily="Noto Sans">Info</Typography>
+                            </Button>
+                        </Link>
                     </Box>
 
                     <Box sx={{ flexGrow: 0 }}>
-                        <Button variant="contained" color="secondary" style={{ marginRight: "20px" }} size="large">
-                            <Typography textAlign="center" fontFamily="Noto Sans"><Link style={linkStyling} to="/login">Login</Link></Typography>
-                        </Button>
-                        <Button variant="contained"  size="large">
-                            <Typography textAlign="center" fontFamily="Noto Sans"><Link style={linkStyling} to="/signup">Sign up</Link></Typography>
-                        </Button>
+                        <Link style={linkStyling} to="/login">
+                            <Button variant="contained"  color="secondary" style={{ marginRight: "20px" }} size="large">
+                                <Typography textAlign="center" style={{color: "white"}} fontFamily="Noto Sans">Login</Typography>
+                            </Button>
+                        </Link>
+                            <Link style={linkStyling} to="/signup">
+                                <Button variant="contained"  size="large">
+                                    <Typography textAlign="center" fontFamily="Noto Sans">Sign up</Typography>
+                                </Button>
+                            </Link>
                     </Box>
                 </Toolbar>
             </Container>

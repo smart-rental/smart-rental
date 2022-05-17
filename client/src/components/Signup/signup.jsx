@@ -8,15 +8,18 @@ import {
     Typography,
     InputAdornment,
     OutlinedInput,
-    InputLabel, FormControl
+    Radio,
+    InputLabel, FormControl, FilledInput, FormControlLabel, RadioGroup, FormLabel
 } from "@mui/material";
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { Link } from "react-router-dom";
 import axios from "axios";
 import IconButton from "@mui/material/IconButton";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { useNavigate } from "react-router-dom";
 
 const Signup = () => {
+    const navigate = useNavigate();
     const [values, setValues] = useState({
         name: '',
         email: '',
@@ -29,8 +32,8 @@ const Signup = () => {
     
     const paperStyle = {
         padding: 20,
-        height: "70vh",
-        width: 280,
+        height: "80vh",
+        width: 300,
         margin: "20px auto"
     }
     
@@ -50,7 +53,7 @@ const Signup = () => {
             showPassword: !values.showPassword,
         });
     };
-
+    
     const handleMouseDownPassword = (event) => {
         event.preventDefault();
     };
@@ -61,16 +64,24 @@ const Signup = () => {
 
     const submitLogin = (e) => {
         e.preventDefault();
-        const { email, password } = values;
+        const { name, email, password, userType, phoneNumber } = values;
         const userLogin = {
+            name,
             email,
-            password
+            phoneNumber,
+            password,
+            userType
+
         }
-        //Call the backend
-        axios.post('http://localhost:5000/api/auth', userLogin)
-            .then(res => { console.log(res.data.message); })
-            .catch(e => { console.log(e.message); });
-        
+        if (values.password === values.confirmPassword) {
+            //Call the backend
+            axios.post('http://localhost:5000/api/users', userLogin)
+                .then(res => { console.log(res.data.message); navigate("/login"); })
+                .catch(e => { console.log(e); });
+        } else { 
+            throw `Parameter is not the same`;
+        }
+
     }
 
     return (
@@ -87,13 +98,13 @@ const Signup = () => {
                     </FormControl>
                     <FormControl style={{ marginBottom: "10px", marginTop: "10px" }} fullWidth>
                         <InputLabel htmlFor="outlined-adornment-password">Name</InputLabel>
-                        <OutlinedInput variant="standard" value={values.email} onChange={handleChange('name')} label="Name" placeholder="Enter name" fullWidth required/>
+                        <OutlinedInput variant="standard" value={values.name} onChange={handleChange('name')} label="Name" placeholder="Enter name" fullWidth required/>
                     </FormControl>
                     <FormControl style={{ marginBottom: "10px", marginTop: "10px" }} fullWidth>
-                        <InputLabel htmlFor="outlined-adornment-password">Phone Number</InputLabel>
-                        <OutlinedInput variant="standard" value={values.email} onChange={handleChange('email')} label="Email" placeholder="Enter phone number xxxxxxxxxx" fullWidth required/>
+                        <InputLabel htmlFor="outlined-adornment-password">Phone</InputLabel>
+                        <OutlinedInput variant="standard" value={values.phoneNumber} onChange={handleChange('phoneNumber')} label="Email" placeholder="Enter phone number xxxxxxxxxx" fullWidth required/>
                     </FormControl>
-                    <FormControl fullWidth>
+                    <FormControl style={{ marginBottom: "10px", marginTop: "10px" }} fullWidth>
                         <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
                         <OutlinedInput variant="standard" value={values.password} onChange={handleChange('password')} label="Password" placeholder="Enter password"  type={values.showPassword ? 'text' : 'password'}  endAdornment={
                             <InputAdornment position="end">
@@ -108,9 +119,8 @@ const Signup = () => {
                             </InputAdornment>
                         }  fullWidth required/>
                     </FormControl>
-                    <FormControl fullWidth>
-                        <InputLabel htmlFor="outlined-adornment-password">Re-Enter Password</InputLabel>
-                        <OutlinedInput variant="standard" value={values.password} onChange={handleChange('password')} label="Password" placeholder="Enter password"  type={values.showPassword ? 'text' : 'password'}  endAdornment={
+                    <FormControl style={{ marginBottom: "10px", marginTop: "10px" }} fullWidth>
+                        <OutlinedInput variant="standard" value={values.confirmPassword} onChange={handleChange('confirmPassword')} label="Password" placeholder="Re-enter password"  type={values.showPassword ? 'text' : 'password'}  endAdornment={
                             <InputAdornment position="end">
                                 <IconButton
                                     aria-label="toggle password visibility"
@@ -123,15 +133,24 @@ const Signup = () => {
                             </InputAdornment>
                         }  fullWidth required/>
                     </FormControl>
-                    <FormControl style={{ marginBottom: "10px", marginTop: "10px" }} fullWidth>
-                        <InputLabel htmlFor="outlined-adornment-password">UserType</InputLabel>
-                        <OutlinedInput variant="standard" value={values.email} onChange={handleChange('email')} label="Email" placeholder="Enter user type" fullWidth required/>
+                    <FormControl>
+                        <FormLabel id="demo-controlled-radio-buttons-group">UserType</FormLabel>
+                        <RadioGroup
+                            aria-labelledby="demo-controlled-radio-buttons-group"
+                            name="controlled-radio-buttons-group"
+                            value={values.userType}
+                            row
+                            onChange={handleChange('userType')}
+                        >
+                            <FormControlLabel value="Landlord" control={<Radio />} label="Landlord" />
+                            <FormControlLabel value="Tenant" control={<Radio />} label="Tenant" />
+                        </RadioGroup>
                     </FormControl>
                     <Button type="submit" color="primary" variant="contained" style={btnStyle} fullWidth><Typography fontFamily="Noto Sans">Sign up</Typography></Button>
                     <Typography fontFamily="Noto Sans">
-                        Don't have an account? &nbsp;
-                        <Link to="/signup" style={linkStyling}>
-                            Sign up
+                        Already have an account? &nbsp;
+                        <Link to="/login" style={linkStyling}>
+                            Sign in
                         </Link>
                     </Typography>
                 </Paper>

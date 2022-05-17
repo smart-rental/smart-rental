@@ -3,7 +3,6 @@ import {
     Grid,
     Paper,
     Avatar,
-    TextField,
     Button,
     Typography,
     InputAdornment,
@@ -15,8 +14,11 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import IconButton from "@mui/material/IconButton";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { useNavigate } from "react-router-dom";
 
 const Signin = () => {
+    const navigate = useNavigate();
+    
     const [values, setValues] = useState({
         email: '',
         password: '',
@@ -62,9 +64,9 @@ const Signin = () => {
         }
         //Call the backend
         axios.post('http://localhost:5000/api/auth', userLogin)
-            .then(res => { console.log(res.data.message); })
+            .then(res => { console.log(res.data.message); navigate("/signup"); })
             .catch(e => { console.log(e.message); });
-        window.location = "/signup";
+        
     }
 
     return (
