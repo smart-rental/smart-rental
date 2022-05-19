@@ -1,29 +1,41 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
-    Grid,
-    Paper,
     Avatar,
     Button,
-    Typography,
+    FormControl,
+    Grid,
     InputAdornment,
+    InputLabel,
     OutlinedInput,
-    InputLabel, FormControl
+    Paper,
+    Typography
 } from "@mui/material";
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import { Link } from "react-router-dom";
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import IconButton from "@mui/material/IconButton";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
-import { useNavigate } from "react-router-dom";
 
 const Signin = () => {
     const navigate = useNavigate();
-    
     const [values, setValues] = useState({
         email: '',
         password: '',
         showPassword: false
-    })
+    });
+    const [users, setUsers] = useState([]);
+
+    useEffect(() => {
+        axios.get("http://localhost:5000/api/auth")
+            .then(res => { 
+                if (res.data.length > 0) {
+                    setUsers(res.data);
+                }
+            })
+            .catch((e) => {
+                console.log(e);});
+    });
+
     const paperStyle = { 
         padding: 20,
         height: "70vh",
@@ -62,9 +74,10 @@ const Signin = () => {
             email,
             password
         }
+        let userInfo = users.find(users => users.email === values.email);
         //Call the backend
         axios.post('http://localhost:5000/api/auth', userLogin)
-            .then(res => { console.log(res.data.message); navigate("/signup"); })
+            .then(res => { console.log(res.data.message); navigate(`/landlord/${userInfo._id}`); })
             .catch(e => { console.log(e.message); });
         
     }

@@ -3,6 +3,7 @@ import Navbar from '../src/components/Navbar/navbar';
 import Login from './components/Signin/signin';
 import Signup from '../src/components/Signup/signup';
 import Home from '../src/components/Home/home';
+import Landlord from './components/Landlord/landlord';
 import { createTheme } from "@mui/material";
 import { red } from "@mui/material/colors";
 import { ThemeProvider } from "@emotion/react";
@@ -42,6 +43,8 @@ const App = function () {
                 <Routes>
                     <Route path="/" element={<Home/>}/>
                     <Route path="/login" element={<Login/>}/>
+                    <Route path="/landlord/:id" element={<Landlord/>}/>
+                    <Route path="/landlord" element={<Landlord/>}/>
                     <Route path="/signup" element={<Signup/>}/>
                 </Routes>
             </BrowserRouter>

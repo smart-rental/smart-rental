@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 
 const propertiesModel = mongoose.Schema({
     location: { type: String, required: true },
-    owner: { type: String, required: true },
+    owner: { type: mongoose.Types.ObjectId, ref: "landlord" },
     propertyCreated: { type: Date, required: true },
     propertyValue: { type: String, required: true },
     rentPerMonth: { type: Number, required: true },
