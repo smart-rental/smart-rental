@@ -77,7 +77,7 @@ const Signin = () => {
         let userInfo = users.find(users => users.email === values.email);
         //Call the backend
         axios.post('http://localhost:5000/api/auth', userLogin)
-            .then(res => { console.log(res.data.message); navigate(`/landlord/${userInfo._id}`); })
+            .then(res => { console.log(res.data.message); navigate(`/addProperty/${userInfo._id}`); })
             .catch(e => { console.log(e.message); });
         
     }

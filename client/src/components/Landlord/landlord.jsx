@@ -23,14 +23,17 @@ const rows = [
     createData('location', 'John Foo', '2009-05-20T09:00:00Z', 1000, 4, 10, 'images', 6, true, true, 'contract'),
 ];
 
+const table = {
+    margin: "100px auto"
+}
 const checkOrX = (bool) => { 
     return bool ? <CheckCircleIcon/> : <CancelIcon/>
 }
 
 export default function BasicTable() {
     return (
-        <TableContainer component={Paper}>
-            <Table sx={{ minWidth: 650 }} aria-label="simple table">
+        <TableContainer component={Paper} style={table}>
+            <Table sx={{ minWidth: 650 }} aria-label="simple table" >
                 <TableHead>
                     <TableRow>
                         <TableCell>Location</TableCell>

@@ -81,6 +81,12 @@ const ResponsiveAppBar = () => {
                             <MenuItem>
                                 <Typography textAlign="center"><Link style={{ color: "black", textDecoration: "none" }} to="/">Info</Link></Typography>
                             </MenuItem>
+                            <MenuItem>
+                                <Typography textAlign="center"><Link style={{ color: "black", textDecoration: "none" }} to="/landlord">Manage Properties</Link></Typography>
+                            </MenuItem>
+                            <MenuItem>
+                                <Typography textAlign="center"><Link style={{ color: "black", textDecoration: "none" }} to="/addProperty">Add Property</Link></Typography>
+                            </MenuItem>
                         </Menu>
                     </Box>
                     
@@ -110,6 +116,16 @@ const ResponsiveAppBar = () => {
                         <Link style={linkStyling} to="/">
                             <Button style={{ marginRight: "20px" }} size="large">
                                 <Typography textAlign="center" style={{color: "white"}} fontFamily="Noto Sans">Info</Typography>
+                            </Button>
+                        </Link>
+                        <Link style={linkStyling} to="/landlord/:id">
+                            <Button style={{ marginRight: "20px" }} size="large">
+                                <Typography textAlign="center" style={{color: "white"}} fontFamily="Noto Sans">Manage Properties</Typography>
+                            </Button>
+                        </Link>
+                        <Link style={linkStyling} to="/addProperty/:id">
+                            <Button style={{ marginRight: "20px" }} size="large">
+                                <Typography textAlign="center" style={{color: "white"}} fontFamily="Noto Sans">Add Property</Typography>
                             </Button>
                         </Link>
                     </Box>

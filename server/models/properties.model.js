@@ -15,7 +15,8 @@ const propertiesModel = mongoose.Schema({
         {
             image: String
         }
-    ]
+    ], 
+    ownerId: { type: String }
 });
 
 let Properties = mongoose.model('Properties', propertiesModel);

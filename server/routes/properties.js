@@ -12,7 +12,8 @@ router.route('/:owner').get((req, res) => {
         .catch(e => res.status(400).json(`Error: ${e}`));
 });
 
-router.route('/').post((req, res) => {
+router.route('/:id').post((req, res) => {
+    const id = req.params._id;
     const { location, owner, propertyCreated, propertyValue, rentPerMonth, maxCapacity, propertyImage, parkingStalls, pets, utilities, tenant, contract } = req.body;
     const newProperty = new Property({
         location,
@@ -26,7 +27,8 @@ router.route('/').post((req, res) => {
         pets,
         utilities,
         tenant,
-        contract
+        contract, 
+        id
     });
 
     newProperty.save()
