@@ -6,18 +6,17 @@ const toId = mongoose.Types.ObjectId;
 
 const router = express.Router();
 
-router.route('/:owner').get((req, res) => {
-    Property.find({ owner: req.params.owner })
+router.route('/:id').get((req, res) => {
+    Property.find({ id: req.params.id })
         .then(Property => res.json(Property))
         .catch(e => res.status(400).json(`Error: ${e}`));
 });
 
 router.route('/:id').post((req, res) => {
-    const id = req.params._id;
-    const { location, owner, propertyCreated, propertyValue, rentPerMonth, maxCapacity, propertyImage, parkingStalls, pets, utilities, tenant, contract } = req.body;
+    const ownerId = req.params.id;
+    const { location, propertyCreated, propertyValue, rentPerMonth, maxCapacity, propertyImage, parkingStalls, pets, utilities, tenant, contract } = req.body;
     const newProperty = new Property({
         location,
-        owner,
         propertyCreated,
         propertyValue,
         rentPerMonth,
@@ -28,7 +27,7 @@ router.route('/:id').post((req, res) => {
         utilities,
         tenant,
         contract, 
-        id
+        ownerId
     });
 
     newProperty.save()

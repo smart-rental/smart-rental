@@ -5,41 +5,39 @@ import {
     Avatar,
     TextField,
     Button,
-    Typography,
-    InputAdornment,
-    OutlinedInput,
-    Radio,
-    InputLabel, FormControl, FilledInput, FormControlLabel, RadioGroup, FormLabel
+    Typography, InputLabel, Select, FormControl
 } from "@mui/material";
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import { Link } from "react-router-dom";
 import axios from "axios";
-import IconButton from "@mui/material/IconButton";
-import { Input, Visibility, VisibilityOff } from "@mui/icons-material";
-import { useNavigate } from "react-router-dom";
+
+import { useNavigate, useParams } from "react-router-dom";
 import HouseIcon from '@mui/icons-material/House';
 import styled from "@emotion/styled";
-import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
-import { DatePicker } from "@mui/x-date-pickers";
+import MenuItem from "@mui/material/MenuItem";
 
 const AddProperty = () => {
     const navigate = useNavigate();
+    const [utilities, setUtilities] = React.useState('');
+    const [pet, setPets] = React.useState('');
     const [values, setValues] = useState({
         propertyLocation: '',
-        owner: '',
         propertyCreated: new Date(),
         propertyValue: 0,
         rentPerMonth: 0,
         maxCapacity: 0,
         parkingStalls: 0,
         pets: false,
-        utilities: false,
-        tenant: false,
+        tenant: '',
         contract: '',
         propertyImage: '',
     });
+
+    const handleUtilitiesChange = (event) => {
+        setUtilities(event.target.value);
+    };
+
+    const handlePetsChange = (event) => {
+        setPets(event.target.value);
+    };
 
     const paperStyle = {
         padding: 20,
@@ -50,22 +48,9 @@ const AddProperty = () => {
         backgroundColor: "#26a69a"
     }
 
-    const linkStyling = { textDecoration: "none"};
-
     const btnStyle = {
         margin: '8px 0'
     }
-
-    const handleClickShowPassword = () => {
-        setValues({
-            ...values,
-            showPassword: !values.showPassword,
-        });
-    };
-
-    const handleMouseDownPassword = (event) => {
-        event.preventDefault();
-    };
 
     const handleChange = (prop) => (event) => {
         setValues({...values, [prop]: event.target.value});
@@ -74,22 +59,31 @@ const AddProperty = () => {
     const Input = styled('input')({
         display: 'none',
     });
+    
+    let { id } = useParams();
 
     const createProperty = (e) => {
         e.preventDefault();
-        const { name, email, password, userType, phoneNumber } = values;
+        console.log(id);
+        const { propertyLocation, propertyCreated, propertyValue, rentPerMonth, maxCapacity, parkingStalls, tenant, contract, propertyImage } = values;
         const userLogin = {
-            name,
-            email,
-            phoneNumber,
-            password,
-            userType
-
+            location: propertyLocation,
+            propertyCreated,
+            propertyValue,
+            rentPerMonth,
+            maxCapacity,
+            parkingStalls,
+            pets: pet,
+            utilities,
+            tenant,
+            contract,
+            propertyImage,
+            ownerId: id
         }
         if (values.password === values.confirmPassword) {
             //Call the backend
-            axios.post('http://localhost:5000/api/users', userLogin)
-                .then(res => { console.log(res.data.message); navigate("/login"); })
+            axios.post(`http://localhost:5000/api/property/${id}`, userLogin)
+                .then(res => { console.log(res); })
                 .catch(e => { console.log(e); });
         } else {
             throw `Parameter is not the same`;
@@ -110,14 +104,31 @@ const AddProperty = () => {
                         required
                         style={btnStyle}
                         fullWidth
+                        onChange={handleChange('propertyLocation')}
                         id="outlined-required"
                         label="Property Location"
                         defaultValue=""
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
+                    />
+                    <TextField
+                        id="outlined-required"
+                        label="Property Built"
+                        onChange={handleChange('propertyCreated')}
+                        style={btnStyle}
+                        defaultValue=""
+                        type="date"
+                        fullWidth
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
                     />
                     <TextField
                         id="outlined-number"
                         label="Property Value"
                         type="number"
+                        onChange={handleChange('propertyValue')}
                         fullWidth
                         style={btnStyle}
                         InputLabelProps={{
@@ -127,6 +138,7 @@ const AddProperty = () => {
                     <TextField
                         id="outlined-number"
                         label="Rent Per Month"
+                        onChange={handleChange('rentPerMonth')}
                         type="number"
                         fullWidth
                         style={btnStyle}
@@ -137,6 +149,7 @@ const AddProperty = () => {
                     <TextField
                         id="outlined-number"
                         label="Max Capacity"
+                        onChange={handleChange('maxCapacity')}
                         type="number"
                         fullWidth
                         style={btnStyle}
@@ -148,8 +161,54 @@ const AddProperty = () => {
                         id="outlined-number"
                         label="Parking Stalls"
                         type="number"
+                        onChange={handleChange('maxCapacity')}
                         fullWidth
                         style={btnStyle}
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
+                    />
+                    <TextField
+                        fullWidth
+                        id="select"
+                        label="Pets"
+                        value={pet}
+                        style={btnStyle}
+                        onChange={handlePetsChange}
+                        select
+                        required
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
+                        >
+                        <MenuItem value={true}>Allowed</MenuItem>
+                        <MenuItem value={false}>Not Allowed</MenuItem>
+                    </TextField>
+                    <TextField 
+                        fullWidth 
+                        id="select" 
+                        label="Utilities"
+                        value={utilities}
+                        style={btnStyle}
+                        onChange={handleUtilitiesChange}
+                        select
+                        required
+                        InputLabelProps={{
+                            shrink: true,
+                        }}>
+                        <MenuItem value={"Water & Electricity"}>Water & Electricity</MenuItem>
+                        <MenuItem value={"Only Electricity"}>Only Electricity</MenuItem>
+                        <MenuItem value={"Only Water"}>Only Water</MenuItem>
+                        <MenuItem value={"None"}>None</MenuItem>
+                    </TextField>
+                    <TextField
+                        required
+                        fullWidth
+                        style={btnStyle}
+                        id="outlined-required"
+                        label="Tenant"
+                        onChange={handleChange('tenant')}
+                        defaultValue=""
                         InputLabelProps={{
                             shrink: true,
                         }}
@@ -159,37 +218,38 @@ const AddProperty = () => {
                         fullWidth
                         style={btnStyle}
                         id="outlined-required"
-                        label="Pets"
+                        onChange={handleChange('contract')}
+                        label="Upload Contract Images"
                         defaultValue=""
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
                     />
                     <TextField
                         required
                         fullWidth
                         style={btnStyle}
                         id="outlined-required"
-                        label="Utilities"
+                        onChange={handleChange('propertyImage')}
+                        label="Upload Property Images"
                         defaultValue=""
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
                     />
-                    <TextField
-                        required
-                        fullWidth
-                        style={btnStyle}
-                        id="outlined-required"
-                        label="Tenant"
-                        defaultValue=""
-                    />
-                    <label htmlFor="contained-button-file">
-                        <Input accept="image/*" id="contained-button-file" multiple type="file" />
-                        <Button variant="contained" style={{ btnStyle, marginRight: "20px" }} component="span">
-                            Upload Contract Images
-                        </Button>
-                    </label>
-                    <label htmlFor="contained-button-file">
-                        <Input accept="image/*" id="contained-button-file" multiple type="file" />
-                        <Button variant="contained" style={btnStyle} component="span">
-                            Upload Property Images
-                        </Button>
-                    </label>
+                    
+                    {/*<label htmlFor="contained-button-file">*/}
+                    {/*    <Input accept="image/*" id="contained-button-file" multiple type="file" />*/}
+                    {/*    <Button variant="contained" style={{ btnStyle, marginRight: "20px" }} component="span">*/}
+                    {/*        Upload Contract Images*/}
+                    {/*    </Button>*/}
+                    {/*</label>*/}
+                    {/*<label htmlFor="contained-button-file">*/}
+                    {/*    <Input accept="image/*" id="contained-button-file" multiple type="file" />*/}
+                    {/*    <Button variant="contained" style={btnStyle} component="span">*/}
+                    {/*        Upload Property Images*/}
+                    {/*    </Button>*/}
+                    {/*</label>*/}
                     <Button type="submit" color="primary" variant="contained" style={btnStyle} fullWidth>
                         <Typography fontFamily="Noto Sans">Submit</Typography>
                     </Button>
@@ -199,4 +259,4 @@ const AddProperty = () => {
     )
 }
 
-export default AddProperty;
+export default (AddProperty);

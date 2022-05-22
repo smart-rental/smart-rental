@@ -2,7 +2,6 @@ import mongoose from 'mongoose';
 
 const propertiesModel = mongoose.Schema({
     location: { type: String, required: true },
-    owner: { type: String, required: true },
     propertyCreated: { type: Date, required: true },
     propertyValue: { type: String, required: true },
     rentPerMonth: { type: Number, required: true },
@@ -10,13 +9,13 @@ const propertiesModel = mongoose.Schema({
     propertyImage: { type: String, required: true },
     parkingStalls: { type: Number, required: true },
     pets: { type: Boolean, required: true },
-    utilities: { type: Boolean, required: true },
-    contract: [
-        {
-            image: String
-        }
-    ], 
-    ownerId: { type: String }
+    utilities: { type: String, required: true },
+    contract: {
+        type: String,
+        required: true
+    },
+    ownerId: { type: String, required: true },
+    tenant: { type: String , required: true }
 });
 
 let Properties = mongoose.model('Properties', propertiesModel);
