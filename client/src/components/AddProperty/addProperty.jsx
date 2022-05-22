@@ -13,6 +13,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import HouseIcon from '@mui/icons-material/House';
 import styled from "@emotion/styled";
 import MenuItem from "@mui/material/MenuItem";
+import swal from 'sweetalert2';
+import Swal from "sweetalert2";
 
 const AddProperty = () => {
     const navigate = useNavigate();
@@ -62,9 +64,24 @@ const AddProperty = () => {
     
     let { id } = useParams();
 
+    const reset = () => {
+        setValues({
+            propertyLocation: '',
+            propertyCreated: new Date(),
+            propertyValue: 0,
+            rentPerMonth: 0,
+            maxCapacity: 0,
+            parkingStalls: 0,
+            pets: false,
+            tenant: '',
+            contract: '',
+            propertyImage: '',
+        });
+        setPets('');
+        setUtilities('');
+    }
     const createProperty = (e) => {
         e.preventDefault();
-        console.log(id);
         const { propertyLocation, propertyCreated, propertyValue, rentPerMonth, maxCapacity, parkingStalls, tenant, contract, propertyImage } = values;
         const userLogin = {
             location: propertyLocation,
@@ -83,7 +100,7 @@ const AddProperty = () => {
         if (values.password === values.confirmPassword) {
             //Call the backend
             axios.post(`http://localhost:5000/api/property/${id}`, userLogin)
-                .then(res => { console.log(res); })
+                .then(res => { Swal.fire('Congratulations', 'Your property has been added', 'success'); reset()})
                 .catch(e => { console.log(e); });
         } else {
             throw `Parameter is not the same`;
