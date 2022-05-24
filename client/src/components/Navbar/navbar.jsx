@@ -117,16 +117,16 @@ const ResponsiveAppBar = () => {
                                 <Typography textAlign="center" style={{color: "white"}} fontFamily="Noto Sans">Info</Typography>
                             </Button>
                         </Link>
-                        <Link style={linkStyling} to={`/landlord/${userId}`}>
-                            <Button style={{ marginRight: "20px" }} size="large">
-                                <Typography textAlign="center" style={{color: "white"}} fontFamily="Noto Sans">Manage Properties</Typography>
-                            </Button>
-                        </Link>
-                        <Link style={linkStyling} to={`/addProperty/${userId}`}>
+                        {userId !== undefined ? <Link style={linkStyling} to={`/landlord/${userId}`}>
+                                <Button style={{ marginRight: "20px" }} size="large">
+                                    <Typography textAlign="center" style={{color: "white"}} fontFamily="Noto Sans">Manage Properties</Typography>
+                                </Button>
+                            </Link> : ''}
+                        {userId !== undefined ? <Link style={linkStyling} to={`/addProperty/${userId}`}>
                             <Button style={{ marginRight: "20px" }} size="large">
                                 <Typography textAlign="center" style={{color: "white"}} fontFamily="Noto Sans">Add Property</Typography>
                             </Button>
-                        </Link>
+                        </Link> : ''}
                     </Box>
 
                     <Box sx={{ flexGrow: 0 }}>
