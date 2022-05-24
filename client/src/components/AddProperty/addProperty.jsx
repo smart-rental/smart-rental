@@ -13,11 +13,11 @@ import { useNavigate, useParams } from "react-router-dom";
 import HouseIcon from '@mui/icons-material/House';
 import styled from "@emotion/styled";
 import MenuItem from "@mui/material/MenuItem";
-import swal from 'sweetalert2';
 import Swal from "sweetalert2";
 
 const AddProperty = () => {
     const navigate = useNavigate();
+    let { id } = useParams();
     const [utilities, setUtilities] = React.useState('');
     const [pet, setPets] = React.useState('');
     const [values, setValues] = useState({
@@ -62,7 +62,6 @@ const AddProperty = () => {
         display: 'none',
     });
     
-    let { id } = useParams();
 
     const reset = () => {
         setValues({
@@ -101,7 +100,7 @@ const AddProperty = () => {
             //Call the backend
             axios.post(`http://localhost:5000/api/property/${id}`, userLogin)
                 .then(res => { Swal.fire('Congratulations', 'Your property has been added', 'success'); reset()})
-                .catch(e => { console.log(e); });
+                .catch(e => { Swal.fire('Try Again', 'Your property has not been added', 'error'); });
         } else {
             throw `Parameter is not the same`;
         }

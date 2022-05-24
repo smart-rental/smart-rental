@@ -33,7 +33,7 @@ const Signin = () => {
                 }
             })
             .catch((e) => {
-                console.log(e);});
+                });
     });
 
     const paperStyle = { 
@@ -75,6 +75,7 @@ const Signin = () => {
             password
         }
         let userInfo = users.find(users => users.email === values.email);
+        localStorage.setItem('id', userInfo._id);
         //Call the backend
         axios.post('http://localhost:5000/api/auth', userLogin)
             .then(res => { console.log(res.data.message); navigate(`/addProperty/${userInfo._id}`); })

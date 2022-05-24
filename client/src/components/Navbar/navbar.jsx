@@ -9,14 +9,13 @@ import MenuIcon from '@mui/icons-material/Menu';
 import Container from '@mui/material/Container';
 import Button from '@mui/material/Button';
 import MenuItem from '@mui/material/MenuItem';
-import { Link } from 'react-router-dom';
-
+import { Link } from "react-router-dom";
 
 const ResponsiveAppBar = () => {
     const [anchorElNav, setAnchorElNav] = React.useState(null);
-
     const linkStyling = {color: "white", textDecoration: "none"};
-    
+    const userId = localStorage.getItem('id');
+    console.log(userId);
     const handleOpenNavMenu = (event) => {
         setAnchorElNav(event.currentTarget);
     };
@@ -118,12 +117,12 @@ const ResponsiveAppBar = () => {
                                 <Typography textAlign="center" style={{color: "white"}} fontFamily="Noto Sans">Info</Typography>
                             </Button>
                         </Link>
-                        <Link style={linkStyling} to="/landlord/:id">
+                        <Link style={linkStyling} to={`/landlord/${userId}`}>
                             <Button style={{ marginRight: "20px" }} size="large">
                                 <Typography textAlign="center" style={{color: "white"}} fontFamily="Noto Sans">Manage Properties</Typography>
                             </Button>
                         </Link>
-                        <Link style={linkStyling} to="/addProperty/:id">
+                        <Link style={linkStyling} to={`/addProperty/${userId}`}>
                             <Button style={{ marginRight: "20px" }} size="large">
                                 <Typography textAlign="center" style={{color: "white"}} fontFamily="Noto Sans">Add Property</Typography>
                             </Button>
