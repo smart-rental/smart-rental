@@ -10,6 +10,7 @@ import { red } from "@mui/material/colors";
 import { ThemeProvider } from "@emotion/react";
 import axios from "axios";
 import { useState } from "react";
+import { useDispatch } from 'react-redux';
 
 
 const customTheme = createTheme({
@@ -41,6 +42,8 @@ const customTheme = createTheme({
 
 
 const App = function () { 
+    const [currentId, setCurrentId] = useState(0); 
+    const dispatch = useDispatch();
     return (
         <ThemeProvider theme={customTheme}>
             <BrowserRouter>

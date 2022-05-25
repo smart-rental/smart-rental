@@ -5,32 +5,30 @@ import {
     Avatar,
     TextField,
     Button,
-    Typography, InputLabel, Select, FormControl
+    Typography
 } from "@mui/material";
-import axios from "axios";
-
-import { useNavigate, useParams } from "react-router-dom";
-import HouseIcon from '@mui/icons-material/House';
+import { useParams } from "react-router-dom";
+import HouseIcon from "@mui/icons-material/House";
 import styled from "@emotion/styled";
 import MenuItem from "@mui/material/MenuItem";
 import Swal from "sweetalert2";
+import { addProperty } from "../../api";
 
 const AddProperty = () => {
-    const navigate = useNavigate();
     let { id } = useParams();
-    const [utilities, setUtilities] = React.useState('');
-    const [pet, setPets] = React.useState('');
+    const [utilities, setUtilities] = React.useState("");
+    const [pet, setPets] = React.useState("");
     const [values, setValues] = useState({
-        propertyLocation: '',
+        propertyLocation: "",
         propertyCreated: new Date(),
         propertyValue: 0,
         rentPerMonth: 0,
         maxCapacity: 0,
         parkingStalls: 0,
         pets: false,
-        tenant: '',
-        contract: '',
-        propertyImage: '',
+        tenant: "",
+        contract: "",
+        propertyImage: ""
     });
 
     const handleUtilitiesChange = (event) => {
@@ -44,45 +42,55 @@ const AddProperty = () => {
     const paperStyle = {
         padding: 20,
         margin: "20px auto"
-    }
+    };
 
     const avatarStyle = {
         backgroundColor: "#26a69a"
-    }
+    };
 
     const btnStyle = {
-        margin: '8px 0'
-    }
+        margin: "8px 0"
+    };
 
     const handleChange = (prop) => (event) => {
-        setValues({...values, [prop]: event.target.value});
-    }
+        setValues({ ...values, [prop]: event.target.value });
+    };
 
-    const Input = styled('input')({
-        display: 'none',
+    const Input = styled("input")({
+        display: "none"
     });
-    
+
 
     const reset = () => {
         setValues({
-            propertyLocation: '',
+            propertyLocation: "",
             propertyCreated: new Date(),
             propertyValue: 0,
             rentPerMonth: 0,
             maxCapacity: 0,
             parkingStalls: 0,
             pets: false,
-            tenant: '',
-            contract: '',
-            propertyImage: '',
+            tenant: "",
+            contract: "",
+            propertyImage: ""
         });
-        setPets('');
-        setUtilities('');
-    }
+        setPets("");
+        setUtilities("");
+    };
     const createProperty = (e) => {
         e.preventDefault();
-        const { propertyLocation, propertyCreated, propertyValue, rentPerMonth, maxCapacity, parkingStalls, tenant, contract, propertyImage } = values;
-        const userLogin = {
+        const {
+            propertyLocation,
+            propertyCreated,
+            propertyValue,
+            rentPerMonth,
+            maxCapacity,
+            parkingStalls,
+            tenant,
+            contract,
+            propertyImage
+        } = values;
+        const propertyToAdd = {
             location: propertyLocation,
             propertyCreated,
             propertyValue,
@@ -95,17 +103,16 @@ const AddProperty = () => {
             contract,
             propertyImage,
             ownerId: id
-        }
-        if (values.password === values.confirmPassword) {
-            //Call the backend
-            axios.post(`http://localhost:5000/api/property/${id}`, userLogin)
-                .then(res => { Swal.fire('Congratulations', 'Your property has been added', 'success'); reset()})
-                .catch(e => { Swal.fire('Try Again', 'Your property has not been added', 'error'); });
-        } else {
-            throw `Parameter is not the same`;
-        }
-
-    }
+        };
+        addProperty(id, propertyToAdd)
+            .then(() => {
+                Swal.fire("Congratulations", "Your property has been added", "success");
+                reset();
+            })
+            .catch(() => {
+                Swal.fire("Try Again", "Your property has not been added", "error");
+            });
+    };
 
     return (
         <form onSubmit={createProperty}>
@@ -114,74 +121,75 @@ const AddProperty = () => {
                     <Grid align="center">
                         <Avatar style={avatarStyle}><HouseIcon/></Avatar>
                         <Typography variant="h5" fontFamily="Noto Sans">Add Property</Typography>
-                        <Typography variant="h5" fontFamily="Noto Sans">Properties that have not been rented out will be displayed for renters to see</Typography>
+                        <Typography variant="h5" fontFamily="Noto Sans">Properties that have not been rented out will be
+                            displayed for renters to see</Typography>
                     </Grid>
                     <TextField
                         required
                         style={btnStyle}
                         fullWidth
-                        onChange={handleChange('propertyLocation')}
+                        onChange={handleChange("propertyLocation")}
                         id="outlined-required"
                         label="Property Location"
                         defaultValue=""
                         InputLabelProps={{
-                            shrink: true,
+                            shrink: true
                         }}
                     />
                     <TextField
                         id="outlined-required"
                         label="Property Built"
-                        onChange={handleChange('propertyCreated')}
+                        onChange={handleChange("propertyCreated")}
                         style={btnStyle}
                         defaultValue=""
                         type="date"
                         fullWidth
                         InputLabelProps={{
-                            shrink: true,
+                            shrink: true
                         }}
                     />
                     <TextField
                         id="outlined-number"
                         label="Property Value"
                         type="number"
-                        onChange={handleChange('propertyValue')}
+                        onChange={handleChange("propertyValue")}
                         fullWidth
                         style={btnStyle}
                         InputLabelProps={{
-                            shrink: true,
+                            shrink: true
                         }}
                     />
                     <TextField
                         id="outlined-number"
                         label="Rent Per Month"
-                        onChange={handleChange('rentPerMonth')}
+                        onChange={handleChange("rentPerMonth")}
                         type="number"
                         fullWidth
                         style={btnStyle}
                         InputLabelProps={{
-                            shrink: true,
+                            shrink: true
                         }}
                     />
                     <TextField
                         id="outlined-number"
                         label="Max Capacity"
-                        onChange={handleChange('maxCapacity')}
+                        onChange={handleChange("maxCapacity")}
                         type="number"
                         fullWidth
                         style={btnStyle}
                         InputLabelProps={{
-                            shrink: true,
+                            shrink: true
                         }}
                     />
                     <TextField
                         id="outlined-number"
                         label="Parking Stalls"
                         type="number"
-                        onChange={handleChange('maxCapacity')}
+                        onChange={handleChange("maxCapacity")}
                         fullWidth
                         style={btnStyle}
                         InputLabelProps={{
-                            shrink: true,
+                            shrink: true
                         }}
                     />
                     <TextField
@@ -194,15 +202,15 @@ const AddProperty = () => {
                         select
                         required
                         InputLabelProps={{
-                            shrink: true,
+                            shrink: true
                         }}
-                        >
+                    >
                         <MenuItem value={true}>Allowed</MenuItem>
                         <MenuItem value={false}>Not Allowed</MenuItem>
                     </TextField>
-                    <TextField 
-                        fullWidth 
-                        id="select" 
+                    <TextField
+                        fullWidth
+                        id="select"
                         label="Utilities"
                         value={utilities}
                         style={btnStyle}
@@ -210,7 +218,7 @@ const AddProperty = () => {
                         select
                         required
                         InputLabelProps={{
-                            shrink: true,
+                            shrink: true
                         }}>
                         <MenuItem value={"Water & Electricity"}>Water & Electricity</MenuItem>
                         <MenuItem value={"Only Electricity"}>Only Electricity</MenuItem>
@@ -223,10 +231,10 @@ const AddProperty = () => {
                         style={btnStyle}
                         id="outlined-required"
                         label="Tenant"
-                        onChange={handleChange('tenant')}
+                        onChange={handleChange("tenant")}
                         defaultValue=""
                         InputLabelProps={{
-                            shrink: true,
+                            shrink: true
                         }}
                     />
                     <TextField
@@ -234,11 +242,11 @@ const AddProperty = () => {
                         fullWidth
                         style={btnStyle}
                         id="outlined-required"
-                        onChange={handleChange('contract')}
+                        onChange={handleChange("contract")}
                         label="Upload Contract Images"
                         defaultValue=""
                         InputLabelProps={{
-                            shrink: true,
+                            shrink: true
                         }}
                     />
                     <TextField
@@ -246,14 +254,14 @@ const AddProperty = () => {
                         fullWidth
                         style={btnStyle}
                         id="outlined-required"
-                        onChange={handleChange('propertyImage')}
+                        onChange={handleChange("propertyImage")}
                         label="Upload Property Images"
                         defaultValue=""
                         InputLabelProps={{
-                            shrink: true,
+                            shrink: true
                         }}
                     />
-                    
+
                     {/*<label htmlFor="contained-button-file">*/}
                     {/*    <Input accept="image/*" id="contained-button-file" multiple type="file" />*/}
                     {/*    <Button variant="contained" style={{ btnStyle, marginRight: "20px" }} component="span">*/}
@@ -272,7 +280,7 @@ const AddProperty = () => {
                 </Paper>
             </Grid>
         </form>
-    )
-}
+    );
+};
 
 export default (AddProperty);
