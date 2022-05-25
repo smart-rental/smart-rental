@@ -10,10 +10,10 @@ import Container from '@mui/material/Container';
 import Button from '@mui/material/Button';
 import MenuItem from '@mui/material/MenuItem';
 import { Link } from "react-router-dom";
+import classes from "./styles";
 
 const ResponsiveAppBar = () => {
     const [anchorElNav, setAnchorElNav] = React.useState(null);
-    const linkStyling = {color: "white", textDecoration: "none"};
     const userId = localStorage.getItem('id');
     console.log(userId);
     const handleOpenNavMenu = (event) => {
@@ -32,20 +32,12 @@ const ResponsiveAppBar = () => {
                     <Typography
                         variant="h6"
                         noWrap
-                        sx={{
-                            mr: 2,
-                            display: { xs: 'none', md: 'flex' },
-                            fontFamily: 'Noto Sans',
-                            fontWeight: 700,
-                            letterSpacing: '.3rem',
-                            color: 'inherit',
-                            textDecoration: 'none',
-                        }}
+                        style={classes.typography}
                     >
-                        <Link to="/" style={linkStyling}>Smart Rentals</Link>
+                        <Link to="/" style={classes.link}>Smart Rentals</Link>
                     </Typography>
 
-                    <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
+                    <Box style={classes.box}>
                         <IconButton
                             size="large"
                             aria-label="account of current user"
@@ -70,21 +62,19 @@ const ResponsiveAppBar = () => {
                             }}
                             open={Boolean(anchorElNav)}
                             onClose={handleCloseNavMenu}
-                            sx={{
-                                display: { xs: 'block', md: 'none' },
-                            }}
+                            style={classes.menu}
                         >
                             <MenuItem>
-                                <Typography textAlign="center"><Link style={{ color: "black", textDecoration: "none" }} to="/">Who are we?</Link></Typography>
+                                <Typography textAlign="center"><Link style={classes.menuItem} to="/">Who are we?</Link></Typography>
                             </MenuItem>
                             <MenuItem>
-                                <Typography textAlign="center"><Link style={{ color: "black", textDecoration: "none" }} to="/">Info</Link></Typography>
+                                <Typography textAlign="center"><Link style={classes.menuItem} to="/">Info</Link></Typography>
                             </MenuItem>
                             <MenuItem>
-                                <Typography textAlign="center"><Link style={{ color: "black", textDecoration: "none" }} to="/landlord">Manage Properties</Link></Typography>
+                                <Typography textAlign="center"><Link style={classes.menuItem} to="/landlord">Manage Properties</Link></Typography>
                             </MenuItem>
                             <MenuItem>
-                                <Typography textAlign="center"><Link style={{ color: "black", textDecoration: "none" }} to="/addProperty">Add Property</Link></Typography>
+                                <Typography textAlign="center"><Link style={classes.menuItem} to="/addProperty">Add Property</Link></Typography>
                             </MenuItem>
                         </Menu>
                     </Box>
@@ -93,49 +83,40 @@ const ResponsiveAppBar = () => {
                     <Typography
                         variant="h5"
                         noWrap
-                        sx={{
-                            mr: 2,
-                            display: { xs: 'flex', md: 'none' },
-                            flexGrow: 1,
-                            fontFamily: 'monospace',
-                            fontWeight: 700,
-                            letterSpacing: '.3rem',
-                            color: 'inherit',
-                            textDecoration: 'none',
-                        }}
+                        style={classes.typography}
                     >
-                        <Link to="/" style={linkStyling}>Rental</Link>
+                        <Link to="/" style={classes.link}>Rental</Link>
                     </Typography>
                     <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-                        <Link style={linkStyling} to="/">
+                        <Link style={classes.link} to="/">
                             <Button style={{ marginRight: "20px" }} size="large">
                                 <Typography textAlign="center" style={{color: "white"}} fontFamily="Noto Sans">Who are we?</Typography>
                             </Button>
                         </Link>
-                        <Link style={linkStyling} to="/">
-                            <Button style={{ marginRight: "20px" }} size="large">
+                        <Link style={classes.link} to="/">
+                            <Button style={classes.mobileButton} size="large">
                                 <Typography textAlign="center" style={{color: "white"}} fontFamily="Noto Sans">Info</Typography>
                             </Button>
                         </Link>
-                        {userId !== undefined ? <Link style={linkStyling} to={`/landlord/${userId}`}>
-                                <Button style={{ marginRight: "20px" }} size="large">
+                        {userId !== undefined ? <Link style={classes.link} to={`/landlord/${userId}`}>
+                                <Button style={classes.mobileButton} size="large">
                                     <Typography textAlign="center" style={{color: "white"}} fontFamily="Noto Sans">Manage Properties</Typography>
                                 </Button>
                             </Link> : ''}
-                        {userId !== undefined ? <Link style={linkStyling} to={`/addProperty/${userId}`}>
-                            <Button style={{ marginRight: "20px" }} size="large">
+                        {userId !== undefined ? <Link style={classes.link} to={`/addProperty/${userId}`}>
+                            <Button style={classes.mobileButton} size="large">
                                 <Typography textAlign="center" style={{color: "white"}} fontFamily="Noto Sans">Add Property</Typography>
                             </Button>
                         </Link> : ''}
                     </Box>
 
-                    <Box sx={{ flexGrow: 0 }}>
-                        <Link style={linkStyling} to="/login">
-                            <Button variant="contained"  color="secondary" style={{ marginRight: "20px" }} size="large">
-                                <Typography textAlign="center" style={{color: "white"}} fontFamily="Noto Sans">Login</Typography>
+                    <Box style={classes.mobileBox}>
+                        <Link style={classes.link} to="/login">
+                            <Button variant="contained"  color="secondary" style={classes.mobileButton} size="large">
+                                <Typography textAlign="center" style={classes.mobileTypography}>Login</Typography>
                             </Button>
                         </Link>
-                            <Link style={linkStyling} to="/signup">
+                            <Link style={classes.link} to="/signup">
                                 <Button variant="contained"  size="large">
                                     <Typography textAlign="center" fontFamily="Noto Sans">Sign up</Typography>
                                 </Button>

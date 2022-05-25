@@ -3,22 +3,21 @@ import {
     Grid,
     Paper,
     Avatar,
-    TextField,
     Button,
     Typography,
     InputAdornment,
     OutlinedInput,
     Radio,
-    InputLabel, FormControl, FilledInput, FormControlLabel, RadioGroup, FormLabel
+    InputLabel, FormControl, FormControlLabel, RadioGroup, FormLabel
 } from "@mui/material";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { Link } from "react-router-dom";
-import axios from "axios";
 import IconButton from "@mui/material/IconButton";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import { createUser } from "../../api";
 import Swal from "sweetalert2";
+import classes from "./styles";
 
 const Signup = () => {
     const navigate = useNavigate();
@@ -31,23 +30,6 @@ const Signup = () => {
         userType: "",
         showPassword: false
     });
-
-    const paperStyle = {
-        padding: 20,
-        height: "80vh",
-        width: 300,
-        margin: "20px auto"
-    };
-
-    const avatarStyle = {
-        backgroundColor: "green"
-    };
-
-    const linkStyling = { textDecoration: "none" };
-
-    const btnStyle = {
-        margin: "8px 0"
-    };
 
     const handleClickShowPassword = () => {
         setValues({
@@ -86,28 +68,28 @@ const Signup = () => {
     return (
         <form onSubmit={submitLogin}>
             <Grid>
-                <Paper elevation={10} style={paperStyle}>
+                <Paper elevation={10} style={classes.paper}>
                     <Grid align="center">
-                        <Avatar style={avatarStyle}><LockOutlinedIcon/></Avatar>
+                        <Avatar style={classes.avatar}><LockOutlinedIcon/></Avatar>
                         <Typography variant="h5" fontFamily="Noto Sans">Sign up</Typography>
                     </Grid>
-                    <FormControl style={{ marginBottom: "10px", marginTop: "10px" }} fullWidth>
+                    <FormControl style={classes.formControl} fullWidth>
                         <InputLabel htmlFor="outlined-adornment-password">Email</InputLabel>
                         <OutlinedInput variant="standard" value={values.email} onChange={handleChange("email")}
                                        label="Email" placeholder="Enter email" fullWidth required/>
                     </FormControl>
-                    <FormControl style={{ marginBottom: "10px", marginTop: "10px" }} fullWidth>
+                    <FormControl style={classes.formControl} fullWidth>
                         <InputLabel htmlFor="outlined-adornment-password">Name</InputLabel>
                         <OutlinedInput variant="standard" value={values.name} onChange={handleChange("name")}
                                        label="Name" placeholder="Enter name" fullWidth required/>
                     </FormControl>
-                    <FormControl style={{ marginBottom: "10px", marginTop: "10px" }} fullWidth>
+                    <FormControl style={classes.formControl} fullWidth>
                         <InputLabel htmlFor="outlined-adornment-password">Phone</InputLabel>
                         <OutlinedInput variant="standard" value={values.phoneNumber}
                                        onChange={handleChange("phoneNumber")} label="Email"
                                        placeholder="Enter phone number xxxxxxxxxx" fullWidth required/>
                     </FormControl>
-                    <FormControl style={{ marginBottom: "10px", marginTop: "10px" }} fullWidth>
+                    <FormControl style={classes.formControl} fullWidth>
                         <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
                         <OutlinedInput variant="standard" value={values.password} onChange={handleChange("password")}
                                        label="Password" placeholder="Enter password"
@@ -124,7 +106,7 @@ const Signup = () => {
                             </InputAdornment>
                         } fullWidth required/>
                     </FormControl>
-                    <FormControl style={{ marginBottom: "10px", marginTop: "10px" }} fullWidth>
+                    <FormControl style={classes.formControl} fullWidth>
                         <OutlinedInput variant="standard" value={values.confirmPassword}
                                        onChange={handleChange("confirmPassword")} label="Password"
                                        placeholder="Re-enter password" type={values.showPassword ? "text" : "password"}
@@ -154,11 +136,11 @@ const Signup = () => {
                             <FormControlLabel value="Tenant" control={<Radio/>} label="Tenant"/>
                         </RadioGroup>
                     </FormControl>
-                    <Button type="submit" color="primary" variant="contained" style={btnStyle} fullWidth><Typography
+                    <Button type="submit" color="primary" variant="contained" style={classes.btnStyle} fullWidth><Typography
                         fontFamily="Noto Sans">Sign up</Typography></Button>
                     <Typography fontFamily="Noto Sans">
                         Already have an account? &nbsp;
-                        <Link to="/login" style={linkStyling}>
+                        <Link to="/login" style={classes.link}>
                             Sign in
                         </Link>
                     </Typography>
