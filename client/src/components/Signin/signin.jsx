@@ -17,9 +17,12 @@ import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { getUsers, validateUser } from "../../api";
 import Swal from "sweetalert2";
 import classes from "./styles";
+import { useDispatch } from "react-redux";
+import authActions from "../../Store/slices/auth-slice";
 
 const Signin = () => {
     const navigate = useNavigate();
+    const dispatch = useDispatch();
     const [values, setValues] = useState({
         email: "",
         password: "",
@@ -37,7 +40,7 @@ const Signin = () => {
             .catch((e) => {
                 console.log(e);
             });
-    });
+    }, [users]);
 
     const handleClickShowPassword = () => {
         setValues({
@@ -62,10 +65,13 @@ const Signin = () => {
             password
         };
         let userInfo = users.find(users => users.email === values.email);
-        localStorage.setItem("id", userInfo._id);
         //Call the backend
         validateUser(userCredentials)
-            .then(() => navigate(`/addProperty/${userInfo._id}`))
+            .then(() => {
+                // localStorage.setItem("id", userInfo._id);
+                navigate(`/addProperty/${userInfo._id}`);
+                dispatch(authActions.actions.login(userInfo._id));                
+            })
             .catch(() => Swal.fire("Try Again", "It seems you have entered the wrong password or email", "error"));
     };
 

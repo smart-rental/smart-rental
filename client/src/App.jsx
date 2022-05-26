@@ -6,7 +6,7 @@ import Home from '../src/components/Home/home';
 import Landlord from './components/Properties/Properties';
 import AddProperty from './components/AddProperty/addProperty';
 import { ThemeProvider } from "@emotion/react";
-import { Provider } from "react-redux";
+import { Provider, useSelector } from "react-redux";
 import store from "./Store";
 import { customTheme } from "./styles";
 
@@ -31,9 +31,9 @@ const App = function () {
     );
 }
 
-const ProtectedRoutes = () => { 
-    const isAuth = localStorage.getItem('id');
-    return isAuth ? <Outlet/> : <Login/>
+const ProtectedRoutes = () => {
+    const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+    return isLoggedIn ? <Outlet/> : <Login/>
 }
 
 export default App;
