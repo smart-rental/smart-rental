@@ -5,8 +5,6 @@ import Signup from '../src/components/Signup/signup';
 import Home from '../src/components/Home/home';
 import Landlord from './components/Landlord/landlord';
 import AddProperty from './components/AddProperty/addProperty';
-import { createTheme } from "@mui/material";
-import { red } from "@mui/material/colors";
 import { ThemeProvider } from "@emotion/react";
 import axios from "axios";
 import { useState } from "react";
@@ -41,7 +39,6 @@ const customTheme = createTheme({
     }
 });
 
-
 const App = function () { 
     return (
         <Provider store={store}>
@@ -64,7 +61,7 @@ const App = function () {
 }
 
 const ProtectedRoutes = () => { 
-    const isAuth = localStorage.getItem('id') !== undefined;
+    const isAuth = localStorage.getItem('id');
     return isAuth ? <Outlet/> : <Login/>
 }
 
