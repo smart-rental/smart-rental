@@ -10,7 +10,8 @@ import { red } from "@mui/material/colors";
 import { ThemeProvider } from "@emotion/react";
 import axios from "axios";
 import { useState } from "react";
-import { useDispatch } from 'react-redux';
+import { Provider, useDispatch } from "react-redux";
+import store from "./Store";
 
 
 const customTheme = createTheme({
@@ -42,44 +43,28 @@ const customTheme = createTheme({
 
 
 const App = function () { 
-    const [currentId, setCurrentId] = useState(0); 
-    const dispatch = useDispatch();
     return (
-        <ThemeProvider theme={customTheme}>
-            <BrowserRouter>
-                <Navbar/>
-                <Routes>
-                    <Route path="/" element={<Home/>}/>
-                    <Route path="/login" element={<Login/>}/>
-                    <Route path="/signup" element={<Signup/>}/>
-                    <Route element={<ProtectedRoutes/>}>
-                        <Route path="/landlord/:id" element={<Landlord/>}/>
-                        <Route path="/addProperty/:id" element={<AddProperty/>}/>
-                    </Route>
-                </Routes>
-            </BrowserRouter>
-        </ThemeProvider>
-
+        <Provider store={store}>
+            <ThemeProvider theme={customTheme}>
+                <BrowserRouter>
+                    <Navbar/>
+                    <Routes>
+                        <Route path="/" element={<Home/>}/>
+                        <Route path="/login" element={<Login/>}/>
+                        <Route path="/signup" element={<Signup/>}/>
+                        <Route element={<ProtectedRoutes/>}>
+                            <Route path="/landlord/:id" element={<Landlord/>}/>
+                            <Route path="/addProperty/:id" element={<AddProperty/>}/>
+                        </Route>
+                    </Routes>
+                </BrowserRouter>
+            </ThemeProvider>
+        </Provider>
     );
 }
 
-const useAuth = () => {
-    const [users, setUsers] = useState([]);
-    let { id } = useParams();
-    axios.get("http://localhost:5000/api/auth")
-        .then(res => {
-            if (res.data.length > 0) {
-                setUsers(res.data);
-            }
-        })
-        .catch((e) => {
-            });
-    let isUserLoggedIn = (users.find(user => user._id === id));
-    return isUserLoggedIn !== undefined;
-}
-
 const ProtectedRoutes = () => { 
-    const isAuth = useAuth();
+    const isAuth = localStorage.getItem('id') !== undefined;
     return isAuth ? <Outlet/> : <Login/>
 }
 
