@@ -32,12 +32,20 @@ const ResponsiveAppBar = () => {
                     <Typography
                         variant="h6"
                         noWrap
-                        style={classes.typography}
+                        sx={{
+                            mr: 2,
+                            display: { xs: 'none', md: 'flex' },
+                            fontFamily: 'Noto Sans',
+                            fontWeight: 700,
+                            letterSpacing: '.3rem',
+                            color: 'inherit',
+                            textDecoration: 'none',
+                        }}
                     >
                         <Link to="/" style={classes.link}>Smart Rentals</Link>
                     </Typography>
 
-                    <Box style={classes.box}>
+                    <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
                         <IconButton
                             size="large"
                             aria-label="account of current user"
@@ -83,7 +91,16 @@ const ResponsiveAppBar = () => {
                     <Typography
                         variant="h5"
                         noWrap
-                        style={classes.typography}
+                        sx={{
+                            mr: 2,
+                            display: { xs: 'flex', md: 'none' },
+                            flexGrow: 1,
+                            fontFamily: 'Noto Sans',
+                            fontWeight: 700,
+                            letterSpacing: '.3rem',
+                            color: 'inherit',
+                            textDecoration: 'none',
+                        }}
                     >
                         <Link to="/" style={classes.link}>Rental</Link>
                     </Typography>
@@ -110,7 +127,7 @@ const ResponsiveAppBar = () => {
                         </Link> : ''}
                     </Box>
 
-                    <Box style={classes.mobileBox}>
+                    <Box sx={{ flexGrow: 0 }}>
                         <Link style={classes.link} to="/login">
                             <Button variant="contained"  color="secondary" style={classes.mobileButton} size="large">
                                 <Typography textAlign="center" style={classes.mobileTypography}>Login</Typography>

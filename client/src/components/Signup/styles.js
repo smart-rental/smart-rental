@@ -1,6 +1,4 @@
-import { makeStyles } from "@mui/material/styles";
-
-export default makeStyles((theme) => ({
+const styles = ({
     paper: {
         padding: 20,
         height: "70vh",
@@ -17,11 +15,13 @@ export default makeStyles((theme) => ({
     },
 
     btnStyle: {
-        margin: theme.spacing(1)
+        margin: "10px"
     },
 
     formControl: {
-        marginBottom: theme.spacing(1),
-        marginTop: theme.spacing(1)
+        marginBottom: "10px",
+        marginTop: "10px"
     }
-}));
+});
+
+export default styles;
