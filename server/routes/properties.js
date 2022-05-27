@@ -2,12 +2,10 @@ import Property from "../models/properties.model.js";
 import express from "express";
 import mongoose from "mongoose";
 
-const toId = mongoose.Types.ObjectId;
-
 const router = express.Router();
 
 router.route('/:id').get((req, res) => {
-    Property.find({ id: req.params.id })
+    Property.find({ ownerId: req.params.id })
         .then(Property => res.json(Property))
         .catch(e => res.status(400).json(`Error: ${e}`));
 });

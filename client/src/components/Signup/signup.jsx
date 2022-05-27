@@ -15,12 +15,15 @@ import { Link } from "react-router-dom";
 import IconButton from "@mui/material/IconButton";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
-import { createUser } from "../../api";
+import { createUser, getUsers } from "../../api";
 import Swal from "sweetalert2";
 import classes from "./styles";
+import { useDispatch } from "react-redux";
+import authActions from "../../Store/slices/auth-slice";
 
 const Signup = () => {
     const navigate = useNavigate();
+    const dispatch = useDispatch();
     const [values, setValues] = useState({
         name: "",
         email: "",
@@ -46,6 +49,15 @@ const Signup = () => {
         setValues({ ...values, [prop]: event.target.value });
     };
 
+    const retrieveNewUser = (userLogin) => {
+        getUsers().then((response) => {
+            let users = response.data.find(users => users.email === userLogin.email);
+            console.log(users);
+            navigate(`/addProperty/${users._id}`);
+            dispatch(authActions.actions.login(users._id));
+        });
+    }
+    
     const submitLogin = (e) => {
         e.preventDefault();
         const { name, email, password, userType, phoneNumber } = values;
@@ -57,7 +69,9 @@ const Signup = () => {
             userType
         };
         createUser(userLogin)
-            .then(() => navigate("/login"))
+            .then(() => {
+                retrieveNewUser(userLogin);
+            })
             .catch((res) => {
                 if (res.data.message === "User with given email already Exist!") {
                     Swal.fire("Email already exits", "Seems that a user with given email already exits", "error");
