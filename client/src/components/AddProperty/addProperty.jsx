@@ -56,11 +56,6 @@ const AddProperty = () => {
         setValues({ ...values, [prop]: event.target.value });
     };
 
-    const Input = styled("input")({
-        display: "none"
-    });
-
-
     const reset = () => {
         setValues({
             propertyLocation: "",

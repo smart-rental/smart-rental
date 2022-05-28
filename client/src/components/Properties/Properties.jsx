@@ -8,6 +8,10 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CancelIcon from '@mui/icons-material/Cancel';
+import { useEffect, useState } from "react";
+import { getProperty } from "../../api";
+import { useParams } from "react-router-dom";
+import Property from "./Property/Property";
 
 function createData(location, owner, propertyCreated, propertyValue, rentPerMonth, maxCapacity, propertyImage, parkingStalls, pets, utilities, contract) {
     return { location, owner, propertyCreated, propertyValue, rentPerMonth, maxCapacity, propertyImage, parkingStalls, pets, utilities, contract };
@@ -26,50 +30,45 @@ const rows = [
 const table = {
     margin: "100px auto"
 }
-const checkOrX = (bool) => { 
-    return bool ? <CheckCircleIcon/> : <CancelIcon/>
-}
 
-export default function BasicTable() {
+const Properties = () => {
+    const [properties, setProperties] = useState([]);
+    const params = useParams();
+    useEffect(() => {
+        getProperty(params.id)
+            .then((res) => {
+                if (res.data.length > 0) {
+                    setProperties(res.data);
+                }
+            })
+            .catch((e) => {
+                console.log(e);})
+    }, [params]);
+
     return (
-        <TableContainer component={Paper} style={table}>
+        <TableContainer component={Paper} style={table} sx={{ maxHeight: '1000px'}}>
             <Table sx={{ minWidth: 650 }} aria-label="simple table" >
                 <TableHead>
                     <TableRow>
                         <TableCell>Location</TableCell>
-                        <TableCell align="right">Date built</TableCell>
-                        <TableCell align="right">Property Value</TableCell>
-                        <TableCell align="right">Rent per month</TableCell>
-                        <TableCell align="right">Max Capacity</TableCell>
-                        <TableCell align="right">Images</TableCell>
-                        <TableCell align="right">Parking Stalls</TableCell>
-                        <TableCell align="right">Pets</TableCell>
-                        <TableCell align="right">Utilities</TableCell>
-                        <TableCell align="right">Contracts</TableCell>
+                        <TableCell align="center">Date built</TableCell>
+                        <TableCell align="center">Property Value</TableCell>
+                        <TableCell align="center">Rent per month</TableCell>
+                        <TableCell align="center">Max Capacity</TableCell>
+                        <TableCell align="center">Images</TableCell>
+                        <TableCell align="center">Parking Stalls</TableCell>
+                        <TableCell align="center">Pets</TableCell>
+                        <TableCell align="center">Utilities</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {rows.map((row, index) => (
-                        <TableRow
-                            key={index}
-                            sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                        >
-                            <TableCell component="th" scope="row">
-                                {row.location}
-                            </TableCell>
-                            <TableCell align="right">{new Date(row.propertyCreated).toLocaleDateString()}</TableCell>
-                            <TableCell align="right">${row.propertyValue}</TableCell>
-                            <TableCell align="right">${row.rentPerMonth}</TableCell>
-                            <TableCell align="right">{row.maxCapacity}</TableCell>
-                            <TableCell align="right">{row.propertyImage}</TableCell>
-                            <TableCell align="right">{row.parkingStalls}</TableCell>
-                            <TableCell align="right">{checkOrX(row.pets)}</TableCell>
-                            <TableCell align="right">{checkOrX(row.utilities)}</TableCell>
-                            <TableCell align="right">{row.contract}</TableCell>
-                        </TableRow>
+                    {properties.map((property, index) => (
+                        <Property property={property} key={index}/>
                     ))}
                 </TableBody>
             </Table>
         </TableContainer>
     );
 }
+
+export default Properties;

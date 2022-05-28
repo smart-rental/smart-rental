@@ -8,4 +8,4 @@ export const getUsers = () => axios.get(`${url}/auth`);
 export const validateUser = (userInfo) => axios.post(`${url}/auth`, userInfo);
 // Property
 export const addProperty = (id, propertyToAdd) => axios.post(`${url}/property/${id}`, propertyToAdd);
-export const getProperty = (id, landLordId) => axios.get( `${url}/property/${id}`, landLordId);
+export const getProperty = (id) => axios.get( `${url}/property/${id}`);
