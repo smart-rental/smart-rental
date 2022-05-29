@@ -11,4 +11,4 @@ export const addProperty = (id, propertyToAdd) => axios.post(`${url}/property/${
 export const getProperties = (id) => axios.get( `${url}/property/${id}`);
 export const getProperty = (ownerId, propertyId) => axios.get( `${url}/property/${ownerId}/${propertyId}`);
 export const deleteProperty = (id) => axios.delete( `${url}/property/${id}`);
-export const editProperty = (ownerId, id) => axios.post( `${url}/property/update/${ownerId}/${id}`);
+export const editProperty = (ownerId, id, propertyToEdit) => axios.post( `${url}/property/update/${ownerId}/${id}`, propertyToEdit);

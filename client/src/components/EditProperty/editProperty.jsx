@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
     Grid,
     Paper,
@@ -15,39 +15,42 @@ import { editProperty, getProperty } from "../../api";
 
 const EditProperty = () => {
     let { ownerId, propertyId } = useParams();
-    const [utilities, setUtilities] = React.useState("");
-    const [pet, setPets] = React.useState("");
-    const [values, setValues] = useState({
+    const initialState = {
         propertyLocation: "",
         propertyCreated: new Date(),
-        propertyValue: 0,
-        rentPerMonth: 0,
-        maxCapacity: 0,
-        parkingStalls: 0,
-        pets: false,
+        propertyValue: "",
+        rentPerMonth: "",
+        maxCapacity: "",
+        parkingStalls: "",
         tenant: "",
         contract: "",
         propertyImage: ""
-    });
+    };
+    const [utilities, setUtilities] = React.useState("");
+    const [pets, setPets] = React.useState("");
+    const [{ propertyLocation, propertyCreated, propertyValue, rentPerMonth, maxCapacity, parkingStalls, tenant, contract, propertyImage }, setValues] = useState(initialState);
 
-    getProperty(ownerId, propertyId).then((res) => {
-        console.log(res.data[0]);
-        const { location, propertyCreated, propertyValue, rentPetMonth, maxCapacity, propertyImage, parkingStalls, pets, utilities, contract, tenant } = res.data[0];
-        setValues({
-            propertyLocation: location,
-            propertyCreated: propertyCreated,
-            propertyValue: propertyValue,
-            rentPerMonth: rentPetMonth,
-            maxCapacity: maxCapacity,
-            parkingStalls: parkingStalls,
-            pets: pets,
-            tenant: tenant,
-            contract: contract,
-            propertyImage: propertyImage
+    useEffect(() => {
+        getProperty(ownerId, propertyId).then((res) => {
+            const { location, propertyCreated, propertyValue, rentPerMonth, maxCapacity, propertyImage, parkingStalls, pets, utilities, contract, tenant } = res.data[0];
+            setValues({
+                propertyLocation: location,
+                propertyCreated,
+                propertyValue,
+                rentPerMonth,
+                maxCapacity,
+                parkingStalls,
+                pets,
+                tenant,
+                contract,
+                propertyImage
+            });
+            setPets(pets);
+            setUtilities(utilities);
         });
-        setPets(pets);
-        setUtilities(utilities);
-    });
+    }, []);
+
+    console.log();
     
     const handleUtilitiesChange = (event) => {
         setUtilities(event.target.value);
@@ -70,47 +73,31 @@ const EditProperty = () => {
         margin: "8px 0"
     };
 
-    const handleChange = (prop) => (event) => {
-        setValues({ ...values, [prop]: event.target.value });
+    const handleChange = (event) => {
+        const { name, value } = event.target;
+        setValues((prevState) => ({ ...prevState, [name]: value }));
     };
 
-    const reset = () => {
-        setValues({...values, propertyLocation: ""});
-        console.log(values);
-        setPets("");
-        setUtilities("");
-    };
-    const createProperty = (e) => {
+    const updateProperty = (e) => {
         e.preventDefault();
-        const {
-            propertyLocation,
-            propertyCreated,
-            propertyValue,
-            rentPerMonth,
-            maxCapacity,
-            parkingStalls,
-            tenant,
-            contract,
-            propertyImage
-        } = values;
-        const propertyToAdd = {
+        console.log(propertyCreated);
+        const propertyToEdit = {
             location: propertyLocation,
             propertyCreated,
             propertyValue,
             rentPerMonth,
             maxCapacity,
             parkingStalls,
-            pets: pet,
+            pets,
             utilities,
             tenant,
             contract,
             propertyImage,
             ownerId
         };
-        editProperty(ownerId, propertyId)
+        editProperty(ownerId, propertyId, propertyToEdit)
             .then(() => {
                 Swal.fire("Congratulations", "Your property has been added", "success");
-                reset();
             })
             .catch(() => {
                 Swal.fire("Try Again", "Your property has not been added", "error");
@@ -118,7 +105,7 @@ const EditProperty = () => {
     };
 
     return (
-        <form onSubmit={createProperty}>
+        <form onSubmit={updateProperty}>
             <Grid>
                 <Paper elevation={10} style={paperStyle}>
                     <Grid align="center">
@@ -131,10 +118,12 @@ const EditProperty = () => {
                         required
                         style={btnStyle}
                         fullWidth
-                        onChange={handleChange("propertyLocation")}
+                        onChange={handleChange}
+                        name="propertyLocation"
                         id="outlined-required"
                         label="Property Location"
                         defaultValue=""
+                        value={propertyLocation}
                         InputLabelProps={{
                             shrink: true
                         }}
@@ -142,9 +131,11 @@ const EditProperty = () => {
                     <TextField
                         id="outlined-required"
                         label="Property Built"
-                        onChange={handleChange("propertyCreated")}
+                        onChange={handleChange}
+                        name="propertyCreated"
                         style={btnStyle}
                         defaultValue=""
+                        value={new Date(propertyCreated).toISOString().split('T')[0]}
                         type="date"
                         fullWidth
                         InputLabelProps={{
@@ -155,8 +146,10 @@ const EditProperty = () => {
                         id="outlined-number"
                         label="Property Value"
                         type="number"
-                        onChange={handleChange("propertyValue")}
+                        onChange={handleChange}
+                        name="propertyValue"
                         fullWidth
+                        value={propertyValue}
                         style={btnStyle}
                         InputLabelProps={{
                             shrink: true
@@ -165,9 +158,11 @@ const EditProperty = () => {
                     <TextField
                         id="outlined-number"
                         label="Rent Per Month"
-                        onChange={handleChange("rentPerMonth")}
+                        onChange={handleChange}
+                        name="rentPerMonth"
                         type="number"
                         fullWidth
+                        value={rentPerMonth}
                         style={btnStyle}
                         InputLabelProps={{
                             shrink: true
@@ -176,7 +171,9 @@ const EditProperty = () => {
                     <TextField
                         id="outlined-number"
                         label="Max Capacity"
-                        onChange={handleChange("maxCapacity")}
+                        onChange={handleChange}
+                        name="maxCapacity"
+                        value={maxCapacity}
                         type="number"
                         fullWidth
                         style={btnStyle}
@@ -188,7 +185,9 @@ const EditProperty = () => {
                         id="outlined-number"
                         label="Parking Stalls"
                         type="number"
-                        onChange={handleChange("maxCapacity")}
+                        onChange={handleChange}
+                        value={parkingStalls}
+                        name="parkingStalls"
                         fullWidth
                         style={btnStyle}
                         InputLabelProps={{
@@ -199,7 +198,7 @@ const EditProperty = () => {
                         fullWidth
                         id="select"
                         label="Pets"
-                        value={pet}
+                        value={pets}
                         style={btnStyle}
                         onChange={handlePetsChange}
                         select
@@ -234,7 +233,9 @@ const EditProperty = () => {
                         style={btnStyle}
                         id="outlined-required"
                         label="Tenant"
-                        onChange={handleChange("tenant")}
+                        onChange={handleChange}
+                        name="tenant"
+                        value={tenant}
                         defaultValue=""
                         InputLabelProps={{
                             shrink: true
@@ -245,7 +246,9 @@ const EditProperty = () => {
                         fullWidth
                         style={btnStyle}
                         id="outlined-required"
-                        onChange={handleChange("contract")}
+                        onChange={handleChange}
+                        name="contract"
+                        value={contract}
                         label="Upload Contract Images"
                         defaultValue=""
                         InputLabelProps={{
@@ -257,7 +260,9 @@ const EditProperty = () => {
                         fullWidth
                         style={btnStyle}
                         id="outlined-required"
-                        onChange={handleChange("propertyImage")}
+                        onChange={handleChange}
+                        name="propertyImage"
+                        value={propertyImage}
                         label="Upload Property Images"
                         defaultValue=""
                         InputLabelProps={{

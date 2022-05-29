@@ -61,7 +61,7 @@ router.route('/update/:ownerId/:id').post((req, res) => {
             Property.tenant = tenant;
             Property.pets = Boolean(pets);
             Property.parkingStalls = Number(parkingStalls);
-            Property.utilities = Boolean(utilities);
+            Property.utilities = utilities;
             Property.contract = contract;
             Property.ownerId = ownerId;
 
