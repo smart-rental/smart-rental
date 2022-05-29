@@ -3,12 +3,15 @@ import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import CancelIcon from "@mui/icons-material/Cancel";
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 
-const Property = ({property: { location, propertyCreated, propertyValue, rentPerMonth, maxCapacity, propertyImage, parkingStalls, pets, utilities }}) => {
+const Property = ({property: { _id, location, propertyCreated, propertyValue, rentPerMonth, maxCapacity, propertyImage, parkingStalls, pets, utilities }, removeProperty, editProperty}) => {
     const checkOrX = (bool) => {
         return bool ? <CheckCircleIcon/> : <CancelIcon/>
     }
 
+    console.log(_id);
     return(
         <TableRow
             sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
@@ -24,6 +27,9 @@ const Property = ({property: { location, propertyCreated, propertyValue, rentPer
             <TableCell align="center">{parkingStalls}</TableCell>
             <TableCell align="center">{checkOrX(pets)}</TableCell>
             <TableCell align="center">{utilities}</TableCell>
+            <TableCell align="center"><EditIcon onClick={() => {editProperty(_id)}}/></TableCell>
+            <TableCell align="center"><DeleteForeverIcon onClick={() => {
+                removeProperty(_id);}}/></TableCell>
         </TableRow>
     );
 }

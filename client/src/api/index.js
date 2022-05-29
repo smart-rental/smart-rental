@@ -9,3 +9,5 @@ export const validateUser = (userInfo) => axios.post(`${url}/auth`, userInfo);
 // Property
 export const addProperty = (id, propertyToAdd) => axios.post(`${url}/property/${id}`, propertyToAdd);
 export const getProperty = (id) => axios.get( `${url}/property/${id}`);
+export const deleteProperty = (id) => axios.delete( `${url}/property/${id}`);
+export const updateProperty = (id) => axios.post( `${url}/property/update/${id}`);

@@ -9,7 +9,6 @@ import {
 } from "@mui/material";
 import { useParams } from "react-router-dom";
 import HouseIcon from "@mui/icons-material/House";
-import styled from "@emotion/styled";
 import MenuItem from "@mui/material/MenuItem";
 import Swal from "sweetalert2";
 import { addProperty } from "../../api";
@@ -57,18 +56,8 @@ const AddProperty = () => {
     };
 
     const reset = () => {
-        setValues({
-            propertyLocation: "",
-            propertyCreated: new Date(),
-            propertyValue: 0,
-            rentPerMonth: 0,
-            maxCapacity: 0,
-            parkingStalls: 0,
-            pets: false,
-            tenant: "",
-            contract: "",
-            propertyImage: ""
-        });
+        setValues({...values, propertyLocation: ""});
+        console.log(values);
         setPets("");
         setUtilities("");
     };

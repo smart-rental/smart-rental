@@ -33,15 +33,15 @@ router.route('/:id').post((req, res) => {
         .catch(e => res.status(400).json(`Error: ${e}`));
 });
 
-router.route('/:owner/:id').delete((req, res) => {
+router.route('/:id').delete((req, res) => {
     const { id } = req.params;
     Property.findByIdAndDelete(id)
         .then(Property => res.json(`Property Deleted: ${Property._id}`))
         .catch(e => res.status(404).json(`Error: ${e}`));
 });
 
-router.route('/update/:owner/:id').post((req, res) => {
-    const { id } = req.params;
+router.route('/update/:ownerId/:id').post((req, res) => {
+    const { id, ownerId } = req.params;
     const { location, owner, propertyCreated, propertyValue, rentPerMonth, maxCapacity, propertyImage, parkingStalls, pets, utilities, tenant, contract } = req.body;
     Property.findByIdAndUpdate(id)
         .then(Property => {
@@ -57,9 +57,10 @@ router.route('/update/:owner/:id').post((req, res) => {
             Property.parkingStalls = Number(parkingStalls);
             Property.utilities = Boolean(utilities);
             Property.contract = contract;
+            Property.ownerId = ownerId;
 
             Property.save()
-                .then(() => res.json('Property updated' + Property))
+                .then(() => res.json(Property))
                 .catch(err => res.status(400).json(`Error: ${err}`));
         })
         .catch(e => res.status(404).json(`Error: ${e}`))
