@@ -10,6 +10,12 @@ router.route('/:id').get((req, res) => {
         .catch(e => res.status(400).json(`Error: ${e}`));
 });
 
+router.route('/:ownerId/:propertyId').get((req, res) => {
+    Property.find({ ownerId: req.params.ownerId, _id: req.params.propertyId })
+        .then(Property => res.json(Property))
+        .catch(e => res.status(400).json(`Error: ${e}`));
+});
+
 router.route('/:id').post((req, res) => {
     const ownerId = req.params.id;
     const { location, propertyCreated, propertyValue, rentPerMonth, maxCapacity, propertyImage, parkingStalls, pets, utilities, tenant, contract } = req.body;

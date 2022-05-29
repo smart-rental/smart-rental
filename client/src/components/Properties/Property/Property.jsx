@@ -10,8 +10,7 @@ const Property = ({property: { _id, location, propertyCreated, propertyValue, re
     const checkOrX = (bool) => {
         return bool ? <CheckCircleIcon/> : <CancelIcon/>
     }
-
-    console.log(_id);
+    
     return(
         <TableRow
             sx={{ '&:last-child td, &:last-child th': { border: 0 } }}

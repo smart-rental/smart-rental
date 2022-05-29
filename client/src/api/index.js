@@ -8,6 +8,7 @@ export const getUsers = () => axios.get(`${url}/auth`);
 export const validateUser = (userInfo) => axios.post(`${url}/auth`, userInfo);
 // Property
 export const addProperty = (id, propertyToAdd) => axios.post(`${url}/property/${id}`, propertyToAdd);
-export const getProperty = (id) => axios.get( `${url}/property/${id}`);
+export const getProperties = (id) => axios.get( `${url}/property/${id}`);
+export const getProperty = (ownerId, propertyId) => axios.get( `${url}/property/${ownerId}/${propertyId}`);
 export const deleteProperty = (id) => axios.delete( `${url}/property/${id}`);
-export const updateProperty = (id) => axios.post( `${url}/property/update/${id}`);
+export const editProperty = (ownerId, id) => axios.post( `${url}/property/update/${ownerId}/${id}`);

@@ -9,6 +9,7 @@ import { ThemeProvider } from "@emotion/react";
 import { Provider, useSelector } from "react-redux";
 import store from "./Store";
 import { customTheme } from "./styles";
+import EditProperty from "./components/EditProperty/editProperty";
 
 const App = function () { 
     return (
@@ -23,6 +24,7 @@ const App = function () {
                         <Route element={<ProtectedRoutes/>}>
                             <Route path="/landlord/:id" element={<Landlord/>}/>
                             <Route path="/addProperty/:id" element={<AddProperty/>}/>
+                            <Route path="/editProperty/:ownerId/:propertyId" element={<EditProperty/>}/>
                         </Route>
                     </Routes>
                 </BrowserRouter>
