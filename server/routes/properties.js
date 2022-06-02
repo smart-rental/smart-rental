@@ -1,8 +1,10 @@
 import Property from "../models/properties.model.js";
+import User from "../models/user.model.js";
 import express from "express";
 import mongoose from "mongoose";
 
 const router = express.Router();
+const toId = mongoose.Types.ObjectId;
 
 router.route('/:id').get((req, res) => {
     Property.find({ ownerId: req.params.id })
@@ -14,6 +16,24 @@ router.route('/:ownerId/:propertyId').get((req, res) => {
     Property.find({ ownerId: req.params.ownerId, _id: req.params.propertyId })
         .then(Property => res.json(Property))
         .catch(e => res.status(400).json(`Error: ${e}`));
+});
+
+router.route('/add/:owner/:property').get((req, res) => { 
+   const tenantPhoneNumber = req.body.phoneNumber;
+   const tenantName = req.body.name;
+   const tenantEmail = req.body.email;
+   const tenantToAdd = User.User.findOne({ phoneNumber: tenantPhoneNumber, name: tenantName, email: tenantEmail })
+       .then(user => {
+           Property.findByIdAndUpdate(req.params.property, { tenant: user._id })
+               .then((Property ) => res.json(Property));
+       });
+
+});
+
+router.route('/seeTenant/:owner/:property').get((req, res) => {
+   Property.findById(req.params.property)
+        .populate("tenant")
+       .then((Property) => { res.json(Property)});
 });
 
 router.route('/:id').post((req, res) => {

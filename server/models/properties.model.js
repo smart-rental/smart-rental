@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import User from "./user.model.js";
 
 const propertiesModel = mongoose.Schema({
     location: { type: String, required: true },
@@ -15,7 +16,7 @@ const propertiesModel = mongoose.Schema({
         required: true
     },
     ownerId: { type: String, required: true },
-    tenant: { type: String , required: true }
+    tenant: { type: mongoose.Schema.Types.ObjectId, ref: User.User }
 });
 
 let Properties = mongoose.model('Properties', propertiesModel);
