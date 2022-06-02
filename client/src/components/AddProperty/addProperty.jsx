@@ -22,13 +22,12 @@ const AddProperty = () => {
         rentPerMonth: "",
         maxCapacity: "",
         parkingStalls: "",
-        tenant: "",
         contract: "",
         propertyImage: ""
     };
     const [utilities, setUtilities] = React.useState("");
     const [pet, setPets] = React.useState("");
-    const [{ propertyLocation, propertyCreated, propertyValue, rentPerMonth, maxCapacity, parkingStalls, tenant, contract, propertyImage }, setValues] = useState(initialState);
+    const [{ propertyLocation, propertyCreated, propertyValue, rentPerMonth, maxCapacity, parkingStalls, contract, propertyImage }, setValues] = useState(initialState);
 
     const handleUtilitiesChange = (event) => {
         setUtilities(event.target.value);
@@ -73,7 +72,6 @@ const AddProperty = () => {
             parkingStalls,
             pets: pet,
             utilities,
-            tenant,
             contract,
             propertyImage,
             ownerId: id
@@ -107,7 +105,6 @@ const AddProperty = () => {
                         name="propertyLocation"
                         id="outlined-required"
                         label="Property Location"
-                        defaultValue=""
                         value={propertyLocation}
                         InputLabelProps={{
                             shrink: true
@@ -119,7 +116,6 @@ const AddProperty = () => {
                         onChange={handleChange}
                         name="propertyCreated"
                         style={btnStyle}
-                        defaultValue=""
                         value={propertyCreated}
                         type="date"
                         fullWidth
@@ -217,25 +213,10 @@ const AddProperty = () => {
                         fullWidth
                         style={btnStyle}
                         id="outlined-required"
-                        label="Tenant"
-                        onChange={handleChange}
-                        name="tenant"
-                        value={tenant}
-                        defaultValue=""
-                        InputLabelProps={{
-                            shrink: true
-                        }}
-                    />
-                    <TextField
-                        required
-                        fullWidth
-                        style={btnStyle}
-                        id="outlined-required"
                         onChange={handleChange}
                         name="contract"
                         value={contract}
                         label="Upload Contract Images"
-                        defaultValue=""
                         InputLabelProps={{
                             shrink: true
                         }}
@@ -249,7 +230,6 @@ const AddProperty = () => {
                         name="propertyImage"
                         value={propertyImage}
                         label="Upload Property Images"
-                        defaultValue=""
                         InputLabelProps={{
                             shrink: true
                         }}

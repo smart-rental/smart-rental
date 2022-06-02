@@ -4,7 +4,6 @@ import express from "express";
 import mongoose from "mongoose";
 
 const router = express.Router();
-const toId = mongoose.Types.ObjectId;
 
 router.route('/:id').get((req, res) => {
     Property.find({ ownerId: req.params.id })
@@ -18,22 +17,31 @@ router.route('/:ownerId/:propertyId').get((req, res) => {
         .catch(e => res.status(400).json(`Error: ${e}`));
 });
 
-router.route('/add/:owner/:property').get((req, res) => { 
+router.route('/addTenant/:owner/:property').patch((req, res) => { 
    const tenantPhoneNumber = req.body.phoneNumber;
    const tenantName = req.body.name;
    const tenantEmail = req.body.email;
-   const tenantToAdd = User.User.findOne({ phoneNumber: tenantPhoneNumber, name: tenantName, email: tenantEmail })
+   User.User.findOne({ phoneNumber: tenantPhoneNumber, name: tenantName, email: tenantEmail })
        .then(user => {
            Property.findByIdAndUpdate(req.params.property, { tenant: user._id })
-               .then((Property ) => res.json(Property));
+               .then(() =>    {
+                   Property.findById(req.params.property)
+                       .populate({ path: "tenant", select: { name: 1, email: 1, phoneNumber: 1 } })
+                       .then((Property) => { res.json(Property)})
+                       .catch((e) => {
+                           console.log(e);})
+               }).catch((e) => {
+               console.log(e);});
+       })
+       .catch((e) => {
+           console.log(e );
        });
-
 });
 
-router.route('/seeTenant/:owner/:property').get((req, res) => {
-   Property.findById(req.params.property)
-        .populate("tenant")
-       .then((Property) => { res.json(Property)});
+router.route('/deleteTenant/:owner/:property').patch((req, res) => {
+    Property.findByIdAndUpdate(req.params.property, {
+        tenant: null
+    }).then((r) => { res.json(r)});
 });
 
 router.route('/:id').post((req, res) => {

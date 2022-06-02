@@ -69,7 +69,7 @@ const Signin = () => {
         validateUser(userCredentials)
             .then(() => {
                 // localStorage.setItem("id", userInfo._id);
-                navigate(`/addProperty/${userInfo._id}`);
+                navigate(`/`);
                 dispatch(authActions.actions.login(userInfo._id));                
             })
             .catch(() => Swal.fire("Try Again", "It seems you have entered the wrong password or email", "error"));

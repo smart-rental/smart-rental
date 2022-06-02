@@ -13,12 +13,16 @@ import { Link } from "react-router-dom";
 import classes from "./styles";
 import { useDispatch, useSelector } from "react-redux";
 import authActions from "../../Store/slices/auth-slice";
+import { useEffect, useState } from "react";
+import { getUsers } from "../../api";
 
 const ResponsiveAppBar = () => {
+    const LANDLORD = "Landlord";
+    const TENANT = "Tenant";
     const [anchorElNav, setAnchorElNav] = React.useState(null);
     const dispatch = useDispatch();
     const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
-    
+    const [userType, setUserType] = useState("");
     const handleOpenNavMenu = (event) => {
         setAnchorElNav(event.currentTarget);
     };
@@ -31,6 +35,16 @@ const ResponsiveAppBar = () => {
         dispatch(authActions.actions.logout(null));
         // localStorage.removeItem('id');
     }
+    
+    useEffect(() => { 
+       getUsers()
+           .then(r => {
+               let user = r.data.find(user => user._id === isLoggedIn);
+               setUserType(user.userType);
+           })
+           .catch(e => {
+               console.log(e);}); 
+    });
 
     return (
         <AppBar position="sticky" color="primary">
@@ -129,16 +143,22 @@ const ResponsiveAppBar = () => {
                                                 fontFamily="Noto Sans">Info</Typography>
                                 </Button> 
                             </Link> : ""}
-                        {isLoggedIn != null ? <Link style={classes.link} to={`/landlord/${isLoggedIn}`}>
+                        {isLoggedIn != null && userType === LANDLORD ? <Link style={classes.link} to={`/landlord/${isLoggedIn}`}>
                             <Button style={classes.mobileButton} size="large">
                                 <Typography textAlign="center" style={{ color: "white" }} fontFamily="Noto Sans">Manage
                                     Properties</Typography>
                             </Button>
                         </Link> : ""}
-                        {isLoggedIn != null ? <Link style={classes.link} to={`/addProperty/${isLoggedIn}`}>
+                        {isLoggedIn != null && userType === LANDLORD ? <Link style={classes.link} to={`/addProperty/${isLoggedIn}`}>
                             <Button style={classes.mobileButton} size="large">
                                 <Typography textAlign="center" style={{ color: "white" }} fontFamily="Noto Sans">Add
                                     Property</Typography>
+                            </Button>
+                        </Link> : ""}                        
+                        {isLoggedIn != null && userType === LANDLORD ? <Link style={classes.link} to={`/addTenant/${isLoggedIn}`}>
+                            <Button style={classes.mobileButton} size="large">
+                                <Typography textAlign="center" style={{ color: "white" }} fontFamily="Noto Sans">Add
+                                    Tenant</Typography>
                             </Button>
                         </Link> : ""}
                     </Box>

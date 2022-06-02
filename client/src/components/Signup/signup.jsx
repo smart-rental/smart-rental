@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
     Grid,
     Paper,
@@ -53,7 +53,7 @@ const Signup = () => {
         getUsers().then((response) => {
             let users = response.data.find(users => users.email === userLogin.email);
             console.log(users);
-            navigate(`/addProperty/${users._id}`);
+            navigate(`/`);
             dispatch(authActions.actions.login(users._id));
         });
     }

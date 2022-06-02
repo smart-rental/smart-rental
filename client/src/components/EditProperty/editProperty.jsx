@@ -22,17 +22,16 @@ const EditProperty = () => {
         rentPerMonth: "",
         maxCapacity: "",
         parkingStalls: "",
-        tenant: "",
         contract: "",
         propertyImage: ""
     };
     const [utilities, setUtilities] = React.useState("");
     const [pets, setPets] = React.useState("");
-    const [{ propertyLocation, propertyCreated, propertyValue, rentPerMonth, maxCapacity, parkingStalls, tenant, contract, propertyImage }, setValues] = useState(initialState);
+    const [{ propertyLocation, propertyCreated, propertyValue, rentPerMonth, maxCapacity, parkingStalls, contract, propertyImage }, setValues] = useState(initialState);
 
     useEffect(() => {
         getProperty(ownerId, propertyId).then((res) => {
-            const { location, propertyCreated, propertyValue, rentPerMonth, maxCapacity, propertyImage, parkingStalls, pets, utilities, contract, tenant } = res.data[0];
+            const { location, propertyCreated, propertyValue, rentPerMonth, maxCapacity, propertyImage, parkingStalls, pets, utilities, contract } = res.data[0];
             setValues({
                 propertyLocation: location,
                 propertyCreated,
@@ -41,7 +40,6 @@ const EditProperty = () => {
                 maxCapacity,
                 parkingStalls,
                 pets,
-                tenant,
                 contract,
                 propertyImage
             });
@@ -50,8 +48,6 @@ const EditProperty = () => {
         });
     }, []);
 
-    console.log();
-    
     const handleUtilitiesChange = (event) => {
         setUtilities(event.target.value);
     };
@@ -90,7 +86,6 @@ const EditProperty = () => {
             parkingStalls,
             pets,
             utilities,
-            tenant,
             contract,
             propertyImage,
             ownerId
@@ -122,7 +117,6 @@ const EditProperty = () => {
                         name="propertyLocation"
                         id="outlined-required"
                         label="Property Location"
-                        defaultValue=""
                         value={propertyLocation}
                         InputLabelProps={{
                             shrink: true
@@ -134,7 +128,6 @@ const EditProperty = () => {
                         onChange={handleChange}
                         name="propertyCreated"
                         style={btnStyle}
-                        defaultValue=""
                         value={new Date(propertyCreated).toISOString().split('T')[0]}
                         type="date"
                         fullWidth
@@ -232,25 +225,10 @@ const EditProperty = () => {
                         fullWidth
                         style={btnStyle}
                         id="outlined-required"
-                        label="Tenant"
-                        onChange={handleChange}
-                        name="tenant"
-                        value={tenant}
-                        defaultValue=""
-                        InputLabelProps={{
-                            shrink: true
-                        }}
-                    />
-                    <TextField
-                        required
-                        fullWidth
-                        style={btnStyle}
-                        id="outlined-required"
                         onChange={handleChange}
                         name="contract"
                         value={contract}
                         label="Upload Contract Images"
-                        defaultValue=""
                         InputLabelProps={{
                             shrink: true
                         }}
@@ -264,7 +242,6 @@ const EditProperty = () => {
                         name="propertyImage"
                         value={propertyImage}
                         label="Upload Property Images"
-                        defaultValue=""
                         InputLabelProps={{
                             shrink: true
                         }}
