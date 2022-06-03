@@ -1,15 +1,16 @@
-import { BrowserRouter, Route, Routes, Outlet, useParams } from "react-router-dom";
+import { BrowserRouter, Route, Routes, Outlet } from "react-router-dom";
 import Navbar from '../src/components/Navbar/navbar';
 import Login from './components/Signin/signin';
 import Signup from '../src/components/Signup/signup';
 import Home from '../src/components/Home/home';
 import Landlord from './components/Properties/Properties';
-import AddProperty from './components/AddProperty/addProperty';
+import AddProperty from './components/Properties/Property/AddProperty/addProperty';
 import { ThemeProvider } from "@emotion/react";
 import { Provider, useSelector } from "react-redux";
 import store from "./Store";
 import { customTheme } from "./styles";
-import EditProperty from "./components/EditProperty/editProperty";
+import EditProperty from "./components/Properties/Property/EditProperty/editProperty";
+import AddTenant from "./components/Properties/Property/AddTenant/AddTenant";
 
 const App = function () { 
     return (
@@ -25,6 +26,7 @@ const App = function () {
                             <Route path="/landlord/:id" element={<Landlord/>}/>
                             <Route path="/addProperty/:id" element={<AddProperty/>}/>
                             <Route path="/editProperty/:ownerId/:propertyId" element={<EditProperty/>}/>
+                            <Route path="/addTenant/:ownerId/:propertyId" element={<AddTenant/>}/>
                         </Route>
                     </Routes>
                 </BrowserRouter>

@@ -5,10 +5,18 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import CancelIcon from "@mui/icons-material/Cancel";
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import PersonAddAltIcon from '@mui/icons-material/PersonAddAlt';
+import { Link } from "react-router-dom";
 
-const Property = ({property: { _id, location, propertyCreated, propertyValue, rentPerMonth, maxCapacity, propertyImage, parkingStalls, pets, utilities }, removeProperty, editProperty}) => {
+const Property = ({property: { _id, location, propertyCreated, propertyValue, rentPerMonth, maxCapacity, propertyImage, parkingStalls, pets, utilities, tenant }, removeProperty, editProperty, addTenant, users}) => {
     const checkOrX = (bool) => {
         return bool ? <CheckCircleIcon/> : <CancelIcon/>
+    }
+    
+    const displayTenant = () => {
+        const isTenant = users.find(user => user._id === tenant);
+        return isTenant == null ? <PersonAddAltIcon onClick={() => {
+            addTenant(_id);}}/> : <Link to={'/editTenant'}>{isTenant.name}</Link>;
     }
     
     return(
@@ -29,6 +37,7 @@ const Property = ({property: { _id, location, propertyCreated, propertyValue, re
             <TableCell align="center"><EditIcon onClick={() => {editProperty(_id)}}/></TableCell>
             <TableCell align="center"><DeleteForeverIcon onClick={() => {
                 removeProperty(_id);}}/></TableCell>
+            <TableCell align="center">{displayTenant()}</TableCell>
         </TableRow>
     );
 }

@@ -17,28 +17,26 @@ router.route('/:ownerId/:propertyId').get((req, res) => {
         .catch(e => res.status(400).json(`Error: ${e}`));
 });
 
-router.route('/addTenant/:owner/:property').patch((req, res) => { 
+router.route('/addTenant/:owner/:property').post((req, res) => { 
    const tenantPhoneNumber = req.body.phoneNumber;
    const tenantName = req.body.name;
    const tenantEmail = req.body.email;
    User.User.findOne({ phoneNumber: tenantPhoneNumber, name: tenantName, email: tenantEmail })
        .then(user => {
-           Property.findByIdAndUpdate(req.params.property, { tenant: user._id })
-               .then(() =>    {
-                   Property.findById(req.params.property)
-                       .populate({ path: "tenant", select: { name: 1, email: 1, phoneNumber: 1 } })
-                       .then((Property) => { res.json(Property)})
-                       .catch((e) => {
-                           console.log(e);})
-               }).catch((e) => {
-               console.log(e);});
+           if (user !== null) {
+               Property.findByIdAndUpdate(req.params.property, { tenant: user._id })
+                   .then(() =>    {
+                       Property.findById(req.params.property)
+                           .populate({ path: "tenant", select: { name: 1, email: 1, phoneNumber: 1 } })
+                           .then((Property) => { res.json(Property)})
+                           .catch(err => res.status(400).json(`Error: ${err}`))
+                   }).catch(err => res.status(400).json(`Error: ${err}`));
+           }
        })
-       .catch((e) => {
-           console.log(e );
-       });
+       .catch(err => res.status(400).json(`Error: ${err}`));
 });
 
-router.route('/deleteTenant/:owner/:property').patch((req, res) => {
+router.route('/deleteTenant/:owner/:property').post((req, res) => {
     Property.findByIdAndUpdate(req.params.property, {
         tenant: null
     }).then((r) => { res.json(r)});

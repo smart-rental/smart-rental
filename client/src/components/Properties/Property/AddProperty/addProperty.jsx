@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
     Grid,
     Paper,
@@ -11,10 +11,10 @@ import { useParams } from "react-router-dom";
 import HouseIcon from "@mui/icons-material/House";
 import MenuItem from "@mui/material/MenuItem";
 import Swal from "sweetalert2";
-import { editProperty, getProperty } from "../../api";
+import { addProperty } from "../../../../api";
 
-const EditProperty = () => {
-    let { ownerId, propertyId } = useParams();
+const AddProperty = () => {
+    let { id } = useParams();
     const initialState = {
         propertyLocation: "",
         propertyCreated: new Date(),
@@ -26,27 +26,8 @@ const EditProperty = () => {
         propertyImage: ""
     };
     const [utilities, setUtilities] = React.useState("");
-    const [pets, setPets] = React.useState("");
+    const [pet, setPets] = React.useState("");
     const [{ propertyLocation, propertyCreated, propertyValue, rentPerMonth, maxCapacity, parkingStalls, contract, propertyImage }, setValues] = useState(initialState);
-
-    useEffect(() => {
-        getProperty(ownerId, propertyId).then((res) => {
-            const { location, propertyCreated, propertyValue, rentPerMonth, maxCapacity, propertyImage, parkingStalls, pets, utilities, contract } = res.data[0];
-            setValues({
-                propertyLocation: location,
-                propertyCreated,
-                propertyValue,
-                rentPerMonth,
-                maxCapacity,
-                parkingStalls,
-                pets,
-                contract,
-                propertyImage
-            });
-            setPets(pets);
-            setUtilities(utilities);
-        });
-    }, []);
 
     const handleUtilitiesChange = (event) => {
         setUtilities(event.target.value);
@@ -68,44 +49,51 @@ const EditProperty = () => {
     const btnStyle = {
         margin: "8px 0"
     };
-
+    
+    const reset = () => {
+        setPets("");
+        setUtilities("");
+        setValues({ ...initialState });
+    };
+    
     const handleChange = (event) => {
         const { name, value } = event.target;
         setValues((prevState) => ({ ...prevState, [name]: value }));
     };
 
-    const updateProperty = (e) => {
+    const createProperty = (e) => {
         e.preventDefault();
-        console.log(propertyCreated);
-        const propertyToEdit = {
+        const propertyToAdd = {
             location: propertyLocation,
             propertyCreated,
             propertyValue,
             rentPerMonth,
             maxCapacity,
             parkingStalls,
-            pets,
+            pets: pet,
             utilities,
             contract,
             propertyImage,
-            ownerId
+            ownerId: id
         };
-        editProperty(ownerId, propertyId, propertyToEdit)
+        addProperty(id, propertyToAdd)
             .then(() => {
-                Swal.fire("Congratulations", "Your property has been added", "success");
+                Swal.fire("Congratulations", "Your property has been added", "success").then(reset);
             })
-            .catch(() => {
+            .catch((e) => {
+                console.log(e);
+                console.log(rentPerMonth);
                 Swal.fire("Try Again", "Your property has not been added", "error");
             });
     };
 
     return (
-        <form onSubmit={updateProperty}>
+        <form onSubmit={createProperty}>
             <Grid>
                 <Paper elevation={10} style={paperStyle}>
                     <Grid align="center">
                         <Avatar style={avatarStyle}><HouseIcon/></Avatar>
-                        <Typography variant="h5" fontFamily="Noto Sans">Edit Property</Typography>
+                        <Typography variant="h5" fontFamily="Noto Sans">Add Property</Typography>
                         <Typography variant="h5" fontFamily="Noto Sans">Properties that have not been rented out will be
                             displayed for renters to see</Typography>
                     </Grid>
@@ -128,7 +116,7 @@ const EditProperty = () => {
                         onChange={handleChange}
                         name="propertyCreated"
                         style={btnStyle}
-                        value={new Date(propertyCreated).toISOString().split('T')[0]}
+                        value={propertyCreated}
                         type="date"
                         fullWidth
                         InputLabelProps={{
@@ -191,7 +179,7 @@ const EditProperty = () => {
                         fullWidth
                         id="select"
                         label="Pets"
-                        value={pets}
+                        value={pet}
                         style={btnStyle}
                         onChange={handlePetsChange}
                         select
@@ -268,4 +256,4 @@ const EditProperty = () => {
     );
 };
 
-export default (EditProperty);
+export default (AddProperty);

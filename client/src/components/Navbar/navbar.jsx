@@ -155,10 +155,9 @@ const ResponsiveAppBar = () => {
                                     Property</Typography>
                             </Button>
                         </Link> : ""}                        
-                        {isLoggedIn != null && userType === LANDLORD ? <Link style={classes.link} to={`/addTenant/${isLoggedIn}`}>
+                        {isLoggedIn != null && userType === LANDLORD ? <Link style={classes.link} to={`/`}>
                             <Button style={classes.mobileButton} size="large">
-                                <Typography textAlign="center" style={{ color: "white" }} fontFamily="Noto Sans">Add
-                                    Tenant</Typography>
+                                <Typography textAlign="center" style={{ color: "white" }} fontFamily="Noto Sans">Issues</Typography>
                             </Button>
                         </Link> : ""}
                     </Box>

@@ -7,7 +7,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { useEffect, useState } from "react";
-import { deleteProperty, getProperties } from "../../api";
+import { deleteProperty, getProperties, getUsers } from "../../api";
 import { useNavigate, useParams } from "react-router-dom";
 import Property from "./Property/Property";
 import Swal from "sweetalert2";
@@ -19,6 +19,7 @@ const table = {
 
 const Properties = () => {
     const [properties, setProperties] = useState([]);
+    const [users, setUsers] = useState([]);
     const params = useParams();
     const navigate = useNavigate();
     useEffect(() => {
@@ -27,7 +28,11 @@ const Properties = () => {
                 setProperties(res.data);
             })
             .catch((e) => {
-                console.log(e);})
+                console.log(e);});
+        getUsers()
+            .then((res) => {
+                setUsers(res.data); 
+            });
     });
 
     const removeProperty = (propertyId) => {
@@ -44,6 +49,10 @@ const Properties = () => {
     
     const editProperty = (propertyId) => { 
         navigate(`/editProperty/${params.id}/${propertyId}`);
+    }
+
+    const addTenant = (propertyId) => {
+        navigate(`/addTenant/${params.id}/${propertyId}`);
     }
     
     return (
@@ -64,11 +73,12 @@ const Properties = () => {
                             <TableCell align="center">Utilities</TableCell>
                             <TableCell align="center">Edit</TableCell>
                             <TableCell align="center">Delete</TableCell>
+                            <TableCell align="center">Tenant</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
                         {properties.map((property) => (
-                            <Property property={property} removeProperty={removeProperty} editProperty={editProperty} key={property._id}/>
+                            <Property property={property} users={users} removeProperty={removeProperty} editProperty={editProperty} addTenant={addTenant} key={property._id}/>
                         ))}
                     </TableBody>
                 </Table>
