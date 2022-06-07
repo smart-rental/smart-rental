@@ -11,6 +11,7 @@ import store from "./Store";
 import { customTheme } from "./styles";
 import EditProperty from "./components/Properties/Property/EditProperty/editProperty";
 import AddTenant from "./components/Properties/Property/AddTenant/AddTenant";
+import EditTenant from "./components/Properties/Property/EditTenant/EditTenant";
 
 const App = function () { 
     return (
@@ -27,6 +28,7 @@ const App = function () {
                             <Route path="/addProperty/:id" element={<AddProperty/>}/>
                             <Route path="/editProperty/:ownerId/:propertyId" element={<EditProperty/>}/>
                             <Route path="/addTenant/:ownerId/:propertyId" element={<AddTenant/>}/>
+                            <Route path="/editTenant/:ownerId/:propertyId" element={<EditTenant/>}/>
                         </Route>
                     </Routes>
                 </BrowserRouter>

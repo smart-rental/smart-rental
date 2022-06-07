@@ -1,19 +1,24 @@
 import Property from "../models/properties.model.js";
 import User from "../models/user.model.js";
 import express from "express";
-import mongoose from "mongoose";
 
 const router = express.Router();
 
 router.route('/:id').get((req, res) => {
     Property.find({ ownerId: req.params.id })
-        .then(Property => res.json(Property))
+        .then(Property.find({ ownerId: req.params.id })
+            .populate({ path: "tenant", select: { name: 1, email: 1, phoneNumber: 1 } })
+            .then((Property) => { res.json(Property)})
+            .catch(err => res.status(400).json(`Error: ${err}`)))
         .catch(e => res.status(400).json(`Error: ${e}`));
 });
 
 router.route('/:ownerId/:propertyId').get((req, res) => {
     Property.find({ ownerId: req.params.ownerId, _id: req.params.propertyId })
-        .then(Property => res.json(Property))
+        .then(Property.findById(req.params.propertyId)
+            .populate({ path: "tenant", select: { name: 1, email: 1, phoneNumber: 1 } })
+            .then((Property) => { res.json(Property)})
+            .catch(err => res.status(400).json(`Error: ${err}`)))
         .catch(e => res.status(400).json(`Error: ${e}`));
 });
 
@@ -25,11 +30,8 @@ router.route('/addTenant/:owner/:property').post((req, res) => {
        .then(user => {
            if (user !== null) {
                Property.findByIdAndUpdate(req.params.property, { tenant: user._id })
-                   .then(() =>    {
-                       Property.findById(req.params.property)
-                           .populate({ path: "tenant", select: { name: 1, email: 1, phoneNumber: 1 } })
-                           .then((Property) => { res.json(Property)})
-                           .catch(err => res.status(400).json(`Error: ${err}`))
+                   .then((Property) =>    {
+                       res.json(Property);
                    }).catch(err => res.status(400).json(`Error: ${err}`));
            }
        })
@@ -37,9 +39,14 @@ router.route('/addTenant/:owner/:property').post((req, res) => {
 });
 
 router.route('/deleteTenant/:owner/:property').post((req, res) => {
-    Property.findByIdAndUpdate(req.params.property, {
-        tenant: null
-    }).then((r) => { res.json(r)});
+    Property.findByIdAndUpdate(req.params.property, { tenant: null })
+        .then((Property) => { 
+            res.json(Property);
+        })
+        .catch((e) => {
+            console.log(e);
+        });
+    
 });
 
 router.route('/:id').post((req, res) => {

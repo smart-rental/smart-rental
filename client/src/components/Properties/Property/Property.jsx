@@ -7,16 +7,21 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import PersonAddAltIcon from '@mui/icons-material/PersonAddAlt';
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const Property = ({property: { _id, location, propertyCreated, propertyValue, rentPerMonth, maxCapacity, propertyImage, parkingStalls, pets, utilities, tenant }, removeProperty, editProperty, addTenant, users}) => {
     const checkOrX = (bool) => {
         return bool ? <CheckCircleIcon/> : <CancelIcon/>
     }
-    
+
+    const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
     const displayTenant = () => {
-        const isTenant = users.find(user => user._id === tenant);
+        let isTenant = null;
+        if (tenant) {
+            isTenant = users.find(user => user._id === tenant._id);
+        }
         return isTenant == null ? <PersonAddAltIcon onClick={() => {
-            addTenant(_id);}}/> : <Link to={'/editTenant'}>{isTenant.name}</Link>;
+            addTenant(_id);}}/> : <Link to={`/editTenant/${isLoggedIn}/${_id}`}>{isTenant.name}</Link>;
     }
     
     return(

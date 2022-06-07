@@ -40,7 +40,9 @@ const ResponsiveAppBar = () => {
        getUsers()
            .then(r => {
                let user = r.data.find(user => user._id === isLoggedIn);
-               setUserType(user.userType);
+               if (user) {
+                   setUserType(user.userType);
+               }
            })
            .catch(e => {
                console.log(e);}); 
