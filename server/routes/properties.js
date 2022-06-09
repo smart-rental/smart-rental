@@ -4,6 +4,13 @@ import express from "express";
 
 const router = express.Router();
 
+router.route('/').get((req, res) => {
+    Property.find()
+        .then((Property) => {
+            res.json(Property); })
+        .catch(e => res.status(400).json(`Error: ${e}`));
+});
+
 router.route('/:id').get((req, res) => {
     Property.find({ ownerId: req.params.id })
         .then(Property.find({ ownerId: req.params.id })
@@ -28,7 +35,7 @@ router.route('/addTenant/:owner/:property').post((req, res) => {
    const tenantEmail = req.body.email;
    User.User.findOne({ phoneNumber: tenantPhoneNumber, name: tenantName, email: tenantEmail })
        .then(user => {
-           if (user !== null) {
+           if (user != null) {
                Property.findByIdAndUpdate(req.params.property, { tenant: user._id })
                    .then((Property) =>    {
                        res.json(Property);

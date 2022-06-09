@@ -2,10 +2,12 @@ import express from 'express';
 import mongoose from "mongoose";
 import cors from "cors";
 
+import issueRouter from './routes/issues.js';
 import usersRouter from './routes/users.js';
 import authRouter from './routes/auth.js';
 import propertyRouter from './routes/properties.js';
 import tenantRouter from './routes/tenant.js';
+
 
 const app = express();
 
@@ -16,6 +18,7 @@ app.use(cors());
 app.use('/api/users', usersRouter);
 app.use('/api/auth', authRouter);
 app.use('/api/property', propertyRouter);
+app.use('/api/issue', issueRouter);
 app.use('/api/tenant', tenantRouter);
 app.use("*", (req, res) => { res.status(404).json({ error: " Page Not found "})});
 

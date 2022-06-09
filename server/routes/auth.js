@@ -9,7 +9,8 @@ router.get("/", (req, res) => {
     User.find()
         .then(users => res.json(users))
         .catch(e => res.status(400).json(e));
-})
+});
+
 router.post("/", async (req, res) => {
     try {
         const { error } = validate(req.body);
