@@ -19,7 +19,7 @@ router.route('/:tenantId').get((req, res) => {
 
 router.route('/:tenantId').post((req, res) => {
     const { tenantId } = req.params;
-    const { issueType, issueImage, issueDescription, status } = req.body;
+    const { issueType, issueImage, issueDescription } = req.body;
     Property.findOne({tenant: tenantId})
         .then((Property) => {
             const newIssue = new Issue({
@@ -28,14 +28,13 @@ router.route('/:tenantId').post((req, res) => {
                 issueType,
                 issueImage,
                 issueDescription,
-                status
             });
             newIssue.save()
                 .then(Issue => res.json(Issue))
                 .catch(e => res.status(400).json(`Error: ${e}`));
         })
-        .catch((e) => {
-            res.json(e);});
+        .catch(() => {
+            res.status(404).json("Error: user does not belong to a property");});
 });
 
 router.route('/:tenantId/:id').delete((req, res) => {

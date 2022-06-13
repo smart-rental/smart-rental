@@ -82,7 +82,6 @@ const AddProperty = () => {
             })
             .catch((e) => {
                 console.log(e);
-                console.log(rentPerMonth);
                 Swal.fire("Try Again", "Your property has not been added", "error");
             });
     };

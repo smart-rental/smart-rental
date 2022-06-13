@@ -162,6 +162,11 @@ const ResponsiveAppBar = () => {
                                 <Typography textAlign="center" style={{ color: "white" }} fontFamily="Noto Sans">Issues</Typography>
                             </Button>
                         </Link> : ""}
+                        {isLoggedIn != null && userType === TENANT ? <Link style={classes.link} to={`/addIssue/${isLoggedIn}`}>
+                            <Button style={classes.mobileButton} size="large">
+                                <Typography textAlign="center" style={{ color: "white" }} fontFamily="Noto Sans">Add Issue</Typography>
+                            </Button>
+                        </Link> : ""}
                     </Box>
 
                     <Box sx={{ flexGrow: 0 }}>

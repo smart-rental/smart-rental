@@ -14,3 +14,9 @@ export const deleteProperty = (id) => axios.delete( `${url}/property/${id}`);
 export const editProperty = (ownerId, id, propertyToEdit) => axios.post( `${url}/property/update/${ownerId}/${id}`, propertyToEdit);
 export const addTenant = (ownerId, propertyId, tenantToAdd) => axios.post(`${url}/property/addTenant/${ownerId}/${propertyId}`, tenantToAdd);
 export const deleteTenant = (ownerId, propertyId) => axios.post(`${url}/property/deleteTenant/${ownerId}/${propertyId}`);
+//Issue
+export const retrieveAllIssues = () => axios.get(`${url}/issue`);
+export const retrieveIssues = (tenantId) => axios.get(`${url}/issue/${tenantId}`);
+export const addIssue = (tenantId, issue) => axios.post(`${url}/issue/${tenantId}`, issue);
+export const deleteIssue = (tenantId, issueId) => axios.delete(`${url}/issue/${tenantId}/${issueId}`);
+export const editIssue = (tenantId, issueId, issueToEdit) => axios.post(`${url}/issue/update/ ${tenantId}/${issueId}`, issueToEdit);
