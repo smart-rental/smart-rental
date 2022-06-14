@@ -4,17 +4,29 @@ import MenuItem from "@mui/material/MenuItem";
 import FeedbackIcon from '@mui/icons-material/Feedback';
 import { useSelector } from "react-redux";
 import { addIssue } from "../../../api";
-import { useParams } from "react-router-dom";
 import Swal from "sweetalert2";
 
 const AddIssue = () => {
     const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
-    const { tenantId } = useParams();
     const initialState = { 
         issueType: "",
         issueImage: "",
         issueDescription: ""
     }
+
+    const paperStyle = {
+        padding: 20,
+        margin: "20px auto"
+    };
+
+    const avatarStyle = {
+        backgroundColor: "#26a69a"
+    };
+
+    const btnStyle = {
+        margin: "8px 0"
+    };
+    
     const [{issueType, issueImage, issueDescription}, setValues] = useState(initialState);
     
     const handleChange = (event) => { 
@@ -33,8 +45,7 @@ const AddIssue = () => {
             issueImage,
             issueDescription
         }
-        console.log(issue);
-        addIssue(tenantId, issue)
+        addIssue(isLoggedIn, issue)
             .then((res) => {
                 console.log(res);
                 Swal.fire("Congratulations", "Your issue has been created and will be addressed shortly by your landlord", "success");
@@ -52,9 +63,9 @@ const AddIssue = () => {
     return (
         <form onSubmit={createIssue}>
             <Grid>
-                <Paper elevation={10}>
+                <Paper elevation={10} style={paperStyle}>
                     <Grid align="center">
-                        <Avatar ><FeedbackIcon/></Avatar>
+                        <Avatar style={avatarStyle}><FeedbackIcon/></Avatar>
                         <Typography variant="h5" fontFamily="Noto Sans">Create An Issue</Typography>
                         <Typography variant="h5" fontFamily="Noto Sans">
                             Issues will be automatically sent to your landlord.
@@ -62,6 +73,7 @@ const AddIssue = () => {
                     </Grid>
                     <TextField
                         fullWidth
+                        style={btnStyle}
                         id="select"
                         label="Issue Type"
                         select
@@ -82,6 +94,7 @@ const AddIssue = () => {
                     <TextField
                         required
                         fullWidth
+                        style={btnStyle}
                         id="outlined-required"
                         onChange={handleChange}
                         name="issueImage"
@@ -100,7 +113,7 @@ const AddIssue = () => {
                         placeholder="Brief description of your issue (optional)"
                         style={{ width: 1904 }}
                     />
-                    <Button type="submit" color="primary" variant="contained" fullWidth>
+                    <Button type="submit" color="primary" variant="contained" fullWidth style={btnStyle}>
                         <Typography fontFamily="Noto Sans">Submit</Typography>
                     </Button>
                 </Paper>

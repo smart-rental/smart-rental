@@ -14,6 +14,7 @@ import AddTenant from "./components/Properties/Property/AddTenant/AddTenant";
 import EditTenant from "./components/Properties/Property/EditTenant/EditTenant";
 import Issues from "./components/Issues/Issues";
 import AddIssue from "./components/Issues/AddIssue/addIssue";
+import EditIssue from "./components/Issues/EditIssue/editIssue";
 
 const App = function () { 
     return (
@@ -31,7 +32,9 @@ const App = function () {
                             <Route path="/editProperty/:ownerId/:propertyId" element={<EditProperty/>}/>
                             <Route path="/addTenant/:ownerId/:propertyId" element={<AddTenant/>}/>
                             <Route path="/editTenant/:ownerId/:propertyId" element={<EditTenant/>}/>
+                            <Route path="/issue/:tenantId" element={<Issues/>}/>
                             <Route path="/addIssue/:tenantId" element={<AddIssue/>}/>
+                            <Route path="/editIssue/:tenantId/:issueId" element={<EditIssue/>}/>
                         </Route>
                     </Routes>
                 </BrowserRouter>

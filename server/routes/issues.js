@@ -15,7 +15,14 @@ router.route('/:tenantId').get((req, res) => {
     Issue.find({ tenantId: req.params.tenantId })
         .then(Issue => res.json(Issue))
         .catch(e => res.status(400).json(`Error: ${e}`));
-}); 
+});
+
+router.route('/:tenantId/:id').get((req, res) => {
+    const { id } = req.params;
+    Issue.findById(id)
+        .then(Issue => res.json(Issue))
+        .catch(e => res.status(400).json(`Error: ${e}`));
+});
 
 router.route('/:tenantId').post((req, res) => {
     const { tenantId } = req.params;
@@ -47,7 +54,7 @@ router.route('/:tenantId/:id').delete((req, res) => {
         .catch(e => res.status(404).json(e));
 });
 
-router.route('/update/:tenantId/:id').post((req, res) => {
+router.route('/update/:tenantId/:id').patch((req, res) => {
     const { tenantId, id } = req.params;
     if (!mongoose.isValidObjectId(tenantId)) {
         return res.status(404).send(`No post with id: ${tenantId}`);
@@ -60,7 +67,7 @@ router.route('/update/:tenantId/:id').post((req, res) => {
             Issue.issueImage = issueImage;
             Issue.issueDescription = issueDescription;
             Issue.status = status;
-            Issue.tenant = tenantId;
+            Issue.tenantId = tenantId;
 
             Issue.save()
                 .then(() => res.json(Issue))
