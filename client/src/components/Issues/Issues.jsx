@@ -19,7 +19,7 @@ const Issues = () => {
             .catch((e) => {
                 console.log(e);
             });
-    }, []);
+    },[]);
     
     const editIssue = (issueId) => { 
         navigate(`/editIssue/${isLoggedIn}/${issueId}`);
@@ -28,7 +28,7 @@ const Issues = () => {
     const removeIssue = (issueId) => {
         deleteIssue(isLoggedIn, issueId)
             .then(() => {
-                setIssues(issues.filter(issue => issue._id === issueId));
+                setIssues(issues.filter(issue => issue._id !== issueId));
                 Swal.fire("Issue Deleted", `The issue has been deleted`, 'success');
             })
             .catch((e) => {

@@ -33,12 +33,12 @@ const Properties = () => {
             .then((res) => {
                 setUsers(res.data); 
             });
-    });
+    }, []);
 
     const removeProperty = (propertyId) => {
         deleteProperty(propertyId)
             .then(() => {
-                setProperties(properties.filter(property => property._id === propertyId));
+                setProperties(properties.filter(property => property._id !== propertyId));
                 Swal.fire("Property Deleted", `The property has been deleted`, 'success');
             })
             .catch((e) => {

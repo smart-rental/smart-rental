@@ -5,9 +5,10 @@ import FeedbackIcon from '@mui/icons-material/Feedback';
 import { useSelector } from "react-redux";
 import { editIssue, retrieveIssue } from "../../../api";
 import Swal from "sweetalert2";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 const EditIssue = () => {
+    const navigate = useNavigate(); 
     const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
     const { issueId } = useParams();
     let initialState = {
@@ -63,7 +64,8 @@ const EditIssue = () => {
         }
         editIssue(isLoggedIn, issueId, issue)
             .then(() => {
-                Swal.fire("Congratulations", "Your issue has been successfully edited", "success");
+                Swal.fire("Congratulations", "Your issue has been successfully edited", "success")
+                    .then(() => navigate(`/issue/${isLoggedIn}`));
             })
             .catch((e) => {
                 if (e.response.status === 404) {
