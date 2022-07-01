@@ -17,9 +17,9 @@ router.route('/:tenantId').get((req, res) => {
         .catch(e => res.status(400).json(`Error: ${e}`));
 });
 
-router.route('/:tenantId/:id').get((req, res) => {
-    const { id } = req.params;
-    Issue.findById(id)
+router.route('/property/:propertyId').get((req, res) => {
+    const { propertyId } = req.params;
+    Issue.find({ propertyId })
         .then(Issue => res.json(Issue))
         .catch(e => res.status(400).json(`Error: ${e}`));
 });

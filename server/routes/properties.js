@@ -20,6 +20,17 @@ router.route('/:id').get((req, res) => {
         .catch(e => res.status(400).json(`Error: ${e}`));
 });
 
+router.route('/locate/:propertyId').get((req, res) => {
+    const { propertyId } = req.params;
+    Property.findById(propertyId)
+        .then((Property) => { 
+            res.json(Property);
+        })
+        .catch((e) => { 
+            res.status(400).json(e);
+        })
+});
+
 router.route('/:ownerId/:propertyId').get((req, res) => {
     Property.find({ ownerId: req.params.ownerId, _id: req.params.propertyId })
         .then(Property.findById(req.params.propertyId)
@@ -98,8 +109,8 @@ router.route('/update/:ownerId/:id').post((req, res) => {
             Property.rentPerMonth = Number(rentPerMonth);
             Property.maxCapacity = Number(maxCapacity);
             Property.propertyImage = propertyImage;
-            Property.tenant = tenant;
             Property.pets = Boolean(pets);
+            Property.tenant = tenant;
             Property.parkingStalls = Number(parkingStalls);
             Property.utilities = utilities;
             Property.contract = contract;

@@ -156,11 +156,6 @@ const ResponsiveAppBar = () => {
                                 <Typography textAlign="center" style={{ color: "white" }} fontFamily="Noto Sans">Add
                                     Property</Typography>
                             </Button>
-                        </Link> : ""}                        
-                        {isLoggedIn != null && userType === LANDLORD ? <Link style={classes.link} to={`/`}>
-                            <Button style={classes.mobileButton} size="large">
-                                <Typography textAlign="center" style={{ color: "white" }} fontFamily="Noto Sans">Issues</Typography>
-                            </Button>
                         </Link> : ""}
                         {isLoggedIn != null && userType === TENANT ? <Link style={classes.link} to={`/addIssue/${isLoggedIn}`}>
                             <Button style={classes.mobileButton} size="large">
@@ -172,7 +167,7 @@ const ResponsiveAppBar = () => {
                                 <Typography textAlign="center" style={{ color: "white" }} fontFamily="Noto Sans">Issues</Typography>
                             </Button>
                         </Link> : ""}
-                        {isLoggedIn != null && userType === TENANT ? <Link style={classes.link} to={`/addIssue/${isLoggedIn}`}>
+                        {isLoggedIn != null ? <Link style={classes.link} to={`/addIssue/${isLoggedIn}`}>
                             <Button style={classes.mobileButton} size="large">
                                 <Typography textAlign="center" style={{ color: "white" }} fontFamily="Noto Sans">Set up auto-payment</Typography>
                             </Button>

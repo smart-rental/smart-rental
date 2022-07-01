@@ -10,6 +10,7 @@ export const validateUser = (userInfo) => axios.post(`${url}/auth`, userInfo);
 export const addProperty = (id, propertyToAdd) => axios.post(`${url}/property/${id}`, propertyToAdd);
 export const getProperties = (id) => axios.get( `${url}/property/${id}`);
 export const getProperty = (ownerId, propertyId) => axios.get( `${url}/property/${ownerId}/${propertyId}`);
+export const getPropertyByID = (propertyId) => axios.get( `${url}/property/locate/${propertyId}`);
 export const deleteProperty = (id) => axios.delete( `${url}/property/${id}`);
 export const editProperty = (ownerId, id, propertyToEdit) => axios.post( `${url}/property/update/${ownerId}/${id}`, propertyToEdit);
 export const addTenant = (ownerId, propertyId, tenantToAdd) => axios.post(`${url}/property/addTenant/${ownerId}/${propertyId}`, tenantToAdd);

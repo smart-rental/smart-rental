@@ -28,11 +28,11 @@ const EditProperty = () => {
     };
     const [utilities, setUtilities] = React.useState("");
     const [pets, setPets] = React.useState("");
-    const [{ propertyLocation, propertyCreated, propertyValue, rentPerMonth, maxCapacity, parkingStalls, contract, propertyImage }, setValues] = useState(initialState);
+    const [{ propertyLocation, propertyCreated, propertyValue, rentPerMonth, maxCapacity, parkingStalls, contract, propertyImage, tenant }, setValues] = useState(initialState);
 
     useEffect(() => {
         getProperty(ownerId, propertyId).then((res) => {
-            const { location, propertyCreated, propertyValue, rentPerMonth, maxCapacity, propertyImage, parkingStalls, pets, utilities, contract } = res.data[0];
+            const { location, propertyCreated, propertyValue, rentPerMonth, maxCapacity, propertyImage, parkingStalls, pets, utilities, contract, tenant } = res.data;
             setValues({
                 propertyLocation: location,
                 propertyCreated,
@@ -42,6 +42,7 @@ const EditProperty = () => {
                 parkingStalls,
                 pets,
                 contract,
+                tenant,
                 propertyImage
             });
             setPets(pets);
@@ -88,6 +89,7 @@ const EditProperty = () => {
             utilities,
             contract,
             propertyImage,
+            tenant,
             ownerId
         };
         editProperty(ownerId, propertyId, propertyToEdit)

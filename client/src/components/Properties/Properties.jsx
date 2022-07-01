@@ -74,6 +74,7 @@ const Properties = () => {
                             <TableCell align="center">Edit</TableCell>
                             <TableCell align="center">Delete</TableCell>
                             <TableCell align="center">Tenant</TableCell>
+                            <TableCell align="center">Issues</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
