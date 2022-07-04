@@ -13,8 +13,7 @@ import { Link } from "react-router-dom";
 import classes from "./styles";
 import { useDispatch, useSelector } from "react-redux";
 import authActions from "../../Store/slices/auth-slice";
-import { useEffect, useState } from "react";
-import { getUsers } from "../../api";
+import userActions from "../../Store/slices/users-slice";
 
 const ResponsiveAppBar = () => {
     const LANDLORD = "Landlord";
@@ -22,7 +21,7 @@ const ResponsiveAppBar = () => {
     const [anchorElNav, setAnchorElNav] = React.useState(null);
     const dispatch = useDispatch();
     const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
-    const [userType, setUserType] = useState("");
+    const userType = useSelector((state) => state.users.userType);
     const handleOpenNavMenu = (event) => {
         setAnchorElNav(event.currentTarget);
     };
@@ -33,20 +32,8 @@ const ResponsiveAppBar = () => {
     
     const logOut = () => { 
         dispatch(authActions.actions.logout(null));
-        // localStorage.removeItem('id');
+        dispatch(userActions.actions.removeUserType(null));
     }
-    
-    useEffect(() => { 
-       getUsers()
-           .then(r => {
-               let user = r.data.find(user => user._id === isLoggedIn);
-               if (user) {
-                   setUserType(user.userType);
-               }
-           })
-           .catch(e => {
-               console.log(e);}); 
-    });
 
     return (
         <AppBar position="sticky" color="primary">
@@ -162,7 +149,7 @@ const ResponsiveAppBar = () => {
                                 <Typography textAlign="center" style={{ color: "white" }} fontFamily="Noto Sans">Add Issue</Typography>
                             </Button>
                         </Link> : ""}
-                        {isLoggedIn != null && userType === TENANT ? <Link style={classes.link} to={`/issue/${isLoggedIn}`}>
+                        {isLoggedIn != null && userType === TENANT ? <Link style={classes.link} to={`/issue`}>
                             <Button style={classes.mobileButton} size="large">
                                 <Typography textAlign="center" style={{ color: "white" }} fontFamily="Noto Sans">Issues</Typography>
                             </Button>

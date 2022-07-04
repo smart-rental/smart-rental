@@ -20,6 +20,7 @@ import Swal from "sweetalert2";
 import classes from "./styles";
 import { useDispatch } from "react-redux";
 import authActions from "../../Store/slices/auth-slice";
+import userActions from "../../Store/slices/users-slice";
 
 const Signup = () => {
     const navigate = useNavigate();
@@ -51,10 +52,10 @@ const Signup = () => {
 
     const retrieveNewUser = (userLogin) => {
         getUsers().then((response) => {
-            let users = response.data.find(users => users.email === userLogin.email);
-            console.log(users);
+            let userInfo = response.data.find(users => users.email === userLogin.email);
             navigate(`/`);
-            dispatch(authActions.actions.login(users._id));
+            dispatch(authActions.actions.login(userInfo._id));
+            dispatch(userActions.actions.setUserType(userInfo.userType));
         });
     }
     

@@ -19,6 +19,7 @@ import Swal from "sweetalert2";
 import classes from "./styles";
 import { useDispatch } from "react-redux";
 import authActions from "../../Store/slices/auth-slice";
+import userActions from "../../Store/slices/users-slice";
 
 const Signin = () => {
     const navigate = useNavigate();
@@ -68,9 +69,9 @@ const Signin = () => {
         //Call the backend
         validateUser(userCredentials)
             .then(() => {
-                // localStorage.setItem("id", userInfo._id);
                 navigate(`/`);
-                dispatch(authActions.actions.login(userInfo._id));                
+                dispatch(authActions.actions.login(userInfo._id)); 
+                dispatch(userActions.actions.setUserType(userInfo.userType));
             })
             .catch(() => Swal.fire("Try Again", "It seems you have entered the wrong password or email", "error"));
     };

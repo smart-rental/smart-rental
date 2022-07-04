@@ -17,6 +17,13 @@ router.route('/:tenantId').get((req, res) => {
         .catch(e => res.status(400).json(`Error: ${e}`));
 });
 
+router.route('/oneIssue/:issueId').get((req, res) => {
+    const { issueId } = req.params;
+    Issue.findById(issueId)
+        .then(Issue => res.json(Issue))
+        .catch(e => res.status(400).json(`Error: ${e}`));
+});
+
 router.route('/property/:propertyId').get((req, res) => {
     const { propertyId } = req.params;
     Issue.find({ propertyId })
@@ -54,10 +61,10 @@ router.route('/:tenantId/:id').delete((req, res) => {
         .catch(e => res.status(404).json(e));
 });
 
-router.route('/update/:tenantId/:id').patch((req, res) => {
-    const { tenantId, id } = req.params;
-    if (!mongoose.isValidObjectId(tenantId)) {
-        return res.status(404).send(`No post with id: ${tenantId}`);
+router.route('/update/:id').patch((req, res) => {
+    const { id } = req.params;
+    if (!mongoose.isValidObjectId(id)) {
+        return res.status(404).send(`No post with id: ${id}`);
     }
     const { propertyId ,issueType, issueImage, issueDescription, status } = req.body;
     Issue.findByIdAndUpdate(id)
@@ -67,7 +74,6 @@ router.route('/update/:tenantId/:id').patch((req, res) => {
             Issue.issueImage = issueImage;
             Issue.issueDescription = issueDescription;
             Issue.status = status;
-            Issue.tenantId = tenantId;
 
             Issue.save()
                 .then(() => res.json(Issue))

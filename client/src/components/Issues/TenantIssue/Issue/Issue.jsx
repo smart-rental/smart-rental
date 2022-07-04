@@ -1,25 +1,41 @@
 import React, { useEffect, useState } from "react";
 import { Button, Card, CardActions, CardContent, CardMedia, Grid, Typography } from "@mui/material";
-import { getPropertyByID } from "../../../api";
+import { getPropertyByID, updateIssue } from "../../../../api";
+import { useSelector } from "react-redux";
 
-const Issue = ({issue: { _id, issueImage, issueType, issueDescription, status, propertyId }, removeIssue, editIssue}) => {
-    const [location , setLocation] = useState("");
-    const findStatus = () => { 
-        if (status) {
-            return "not done";
-        }
-        return "done"
-    }
+const Issue = ({
+                   issue: { _id, issueImage, issueType, issueDescription, status, propertyId },
+                   removeIssue,
+                   editIssue,
+                   updateStatus
+               }) => {
+    const [location, setLocation] = useState("");
+    const userType = useSelector((state) => state.users.userType);
+    const findStatus = () => {
+        return status ? "Completed" : "In Progress";
+    };
 
-    useEffect(() => { 
+    //gets the property using the property location
+    useEffect(() => {
         getPropertyByID(propertyId)
             .then(r => {
-                setLocation(r.data.location);
+                if (r.data) {
+                    setLocation(r.data.location);
+                }
             })
             .catch(e => {
-                console.log(e);});
-    }, []);
-    
+                console.log(e);
+            });
+    });
+
+    const issue = {
+        issueType,
+        issueImage,
+        issueDescription,
+        status: true,
+        propertyId
+    };
+
     return (
         <Grid item>
             <Card sx={{ maxWidth: 345 }}>
@@ -34,7 +50,7 @@ const Issue = ({issue: { _id, issueImage, issueType, issueDescription, status, p
                         {issueType}
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
-                        {issueDescription}
+                        Description: {issueDescription}
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
                         Status: {findStatus()}
@@ -47,10 +63,13 @@ const Issue = ({issue: { _id, issueImage, issueType, issueDescription, status, p
                     <Button size="small" onClick={() => editIssue(_id)}>
                         Edit
                     </Button>
-                    <Button size="small" onClick={() => removeIssue(_id)}>
-                        Delete
-                    </Button>
+                    {userType === "Landlord" ?
+                        <Button size="small" onClick={() => updateStatus(_id, issue)}>Done</Button> :
+                        <Button size="small" onClick={() => removeIssue(_id)}>
+                            Delete
+                        </Button>}
                 </CardActions>
+
             </Card>
         </Grid>
     );

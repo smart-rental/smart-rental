@@ -1,37 +1,18 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Avatar, Button, Grid, Paper, TextareaAutosize, TextField, Typography } from "@mui/material";
 import MenuItem from "@mui/material/MenuItem";
 import FeedbackIcon from '@mui/icons-material/Feedback';
 import { useSelector } from "react-redux";
-import { editIssue, retrieveIssue } from "../../../api";
+import { addIssue } from "../../../../api";
 import Swal from "sweetalert2";
-import { useNavigate, useParams } from "react-router-dom";
 
-const EditIssue = () => {
-    const navigate = useNavigate(); 
+const AddIssue = () => {
     const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
-    const { issueId } = useParams();
-    let initialState = {
+    const initialState = { 
         issueType: "",
         issueImage: "",
         issueDescription: ""
     }
-    const [{issueType, issueImage, issueDescription}, setValues] = useState(initialState);
-    const [res, setRef] = useState({}); 
-    useEffect(() => { 
-        retrieveIssue(isLoggedIn, issueId)
-            .then((res) => {
-                setRef(res.data);
-                setValues({
-                    issueType: res.data.issueType,
-                    issueImage: res.data.issueImage,
-                    issueDescription: res.data.issueDescription
-                })
-            })
-            .catch((e) => {
-                console.log(e);
-            })
-    }, []);
 
     const paperStyle = {
         padding: 20,
@@ -45,45 +26,47 @@ const EditIssue = () => {
     const btnStyle = {
         margin: "8px 0"
     };
-
-
-    const handleChange = (event) => {
+    
+    const [{issueType, issueImage, issueDescription}, setValues] = useState(initialState);
+    
+    const handleChange = (event) => { 
         const {name, value} = event.target;
         setValues((prevState) => ({ ...prevState, [name]: value}));
     }
-
+    
+    const reset = () => { 
+        setValues(initialState);
+    }
+    
     const createIssue = (e) => {
         e.preventDefault();
-        const { status, propertyId } = res;
-        const issue = {
+        const issue = { 
             issueType,
             issueImage,
-            issueDescription,
-            status,
-            propertyId
+            issueDescription
         }
-        editIssue(isLoggedIn, issueId, issue)
-            .then(() => {
-                Swal.fire("Congratulations", "Your issue has been successfully edited", "success")
-                    .then(() => navigate(`/issue/${isLoggedIn}`));
+        addIssue(isLoggedIn, issue)
+            .then((res) => {
+                console.log(res);
+                Swal.fire("Congratulations", "Your issue has been created and will be addressed shortly by your landlord", "success");
+                reset();
             })
             .catch((e) => {
                 if (e.response.status === 404) {
                     Swal.fire("Error", "You have not been added to a property. <br/> If this is a mistake please contact your landlord to add you to their list of properties", "error");
-                } else {
+                } else { 
                     Swal.fire("Error", "There was an issue adding your error", "error");
-                    console.log(e);
                 }
             })
     }
-
+    
     return (
         <form onSubmit={createIssue}>
             <Grid>
                 <Paper elevation={10} style={paperStyle}>
                     <Grid align="center">
                         <Avatar style={avatarStyle}><FeedbackIcon/></Avatar>
-                        <Typography variant="h5" fontFamily="Noto Sans">Edit Issue</Typography>
+                        <Typography variant="h5" fontFamily="Noto Sans">Create An Issue</Typography>
                         <Typography variant="h5" fontFamily="Noto Sans">
                             Issues will be automatically sent to your landlord.
                         </Typography>
@@ -139,4 +122,4 @@ const EditIssue = () => {
     );
 };
 
-export default EditIssue;
+export default AddIssue;

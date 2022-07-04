@@ -9,6 +9,9 @@ const usersSlice = createSlice({
         setUserType(state, action) {
             state.userType = action.payload;
         },
+        removeUserType(state, action) {
+            state.userType = action.payload;
+        }
     }
 });
 

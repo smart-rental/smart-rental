@@ -45,7 +45,7 @@ const Property = ({property: { _id, location, propertyCreated, propertyValue, re
             <TableCell align="center"><DeleteForeverIcon onClick={() => {
                 removeProperty(_id);}}/></TableCell>
             <TableCell align="center">{displayTenant()}</TableCell>
-            <TableCell align="center">Issue</TableCell>
+            <TableCell align="center"><Link to={`/issue/${_id}`}>Issue</Link></TableCell>
         </TableRow>
     );
 }
