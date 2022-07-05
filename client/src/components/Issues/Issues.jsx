@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useId } from "react";
-import { Grid, Typography } from "@mui/material";
 import Issue from "./TenantIssue/Issue/Issue";
 import { useSelector } from "react-redux";
 import { deleteIssue, retrieveIssueFromProperty, retrieveIssues, updateIssue } from "../../api";
@@ -13,6 +12,7 @@ const Issues = () => {
     const userType = useSelector((state) => state.users.userType);
     const [columns, setColumns] = useState([]);
     const [issues, setIssues] = useState([]);
+    const [status, setStatus] = useState([]);
     const params = useParams();
     const requestedId = useId();
     const inProgressId = useId();
@@ -47,20 +47,16 @@ const Issues = () => {
             .catch((e) => {
                 console.log(e);
             });
-    }, []);
+    }, [status]);
 
     const editIssue = (issueId) => {
         navigate(`/editIssue/${isLoggedIn}/${issueId}`);
     };
 
     const updateStatus = (issueId, issue) => {
-        updateIssue(issueId, issue)
-            .then(r => {
-                console.log(r);
-            })
-            .catch(e => {
-                console.log(e);
-            });
+        updateIssue(issueId, issue).then(r => {
+            setStatus(r.data)
+        })
     };
 
     const removeIssue = (issueId) => {
@@ -170,7 +166,7 @@ const Issues = () => {
                                                                             ...provided.draggableProps.style
                                                                         }}
                                                                     >
-                                                                        <Issue issue={item} editIssue={editIssue} removeIssue={removeIssue}/>
+                                                                        <Issue issue={item} editIssue={editIssue} removeIssue={removeIssue} updateStatus={updateStatus}/>
                                                                     </div>
                                                                 );
                                                             }}

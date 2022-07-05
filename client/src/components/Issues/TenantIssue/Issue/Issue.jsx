@@ -6,8 +6,9 @@ import { useSelector } from "react-redux";
 const Issue = ({
                    issue: { _id, issueImage, issueType, issueDescription, status, propertyId },
                    removeIssue,
-                   editIssue, 
+                   editIssue,
                }) => {
+    
     return (
         <Grid item>
             <Card sx={{ maxWidth: 345 }}>

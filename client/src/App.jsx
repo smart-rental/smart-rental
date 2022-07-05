@@ -3,7 +3,7 @@ import Navbar from '../src/components/Navbar/navbar';
 import Login from './components/Signin/signin';
 import Signup from '../src/components/Signup/signup';
 import Home from '../src/components/Home/home';
-import Landlord from './components/Properties/Properties';
+import Properties from './components/Properties/Properties';
 import AddProperty from './components/Properties/Property/AddProperty/addProperty';
 import { ThemeProvider } from "@emotion/react";
 import { Provider, useSelector } from "react-redux";
@@ -27,7 +27,7 @@ const App = function () {
                         <Route path="/login" element={<Login/>}/>
                         <Route path="/signup" element={<Signup/>}/>
                         <Route element={<ProtectedRoutes/>}>
-                            <Route path="/landlord/:id" element={<Landlord/>}/>
+                            <Route path="/landlord/:id" element={<Properties/>}/>
                             <Route path="/addProperty/:id" element={<AddProperty/>}/>
                             <Route path="/editProperty/:ownerId/:propertyId" element={<EditProperty/>}/>
                             <Route path="/addTenant/:ownerId/:propertyId" element={<AddTenant/>}/>

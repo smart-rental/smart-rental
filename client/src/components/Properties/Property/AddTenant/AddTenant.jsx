@@ -7,7 +7,7 @@ import {
     Button,
     Typography
 } from "@mui/material";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import HouseIcon from "@mui/icons-material/House";
 import Swal from "sweetalert2";
 import { addTenant, deleteTenant } from "../../../../api";
@@ -20,7 +20,7 @@ const AddTenant = () => {
         phoneNumber: ""   
     };
     const [{ name, email, phoneNumber }, setValues] = useState(initialState);
-
+    const navigate = useNavigate();
     const paperStyle = {
         padding: 20,
         margin: "20px auto"
@@ -36,6 +36,7 @@ const AddTenant = () => {
 
     const reset = () => {
         setValues({ ...initialState });
+        navigate(`/landlord/${ownerId}`);
     };
 
     const handleChange = (event) => {
