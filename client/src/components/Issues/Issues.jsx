@@ -8,48 +8,46 @@ import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import Swal from "sweetalert2";
 
 const Issues = () => {
-    const [issues, setIssues] = useState([]);
     const navigate = useNavigate();
     const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
     const userType = useSelector((state) => state.users.userType);
+    const [columns, setColumns] = useState([]);
+    const [issues, setIssues] = useState([]);
     const params = useParams();
-    //Retrieve issues from backend
+    const requestedId = useId();
+    const inProgressId = useId();
+    const doneId = useId();
     useEffect(() => {
-        if (userType === "Tenant") {
-            retrieveIssues(isLoggedIn)
-                .then((res) => {
-                    setIssues(res.data);
-                })
-                .catch((e) => {
-                    console.log(e);
-                });
-        } else {
-            retrieveIssueFromProperty(params.propertyId)
-                .then((res) => {
-                    setIssues(res.data);
-                })
-                .catch((e) => {
-                    console.log(e);
-                });
-        }
+        const issuesPromise =
+            userType === "Tenant"
+                ? retrieveIssues(isLoggedIn)
+                : retrieveIssueFromProperty(params.propertyId);
+        issuesPromise
+            .then((res) => {
+                setIssues(res.data);
+                const requestedIssues = res.data.filter(issue => issue.status === "Requested");
+                const inProgressIssues = res.data.filter(issue => issue.status === "In Progress");
+                const doneIssues = res.data.filter(issue => issue.status === "Done");
+                const columnsFromBackend = {
+                    [requestedId]: {
+                        name: "Requested",
+                        items: requestedIssues,
+                    },
+                    [inProgressId]: {
+                        name: "In Progress",
+                        items: inProgressIssues,
+                    },
+                    [doneId]: {
+                        name: "Done",
+                        items: doneIssues,
+                    },
+                };
+                setColumns(columnsFromBackend);
+            })
+            .catch((e) => {
+                console.log(e);
+            });
     }, []);
-
-    const columnsFromBackend = {
-        [useId()]: {
-            name: "Requested",
-            items: issues
-        },
-        [useId()]: {
-            name: "In Progress",
-            items: []
-        },
-        [useId()]: {
-            name: "Done",
-            items: []
-        }
-    };
-    //Columns is an empty array
-    const [columns, setColumns ] = useState(columnsFromBackend);
 
     const editIssue = (issueId) => {
         navigate(`/editIssue/${isLoggedIn}/${issueId}`);
@@ -58,7 +56,7 @@ const Issues = () => {
     const updateStatus = (issueId, issue) => {
         updateIssue(issueId, issue)
             .then(r => {
-                removeIssue(issueId);
+                console.log(r);
             })
             .catch(e => {
                 console.log(e);
@@ -86,6 +84,7 @@ const Issues = () => {
             const destItems = [...destColumn.items];
             const [removed] = sourceItems.splice(source.index, 1);
             destItems.splice(destination.index, 0, removed);
+            const issue = { ...removed, status: destColumn.name };
             setColumns({
                 ...columns,
                 [source.droppableId]: {
@@ -97,6 +96,7 @@ const Issues = () => {
                     items: destItems
                 }
             });
+            updateStatus(issue._id, issue);
         } else {
             const column = columns[source.droppableId];
             const copiedItems = [...column.items];
@@ -170,7 +170,7 @@ const Issues = () => {
                                                                             ...provided.draggableProps.style
                                                                         }}
                                                                     >
-                                                                        {item.issueDescription}
+                                                                        <Issue issue={item} editIssue={editIssue} removeIssue={removeIssue}/>
                                                                     </div>
                                                                 );
                                                             }}

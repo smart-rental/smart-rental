@@ -6,7 +6,7 @@ const issuesModel = mongoose.Schema({
     issueType: { type: String, required: true },
     issueImage: { type: String, required: true },
     issueDescription: { type: String, required: true },
-    status: { type: Boolean, required: true, default: false }
+    status: { type: String, required: true, default: "Requested" }
 });
 
 let Issue = mongoose.model('Issue', issuesModel);
