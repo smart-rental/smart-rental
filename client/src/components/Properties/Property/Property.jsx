@@ -8,6 +8,7 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import PersonAddAltIcon from '@mui/icons-material/PersonAddAlt';
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
+import Gallery from "../../Gallery/Gallery";
 
 const Property = ({property: { _id, location, propertyCreated, propertyValue, rentPerMonth, maxCapacity, propertyImage, parkingStalls, pets, utilities, tenant }, removeProperty, editProperty, addTenant, users}) => {
     const checkOrX = (bool) => {
@@ -25,7 +26,7 @@ const Property = ({property: { _id, location, propertyCreated, propertyValue, re
         return isTenant == null ? <PersonAddAltIcon onClick={() => {
             addTenant(_id);}}/> : <Link to={`/editTenant/${isLoggedIn}/${_id}`}>{isTenant.name}</Link>;
     }
-    
+
     return(
         <TableRow
             sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
@@ -37,7 +38,9 @@ const Property = ({property: { _id, location, propertyCreated, propertyValue, re
             <TableCell align="center">${propertyValue}</TableCell>
             <TableCell align="center">${rentPerMonth}</TableCell>
             <TableCell align="center">{maxCapacity}</TableCell>
-            <TableCell align="center">{propertyImage}</TableCell>
+            <TableCell align="center">
+                <Gallery images={propertyImage}/>
+            </TableCell>
             <TableCell align="center">{parkingStalls}</TableCell>
             <TableCell align="center">{checkOrX(pets)}</TableCell>
             <TableCell align="center">{utilities}</TableCell>

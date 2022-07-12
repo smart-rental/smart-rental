@@ -88,7 +88,6 @@ const AddTenant = () => {
                         name="name"
                         id="outlined-required"
                         label="Tenant Name"
-                        value={name}
                         InputLabelProps={{
                             shrink: true
                         }}
@@ -101,7 +100,6 @@ const AddTenant = () => {
                         name="email"
                         id="outlined-required"
                         label="Tenant Email"
-                        value={email}
                         InputLabelProps={{
                             shrink: true
                         }}
@@ -114,7 +112,6 @@ const AddTenant = () => {
                         name="phoneNumber"
                         id="outlined-required"
                         label="Tenant Phone Number"
-                        value={phoneNumber}
                         InputLabelProps={{
                             shrink: true
                         }}

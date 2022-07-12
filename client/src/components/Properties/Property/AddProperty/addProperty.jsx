@@ -23,11 +23,11 @@ const AddProperty = () => {
         maxCapacity: "",
         parkingStalls: "",
         contract: "",
-        propertyImage: ""
     };
     const [utilities, setUtilities] = React.useState("");
     const [pet, setPets] = React.useState("");
-    const [{ propertyLocation, propertyCreated, propertyValue, rentPerMonth, maxCapacity, parkingStalls, contract, propertyImage }, setValues] = useState(initialState);
+    const [propertyImage, setPropertyImage] = React.useState("");
+    const [{ propertyLocation, propertyCreated, propertyValue, rentPerMonth, maxCapacity, parkingStalls }, setValues] = useState(initialState);
 
     const handleUtilitiesChange = (event) => {
         setUtilities(event.target.value);
@@ -35,6 +35,15 @@ const AddProperty = () => {
 
     const handlePetsChange = (event) => {
         setPets(event.target.value);
+    };
+
+    const handleFileChange = (event) => {
+        setPropertyImage(event.target.files);
+    }
+    
+    const handleChange = (event) => {
+        const { name, value } = event.target;
+        setValues((prevState) => ({ ...prevState, [name]: value }));
     };
 
     const paperStyle = {
@@ -55,29 +64,26 @@ const AddProperty = () => {
         setUtilities("");
         setValues({ ...initialState });
     };
-    
-    const handleChange = (event) => {
-        const { name, value } = event.target;
-        setValues((prevState) => ({ ...prevState, [name]: value }));
-    };
 
     const createProperty = (e) => {
         e.preventDefault();
-        const propertyToAdd = {
-            location: propertyLocation,
-            propertyCreated,
-            propertyValue,
-            rentPerMonth,
-            maxCapacity,
-            parkingStalls,
-            pets: pet,
-            utilities,
-            contract,
-            propertyImage,
-            ownerId: id
-        };
-        addProperty(id, propertyToAdd)
-            .then(() => {
+        const formData = new FormData();
+        for (const image of propertyImage) {
+            console.log(image);
+            formData.append("propertyImage", image);
+        }
+        formData.append("location", propertyLocation);
+        formData.append("propertyCreated", propertyCreated.toString());
+        formData.append("propertyValue", propertyValue);
+        formData.append("rentPerMonth", rentPerMonth);
+        formData.append("maxCapacity", maxCapacity);
+        formData.append("parkingStalls", parkingStalls);
+        formData.append("pets", pet);
+        formData.append("utilities", utilities);
+        formData.append("contract", "someContract");
+        formData.append("ownerId", id);
+        addProperty(id, formData)
+            .then((r) => {
                 Swal.fire("Congratulations", "Your property has been added", "success").then(reset);
             })
             .catch((e) => {
@@ -104,7 +110,6 @@ const AddProperty = () => {
                         name="propertyLocation"
                         id="outlined-required"
                         label="Property Location"
-                        value={propertyLocation}
                         InputLabelProps={{
                             shrink: true
                         }}
@@ -115,7 +120,6 @@ const AddProperty = () => {
                         onChange={handleChange}
                         name="propertyCreated"
                         style={btnStyle}
-                        value={propertyCreated}
                         type="date"
                         fullWidth
                         InputLabelProps={{
@@ -129,7 +133,6 @@ const AddProperty = () => {
                         onChange={handleChange}
                         name="propertyValue"
                         fullWidth
-                        value={propertyValue}
                         style={btnStyle}
                         InputLabelProps={{
                             shrink: true
@@ -142,7 +145,6 @@ const AddProperty = () => {
                         name="rentPerMonth"
                         type="number"
                         fullWidth
-                        value={rentPerMonth}
                         style={btnStyle}
                         InputLabelProps={{
                             shrink: true
@@ -153,7 +155,6 @@ const AddProperty = () => {
                         label="Max Capacity"
                         onChange={handleChange}
                         name="maxCapacity"
-                        value={maxCapacity}
                         type="number"
                         fullWidth
                         style={btnStyle}
@@ -166,7 +167,6 @@ const AddProperty = () => {
                         label="Parking Stalls"
                         type="number"
                         onChange={handleChange}
-                        value={parkingStalls}
                         name="parkingStalls"
                         fullWidth
                         style={btnStyle}
@@ -207,45 +207,15 @@ const AddProperty = () => {
                         <MenuItem value={"Only Water"}>Only Water</MenuItem>
                         <MenuItem value={"None"}>None</MenuItem>
                     </TextField>
-                    <TextField
+                    <input
+                        type="file"
                         required
-                        fullWidth
                         style={btnStyle}
                         id="outlined-required"
-                        onChange={handleChange}
-                        name="contract"
-                        value={contract}
-                        label="Upload Contract Images"
-                        InputLabelProps={{
-                            shrink: true
-                        }}
-                    />
-                    <TextField
-                        required
-                        fullWidth
-                        style={btnStyle}
-                        id="outlined-required"
-                        onChange={handleChange}
+                        onChange={handleFileChange}
                         name="propertyImage"
-                        value={propertyImage}
-                        label="Upload Property Images"
-                        InputLabelProps={{
-                            shrink: true
-                        }}
+                        multiple
                     />
-
-                    {/*<label htmlFor="contained-button-file">*/}
-                    {/*    <Input accept="image/*" id="contained-button-file" multiple type="file" />*/}
-                    {/*    <Button variant="contained" style={{ btnStyle, marginRight: "20px" }} component="span">*/}
-                    {/*        Upload Contract Images*/}
-                    {/*    </Button>*/}
-                    {/*</label>*/}
-                    {/*<label htmlFor="contained-button-file">*/}
-                    {/*    <Input accept="image/*" id="contained-button-file" multiple type="file" />*/}
-                    {/*    <Button variant="contained" style={btnStyle} component="span">*/}
-                    {/*        Upload Property Images*/}
-                    {/*    </Button>*/}
-                    {/*</label>*/}
                     <Button type="submit" color="primary" variant="contained" style={btnStyle} fullWidth>
                         <Typography fontFamily="Noto Sans">Submit</Typography>
                     </Button>

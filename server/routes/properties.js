@@ -1,5 +1,6 @@
 import Property from "../models/properties.model.js";
 import User from "../models/user.model.js";
+import { upload } from "../middleware/propertyImageHelper.js";
 import express from "express";
 
 const router = express.Router();
@@ -48,7 +49,7 @@ router.route('/addTenant/:owner/:property').post((req, res) => {
        .then(user => {
            if (user != null) {
                Property.findByIdAndUpdate(req.params.property, { tenant: user._id })
-                   .then((Property) =>    {
+                   .then((Property) =>  {
                        res.json(Property);
                    }).catch(err => res.status(400).json(`Error: ${err}`));
            }
@@ -67,16 +68,24 @@ router.route('/deleteTenant/:owner/:property').post((req, res) => {
     
 });
 
-router.route('/:id').post((req, res) => {
+router.route('/:id').post(upload.array("propertyImage", 7), (req, res) => {
     const ownerId = req.params.id;
-    const { location, propertyCreated, propertyValue, rentPerMonth, maxCapacity, propertyImage, parkingStalls, pets, utilities, tenant, contract } = req.body;
+    let fileArray = [];
+    req.files.forEach(element => {
+        const file = {
+            fileName: element.originalname,
+            filePath: element.path,
+        }
+        fileArray.push(file);
+    });
+    const { location, propertyCreated, propertyValue, rentPerMonth, maxCapacity, parkingStalls, pets, utilities, tenant, contract } = req.body;
     const newProperty = new Property({
         location,
         propertyCreated,
         propertyValue,
         rentPerMonth,
         maxCapacity,
-        propertyImage,
+        propertyImage: fileArray,
         parkingStalls,
         pets,
         utilities,
@@ -97,18 +106,25 @@ router.route('/:id').delete((req, res) => {
         .catch(e => res.status(404).json(`Error: ${e}`));
 });
 
-router.route('/update/:ownerId/:id').post((req, res) => {
+router.route('/update/:ownerId/:id').post(upload.array("propertyImage", 7), (req, res) => {
     const { id, ownerId } = req.params;
-    const { location, owner, propertyCreated, propertyValue, rentPerMonth, maxCapacity, propertyImage, parkingStalls, pets, utilities, tenant, contract } = req.body;
+    let fileArray = [];
+    req.files.forEach(element => {
+        const file = {
+            fileName: element.originalname,
+            filePath: element.path,
+        }
+        fileArray.push(file);
+    });
+    const { location, propertyCreated, propertyValue, rentPerMonth, maxCapacity, parkingStalls, pets, utilities, tenant, contract } = req.body;
     Property.findByIdAndUpdate(id)
         .then(Property => {
             Property.location = location;
-            Property.owner = owner;
             Property.propertyCreated = Date.parse(propertyCreated);
             Property.propertyValue = Number(propertyValue);
             Property.rentPerMonth = Number(rentPerMonth);
             Property.maxCapacity = Number(maxCapacity);
-            Property.propertyImage = propertyImage;
+            Property.propertyImage = fileArray;
             Property.pets = Boolean(pets);
             Property.tenant = tenant;
             Property.parkingStalls = Number(parkingStalls);

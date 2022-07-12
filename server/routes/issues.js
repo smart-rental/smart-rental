@@ -2,6 +2,7 @@ import Issue from "../models/issues.model.js";
 import Property from "../models/properties.model.js";
 import express from "express";
 import mongoose from "mongoose";
+import { upload } from "../middleware/issueImageHelper.js";
 
 const router = express.Router();
 
@@ -31,16 +32,24 @@ router.route('/property/:propertyId').get((req, res) => {
         .catch(e => res.status(400).json(`Error: ${e}`));
 });
 
-router.route('/:tenantId').post((req, res) => {
+router.route('/:tenantId').post(upload.array("issueImage", 5),(req, res) => {
     const { tenantId } = req.params;
-    const { issueType, issueImage, issueDescription } = req.body;
+    let fileArray = [];
+    req.files.forEach(element => {
+        const file = {
+            fileName: element.originalname,
+            filePath: element.path,
+        }
+        fileArray.push(file);
+    });
+    const { issueType, issueDescription } = req.body;
     Property.findOne({tenant: tenantId})
         .then((Property) => {
             const newIssue = new Issue({
                 tenantId,
                 propertyId: Property._id,
+                issueImage: fileArray,
                 issueType,
-                issueImage,
                 issueDescription,
             });
             newIssue.save()
@@ -61,17 +70,25 @@ router.route('/:tenantId/:id').delete((req, res) => {
         .catch(e => res.status(404).json(e));
 });
 
-router.route('/update/:id').patch((req, res) => {
+router.route('/update/:id').patch(upload.array("issueImage", 5), (req, res) => {
     const { id } = req.params;
     if (!mongoose.isValidObjectId(id)) {
         return res.status(404).send(`No post with id: ${id}`);
     }
-    const { propertyId ,issueType, issueImage, issueDescription, status } = req.body;
+    let fileArray = [];
+    req.files.forEach(element => {
+        const file = {
+            fileName: element.originalname,
+            filePath: element.path,
+        }
+        fileArray.push(file);
+    });
+    const { propertyId ,issueType, issueDescription, status } = req.body;
     Issue.findByIdAndUpdate(id)
         .then(Issue => {
             Issue.propertyId = propertyId;
             Issue.issueType = issueType;
-            Issue.issueImage = issueImage;
+            Issue.issueImage = fileArray;
             Issue.issueDescription = issueDescription;
             Issue.status = status;
 

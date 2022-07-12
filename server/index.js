@@ -7,9 +7,15 @@ import usersRouter from './routes/users.js';
 import authRouter from './routes/auth.js';
 import propertyRouter from './routes/properties.js';
 import tenantRouter from './routes/tenant.js';
+import path from "path";
+
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
 
 
 const app = express();
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -20,6 +26,7 @@ app.use('/api/auth', authRouter);
 app.use('/api/property', propertyRouter);
 app.use('/api/issue', issueRouter);
 app.use('/api/tenant', tenantRouter);
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use("*", (req, res) => { res.status(404).json({ error: " Page Not found "})});
 
 const CONNECTION_URL = "mongodb+srv://gavpeng:gavpeng7447@cluster0.vq4nk.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";

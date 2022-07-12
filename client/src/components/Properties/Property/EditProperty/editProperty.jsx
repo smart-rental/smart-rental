@@ -28,11 +28,12 @@ const EditProperty = () => {
     };
     const [utilities, setUtilities] = React.useState("");
     const [pets, setPets] = React.useState("");
-    const [{ propertyLocation, propertyCreated, propertyValue, rentPerMonth, maxCapacity, parkingStalls, contract, propertyImage, tenant }, setValues] = useState(initialState);
+    const [propertyImage, setPropertyImage] = React.useState("");
+    const [{ propertyLocation, propertyCreated, propertyValue, rentPerMonth, maxCapacity, parkingStalls, contract }, setValues] = useState(initialState);
 
     useEffect(() => {
         getProperty(ownerId, propertyId).then((res) => {
-            const { location, propertyCreated, propertyValue, rentPerMonth, maxCapacity, propertyImage, parkingStalls, pets, utilities, contract, tenant } = res.data;
+            const { location, propertyCreated, propertyValue, rentPerMonth, propertyImage, maxCapacity, parkingStalls, pets, utilities, contract, tenant } = res.data;
             setValues({
                 propertyLocation: location,
                 propertyCreated,
@@ -43,21 +44,30 @@ const EditProperty = () => {
                 pets,
                 contract,
                 tenant,
-                propertyImage
             });
+            setPropertyImage(propertyImage);
             setPets(pets);
             setUtilities(utilities);
         });
-    }, []);
+    }, [ownerId, propertyId]);
 
     const handleUtilitiesChange = (event) => {
         setUtilities(event.target.value);
     };
 
+    const handleFileChange = (event) => {
+        setPropertyImage(event.target.files);
+    };
+    
     const handlePetsChange = (event) => {
         setPets(event.target.value);
     };
 
+    const handleChange = (event) => {
+        const { name, value } = event.target;
+        setValues((prevState) => ({ ...prevState, [name]: value }));
+    };
+    
     const paperStyle = {
         padding: 20,
         margin: "20px auto"
@@ -71,29 +81,25 @@ const EditProperty = () => {
         margin: "8px 0"
     };
 
-    const handleChange = (event) => {
-        const { name, value } = event.target;
-        setValues((prevState) => ({ ...prevState, [name]: value }));
-    };
-
     const updateProperty = (e) => {
         e.preventDefault();
-        const propertyToEdit = {
-            location: propertyLocation,
-            propertyCreated,
-            propertyValue,
-            rentPerMonth,
-            maxCapacity,
-            parkingStalls,
-            pets,
-            utilities,
-            contract,
-            propertyImage,
-            tenant,
-            ownerId
-        };
-        editProperty(ownerId, propertyId, propertyToEdit)
-            .then(() => {
+        const formData = new FormData();
+        for (const image of propertyImage) {
+            formData.append("propertyImage", image);
+        }
+        formData.append("location", propertyLocation);
+        formData.append("propertyCreated", propertyCreated.toString());
+        formData.append("propertyValue", propertyValue);
+        formData.append("rentPerMonth", rentPerMonth);
+        formData.append("maxCapacity", maxCapacity);
+        formData.append("parkingStalls", parkingStalls);
+        formData.append("pets", pets);
+        formData.append("utilities", utilities);
+        formData.append("contract", "someContract");
+        formData.append("ownerId", ownerId);
+        editProperty(ownerId, propertyId, formData)
+            .then((r) => {
+                console.log(r);
                 Swal.fire("Congratulations", "Your property has been updated", "success");
                 navigate(`/landlord/${ownerId}`);
             })
@@ -236,32 +242,15 @@ const EditProperty = () => {
                             shrink: true
                         }}
                     />
-                    <TextField
-                        required
-                        fullWidth
+                    <input
+                        type="file"
                         style={btnStyle}
                         id="outlined-required"
-                        onChange={handleChange}
+                        onChange={handleFileChange}
                         name="propertyImage"
-                        value={propertyImage}
-                        label="Upload Property Images"
-                        InputLabelProps={{
-                            shrink: true
-                        }}
+                        required
+                        multiple
                     />
-
-                    {/*<label htmlFor="contained-button-file">*/}
-                    {/*    <Input accept="image/*" id="contained-button-file" multiple type="file" />*/}
-                    {/*    <Button variant="contained" style={{ btnStyle, marginRight: "20px" }} component="span">*/}
-                    {/*        Upload Contract Images*/}
-                    {/*    </Button>*/}
-                    {/*</label>*/}
-                    {/*<label htmlFor="contained-button-file">*/}
-                    {/*    <Input accept="image/*" id="contained-button-file" multiple type="file" />*/}
-                    {/*    <Button variant="contained" style={btnStyle} component="span">*/}
-                    {/*        Upload Property Images*/}
-                    {/*    </Button>*/}
-                    {/*</label>*/}
                     <Button type="submit" color="primary" variant="contained" style={btnStyle} fullWidth>
                         <Typography fontFamily="Noto Sans">Submit</Typography>
                     </Button>
