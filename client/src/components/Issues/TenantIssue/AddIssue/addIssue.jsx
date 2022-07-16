@@ -10,7 +10,6 @@ const AddIssue = () => {
     const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
     const initialState = { 
         issueType: "",
-        issueImage: "",
         issueDescription: ""
     }
 
@@ -27,7 +26,12 @@ const AddIssue = () => {
         margin: "8px 0"
     };
     
-    const [{issueType, issueImage, issueDescription}, setValues] = useState(initialState);
+    const [{issueType, issueDescription}, setValues] = useState(initialState);
+    const [issueImage, setIssueImage] = useState("");
+    
+    const handleFileChange = (event) => {
+        setIssueImage(event.target.files);
+    }
     
     const handleChange = (event) => { 
         const {name, value} = event.target;
@@ -40,22 +44,23 @@ const AddIssue = () => {
     
     const createIssue = (e) => {
         e.preventDefault();
-        const issue = { 
-            issueType,
-            issueImage,
-            issueDescription
+        const issueData = new FormData();
+        for (const image of issueImage) {
+            issueData.append("issueImage", image);
         }
-        addIssue(isLoggedIn, issue)
-            .then((res) => {
-                console.log(res);
+        issueData.append("issueType", issueType);
+        issueData.append("issueDescription", issueDescription);
+        addIssue(isLoggedIn, issueData)
+            .then(() => {
                 Swal.fire("Congratulations", "Your issue has been created and will be addressed shortly by your landlord", "success");
                 reset();
             })
             .catch((e) => {
                 if (e.response.status === 404) {
                     Swal.fire("Error", "You have not been added to a property. <br/> If this is a mistake please contact your landlord to add you to their list of properties", "error");
-                } else { 
-                    Swal.fire("Error", "There was an issue adding your error", "error");
+                } else {
+                    console.log(e);
+                    Swal.fire("Error", "There was an issue adding your issue", "error");
                 }
             })
     }
@@ -91,19 +96,6 @@ const AddIssue = () => {
                         <MenuItem value={"Roof Leaks"}>Roof Leaks</MenuItem>
                         <MenuItem value={"Other"}>Other</MenuItem>
                     </TextField>
-                    <TextField
-                        required
-                        fullWidth
-                        style={btnStyle}
-                        id="outlined-required"
-                        onChange={handleChange}
-                        name="issueImage"
-                        value={issueImage}
-                        label="Upload Issue Image"
-                        InputLabelProps={{
-                            shrink: true
-                        }}
-                    />
                     <TextareaAutosize
                         aria-label="minimum height"
                         minRows={8}
@@ -112,6 +104,15 @@ const AddIssue = () => {
                         value={issueDescription}
                         placeholder="Brief description of your issue (optional)"
                         style={{ width: 1904 }}
+                    />
+                    <input
+                        type="file"
+                        required
+                        style={btnStyle}
+                        id="outlined-required"
+                        onChange={handleFileChange}
+                        name="issueImage"
+                        multiple
                     />
                     <Button type="submit" color="primary" variant="contained" fullWidth style={btnStyle}>
                         <Typography fontFamily="Noto Sans">Submit</Typography>

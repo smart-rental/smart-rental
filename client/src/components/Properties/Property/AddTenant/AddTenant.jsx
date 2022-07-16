@@ -86,6 +86,7 @@ const AddTenant = () => {
                         fullWidth
                         onChange={handleChange}
                         name="name"
+                        value={name}
                         id="outlined-required"
                         label="Tenant Name"
                         InputLabelProps={{
@@ -98,6 +99,7 @@ const AddTenant = () => {
                         fullWidth
                         onChange={handleChange}
                         name="email"
+                        value={email}
                         id="outlined-required"
                         label="Tenant Email"
                         InputLabelProps={{
@@ -110,6 +112,7 @@ const AddTenant = () => {
                         fullWidth
                         onChange={handleChange}
                         name="phoneNumber"
+                        value={phoneNumber}
                         id="outlined-required"
                         label="Tenant Phone Number"
                         InputLabelProps={{

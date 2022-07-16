@@ -2,6 +2,7 @@ import Property from "../models/properties.model.js";
 import User from "../models/user.model.js";
 import { upload } from "../middleware/propertyImageHelper.js";
 import express from "express";
+import imageHelper from "../middleware/imageHelper.js";
 
 const router = express.Router();
 
@@ -116,7 +117,7 @@ router.route('/update/:ownerId/:id').post(upload.array("propertyImage", 7), (req
         }
         fileArray.push(file);
     });
-    const { location, propertyCreated, propertyValue, rentPerMonth, maxCapacity, parkingStalls, pets, utilities, tenant, contract } = req.body;
+    const { location, propertyCreated, propertyValue, rentPerMonth, maxCapacity, parkingStalls, pets, utilities, contract } = req.body;
     Property.findByIdAndUpdate(id)
         .then(Property => {
             Property.location = location;
@@ -124,9 +125,8 @@ router.route('/update/:ownerId/:id').post(upload.array("propertyImage", 7), (req
             Property.propertyValue = Number(propertyValue);
             Property.rentPerMonth = Number(rentPerMonth);
             Property.maxCapacity = Number(maxCapacity);
-            Property.propertyImage = fileArray;
+            Property.propertyImage = imageHelper(fileArray, Property.propertyImage);
             Property.pets = Boolean(pets);
-            Property.tenant = tenant;
             Property.parkingStalls = Number(parkingStalls);
             Property.utilities = utilities;
             Property.contract = contract;

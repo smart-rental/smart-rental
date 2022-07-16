@@ -67,22 +67,21 @@ const AddProperty = () => {
 
     const createProperty = (e) => {
         e.preventDefault();
-        const formData = new FormData();
+        const propertyData = new FormData();
         for (const image of propertyImage) {
-            console.log(image);
-            formData.append("propertyImage", image);
+            propertyData.append("propertyImage", image);
         }
-        formData.append("location", propertyLocation);
-        formData.append("propertyCreated", propertyCreated.toString());
-        formData.append("propertyValue", propertyValue);
-        formData.append("rentPerMonth", rentPerMonth);
-        formData.append("maxCapacity", maxCapacity);
-        formData.append("parkingStalls", parkingStalls);
-        formData.append("pets", pet);
-        formData.append("utilities", utilities);
-        formData.append("contract", "someContract");
-        formData.append("ownerId", id);
-        addProperty(id, formData)
+        propertyData.append("location", propertyLocation);
+        propertyData.append("propertyCreated", propertyCreated.toString());
+        propertyData.append("propertyValue", propertyValue);
+        propertyData.append("rentPerMonth", rentPerMonth);
+        propertyData.append("maxCapacity", maxCapacity);
+        propertyData.append("parkingStalls", parkingStalls);
+        propertyData.append("pets", pet);
+        propertyData.append("utilities", utilities);
+        propertyData.append("contract", "someContract");
+        propertyData.append("ownerId", id);
+        addProperty(id, propertyData)
             .then((r) => {
                 Swal.fire("Congratulations", "Your property has been added", "success").then(reset);
             })
@@ -110,6 +109,7 @@ const AddProperty = () => {
                         name="propertyLocation"
                         id="outlined-required"
                         label="Property Location"
+                        value={propertyLocation}
                         InputLabelProps={{
                             shrink: true
                         }}
@@ -122,6 +122,7 @@ const AddProperty = () => {
                         style={btnStyle}
                         type="date"
                         fullWidth
+                        value={propertyCreated}
                         InputLabelProps={{
                             shrink: true
                         }}
@@ -133,6 +134,7 @@ const AddProperty = () => {
                         onChange={handleChange}
                         name="propertyValue"
                         fullWidth
+                        value={propertyValue}
                         style={btnStyle}
                         InputLabelProps={{
                             shrink: true
@@ -145,6 +147,7 @@ const AddProperty = () => {
                         name="rentPerMonth"
                         type="number"
                         fullWidth
+                        value={rentPerMonth}
                         style={btnStyle}
                         InputLabelProps={{
                             shrink: true
@@ -157,6 +160,7 @@ const AddProperty = () => {
                         name="maxCapacity"
                         type="number"
                         fullWidth
+                        value={maxCapacity}
                         style={btnStyle}
                         InputLabelProps={{
                             shrink: true
@@ -169,6 +173,7 @@ const AddProperty = () => {
                         onChange={handleChange}
                         name="parkingStalls"
                         fullWidth
+                        value={parkingStalls}
                         style={btnStyle}
                         InputLabelProps={{
                             shrink: true
@@ -209,7 +214,6 @@ const AddProperty = () => {
                     </TextField>
                     <input
                         type="file"
-                        required
                         style={btnStyle}
                         id="outlined-required"
                         onChange={handleFileChange}

@@ -1,23 +1,18 @@
-import React, { useEffect, useState } from "react";
-import { Button, Card, CardActions, CardContent, CardMedia, Grid, Typography } from "@mui/material";
-import { getPropertyByID, updateIssue } from "../../../../api";
-import { useSelector } from "react-redux";
+import React from "react";
+import { Button, Card, CardActions, CardContent, Grid, Typography } from "@mui/material";
+import Gallery from "../../../Gallery/Gallery";
 
 const Issue = ({
-                   issue: { _id, issueImage, issueType, issueDescription, status, propertyId },
+                   issue: { _id, issueImage, issueType, issueDescription, status },
                    removeIssue,
                    editIssue,
                }) => {
-    
     return (
         <Grid item>
             <Card sx={{ maxWidth: 345 }}>
-                <CardMedia
-                    component="img"
-                    height="140"
-                    image={issueImage}
-                    alt="issue image"
-                />
+                <div style={{ display: "flex", justifyContent: "center"}}>
+                    <Gallery images={issueImage}/>
+                </div>
                 <CardContent>
                     <Typography gutterBottom variant="h5" component="div">
                         {issueType}

@@ -61,8 +61,9 @@ const Issues = () => {
 
     const removeIssue = (issueId) => {
         deleteIssue(isLoggedIn, issueId)
-            .then(() => {
+            .then((r) => {
                 setIssues(issues.filter(issue => issue._id !== issueId));
+                setStatus(r.data)
                 Swal.fire("Issue Deleted", `The issue has been deleted`, "success");
             })
             .catch((e) => {
@@ -155,14 +156,10 @@ const Issues = () => {
                                                                         {...provided.draggableProps}
                                                                         {...provided.dragHandleProps}
                                                                         style={{
-                                                                            userSelect: "none",
-                                                                            padding: 16,
-                                                                            margin: "0 0 8px 0",
-                                                                            minHeight: "50px",
                                                                             backgroundColor: snapshot.isDragging
                                                                                 ? "#263B4A"
                                                                                 : "#456C86",
-                                                                            color: "white",
+                                                                            marginBottom: "10px",
                                                                             ...provided.draggableProps.style
                                                                         }}
                                                                     >

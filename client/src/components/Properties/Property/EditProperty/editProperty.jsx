@@ -248,7 +248,6 @@ const EditProperty = () => {
                         id="outlined-required"
                         onChange={handleFileChange}
                         name="propertyImage"
-                        required
                         multiple
                     />
                     <Button type="submit" color="primary" variant="contained" style={btnStyle} fullWidth>
