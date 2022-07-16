@@ -40,7 +40,7 @@ const AddProperty = () => {
     const handleFileChange = (event) => {
         setPropertyImage(event.target.files);
     }
-    
+
     const handleChange = (event) => {
         const { name, value } = event.target;
         setValues((prevState) => ({ ...prevState, [name]: value }));
@@ -58,10 +58,11 @@ const AddProperty = () => {
     const btnStyle = {
         margin: "8px 0"
     };
-    
+
     const reset = () => {
         setPets("");
         setUtilities("");
+        setPropertyImage("");
         setValues({ ...initialState });
     };
 

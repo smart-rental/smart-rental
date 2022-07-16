@@ -31,9 +31,9 @@ const Properties = () => {
                 console.log(e);});
         getUsers()
             .then((res) => {
-                setUsers(res.data); 
+                setUsers(res.data);
             });
-    }, []);
+    }, [params.id]);
 
     const removeProperty = (propertyId) => {
         deleteProperty(propertyId)
@@ -46,15 +46,15 @@ const Properties = () => {
                 Swal.fire("Error", "There was an error deleting your property", "error");
             });
     }
-    
-    const editProperty = (propertyId) => { 
+
+    const editProperty = (propertyId) => {
         navigate(`/editProperty/${params.id}/${propertyId}`);
     }
 
     const addTenant = (propertyId) => {
         navigate(`/addTenant/${params.id}/${propertyId}`);
     }
-    
+
     return (
         <div>
             <Typography textAlign="center" variant="h3">Properties</Typography>

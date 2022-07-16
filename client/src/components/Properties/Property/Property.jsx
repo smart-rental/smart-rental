@@ -27,6 +27,14 @@ const Property = ({property: { _id, location, propertyCreated, propertyValue, re
             addTenant(_id);}}/> : <Link to={`/editTenant/${isLoggedIn}/${_id}`}>{isTenant.name}</Link>;
     }
 
+    const dateToString = () => {
+        const date = new Date(propertyCreated);
+        const day = date.getUTCDate();
+        const month = date.getUTCMonth() + 1;
+        const year = date.getUTCFullYear();
+        return `${month}/${day}/${year}`
+    }
+
     return(
         <TableRow
             sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
@@ -34,7 +42,7 @@ const Property = ({property: { _id, location, propertyCreated, propertyValue, re
             <TableCell component="th" scope="row">
                 {location}
             </TableCell>
-            <TableCell align="center">{new Date(propertyCreated).toLocaleDateString()}</TableCell>
+            <TableCell align="center">{dateToString()}</TableCell>
             <TableCell align="center">${propertyValue}</TableCell>
             <TableCell align="center">${rentPerMonth}</TableCell>
             <TableCell align="center">{maxCapacity}</TableCell>
@@ -53,4 +61,4 @@ const Property = ({property: { _id, location, propertyCreated, propertyValue, re
     );
 }
 
-export default Property; 
+export default Property;
