@@ -70,7 +70,7 @@ const Issues = () => {
                 console.log(e);
             });
     };
-    
+
     const onDragEnd = (result, columns, setColumns) => {
         if (!result.destination) return;
         const { source, destination } = result;

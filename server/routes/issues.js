@@ -85,7 +85,7 @@ router.route("/update/:id").patch(upload.array("issueImage", 5), (req, res) => {
                 filePath: element.path
             };
             fileArray.push(file);
-        });  
+        });
     }
     const { propertyId, issueType, issueDescription, status } = req.body;
     Issue.findByIdAndUpdate(id)

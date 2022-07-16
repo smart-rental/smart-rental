@@ -8,7 +8,8 @@ import Swal from "sweetalert2";
 import { useNavigate, useParams } from "react-router-dom";
 
 const EditIssue = () => {
-    const navigate = useNavigate(); 
+    const navigate = useNavigate();
+    const userType = useSelector((state) => state.users.userType);
     const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
     const { issueId } = useParams();
     let initialState = {
@@ -50,7 +51,7 @@ const EditIssue = () => {
     const handleFileChange = (event) => {
         setIssueImage(event.target.files);
     }
-    
+
     const handleChange = (event) => {
         const {name, value} = event.target;
         setValues((prevState) => ({ ...prevState, [name]: value}));
@@ -70,7 +71,11 @@ const EditIssue = () => {
         updateIssue(issueId, issueData)
             .then(() => {
                 Swal.fire("Congratulations", "Your issue has been successfully edited", "success")
-                    .then(() => navigate(`/issue/${isLoggedIn}`));
+                    .then(() => {
+                        if (userType === "Tenant") {
+                            navigate(`/issue/${isLoggedIn}`);
+                        }
+                    });
             })
             .catch((e) => {
                 if (e.response.status === 404) {

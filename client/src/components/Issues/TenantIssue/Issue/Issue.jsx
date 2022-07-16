@@ -3,10 +3,19 @@ import { Button, Card, CardActions, CardContent, Grid, Typography } from "@mui/m
 import Gallery from "../../../Gallery/Gallery";
 
 const Issue = ({
-                   issue: { _id, issueImage, issueType, issueDescription, status },
+                   issue: { _id, issueImage, issueType, issueDescription, status, timeStamp},
                    removeIssue,
                    editIssue,
                }) => {
+
+    const dateToString = () => {
+        const date = new Date(timeStamp);
+        const day = date.getUTCDate();
+        const month = date.getUTCMonth() + 1;
+        const year = date.getUTCFullYear();
+        return `${month}/${day}/${year}`
+    }
+
     return (
         <Grid item>
             <Card sx={{ maxWidth: 345 }}>
@@ -22,6 +31,9 @@ const Issue = ({
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
                         Status: {status}
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                        Created: {dateToString()}
                     </Typography>
                 </CardContent>
                 <CardActions>
