@@ -27,6 +27,7 @@ const AddProperty = () => {
     const [utilities, setUtilities] = React.useState("");
     const [pet, setPets] = React.useState("");
     const [propertyImage, setPropertyImage] = React.useState("");
+    const imageInputRef = React.useRef();
     const [{ propertyLocation, propertyCreated, propertyValue, rentPerMonth, maxCapacity, parkingStalls }, setValues] = useState(initialState);
 
     const handleUtilitiesChange = (event) => {
@@ -42,7 +43,11 @@ const AddProperty = () => {
     }
 
     const handleChange = (event) => {
-        const { name, value } = event.target;
+        let { name, value } = event.target;
+        const numbersInput = ["propertyValue", "rentPerMonth", "maxCapacity", "parkingStalls"];
+        if (numbersInput.includes(name) && value < 0) {
+            value = 0;
+        }
         setValues((prevState) => ({ ...prevState, [name]: value }));
     };
 
@@ -62,7 +67,7 @@ const AddProperty = () => {
     const reset = () => {
         setPets("");
         setUtilities("");
-        setPropertyImage("");
+        imageInputRef.current.value = "";
         setValues({ ...initialState });
     };
 
@@ -218,6 +223,7 @@ const AddProperty = () => {
                         style={btnStyle}
                         id="outlined-required"
                         onChange={handleFileChange}
+                        ref={imageInputRef}
                         name="propertyImage"
                         multiple
                     />

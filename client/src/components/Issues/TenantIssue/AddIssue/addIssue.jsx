@@ -39,6 +39,7 @@ const AddIssue = () => {
     }
     
     const reset = () => { 
+        setIssueImage("");
         setValues(initialState);
     }
     
@@ -110,6 +111,7 @@ const AddIssue = () => {
                         required
                         style={btnStyle}
                         id="outlined-required"
+                        value={issueImage}
                         onChange={handleFileChange}
                         name="issueImage"
                         multiple
