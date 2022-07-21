@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { Avatar, Button, Grid, Paper, TextareaAutosize, TextField, Typography } from "@mui/material";
 import MenuItem from "@mui/material/MenuItem";
 import FeedbackIcon from '@mui/icons-material/Feedback';
@@ -28,9 +28,18 @@ const AddIssue = () => {
     
     const [{issueType, issueDescription}, setValues] = useState(initialState);
     const [issueImage, setIssueImage] = useState("");
-    
+    const [selectedFiles, setSelectedFiles] = useState([]);
+    const [selectedFilesArray, setSelectedFilesArray] = useState([]);
+    const imageInputRef = useRef();
+
     const handleFileChange = (event) => {
-        setIssueImage(event.target.files);
+        const selectedFiles = event.target.files;
+        const selectedFilesArray = Array.from(selectedFiles);
+        const imageArray = selectedFilesArray.map((image) => {
+            return URL.createObjectURL(image);
+        });
+        setSelectedFilesArray(prevState => prevState.concat(selectedFilesArray));
+        setSelectedFiles(prevState => prevState.concat(imageArray));
     }
     
     const handleChange = (event) => { 
@@ -41,12 +50,15 @@ const AddIssue = () => {
     const reset = () => { 
         setIssueImage("");
         setValues(initialState);
+        setSelectedFilesArray([]);
+        setSelectedFiles([]);
+        imageInputRef.current.value = "";
     }
     
     const createIssue = (e) => {
         e.preventDefault();
         const issueData = new FormData();
-        for (const image of issueImage) {
+        for (const image of selectedFilesArray) {
             issueData.append("issueImage", image);
         }
         issueData.append("issueType", issueType);
@@ -111,11 +123,26 @@ const AddIssue = () => {
                         required
                         style={btnStyle}
                         id="outlined-required"
-                        value={issueImage}
+                        ref={imageInputRef}
                         onChange={handleFileChange}
                         name="issueImage"
                         multiple
                     />
+                    {selectedFiles && selectedFiles.map((image, index) => {
+                        return (
+                            <div key={index}>
+                                <img
+                                    src={image}
+                                    alt="tower"/>
+                                <Button onClick={() => {
+                                    setSelectedFiles(selectedFiles.filter(e => e !== image))
+                                    setSelectedFilesArray(selectedFilesArray.filter((e, ind) => ind !== index));
+                                }}>
+                                    Delete Image
+                                </Button>
+                            </div>
+                        )
+                    })}
                     <Button type="submit" color="primary" variant="contained" fullWidth style={btnStyle}>
                         <Typography fontFamily="Noto Sans">Submit</Typography>
                     </Button>

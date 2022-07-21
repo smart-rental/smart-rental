@@ -117,7 +117,7 @@ router.route('/update/:ownerId/:id').post(upload.array("propertyImage", 7), (req
         }
         fileArray.push(file);
     });
-    const { location, propertyCreated, propertyValue, rentPerMonth, maxCapacity, parkingStalls, pets, utilities, contract } = req.body;
+    const { location, propertyCreated, propertyValue, rentPerMonth, maxCapacity, indexToDelete, parkingStalls, pets, utilities, contract } = req.body;
     Property.findByIdAndUpdate(id)
         .then(Property => {
             Property.location = location;
@@ -125,7 +125,7 @@ router.route('/update/:ownerId/:id').post(upload.array("propertyImage", 7), (req
             Property.propertyValue = Number(propertyValue);
             Property.rentPerMonth = Number(rentPerMonth);
             Property.maxCapacity = Number(maxCapacity);
-            Property.propertyImage = imageHelper(fileArray, Property.propertyImage);
+            Property.propertyImage = indexToDelete == null ? imageHelper(fileArray, Property.propertyImage) :  Property.propertyImage.filter((images, index) => !(indexToDelete.includes(index)));
             Property.pets = Boolean(pets);
             Property.parkingStalls = Number(parkingStalls);
             Property.utilities = utilities;
@@ -136,7 +136,7 @@ router.route('/update/:ownerId/:id').post(upload.array("propertyImage", 7), (req
                 .then(() => res.json(Property))
                 .catch(err => res.status(400).json(`Error: ${err}`));
         })
-        .catch(e => res.status(404).json(`Error: ${e}`))
+        .catch(e => res.status(400).json(`Error: ${e}`))
 });
 
 export default router;

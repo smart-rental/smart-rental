@@ -87,12 +87,12 @@ router.route("/update/:id").patch(upload.array("issueImage", 5), (req, res) => {
             fileArray.push(file);
         });
     }
-    const { propertyId, issueType, issueDescription, status } = req.body;
+    const { propertyId, issueType, issueDescription, indexToDelete, status } = req.body;
     Issue.findByIdAndUpdate(id)
         .then(Issue => {
             Issue.propertyId = propertyId;
             Issue.issueType = issueType;
-            Issue.issueImage = imageHelper(fileArray, Issue.issueImage);
+            Issue.issueImage = indexToDelete == null ? imageHelper(fileArray, Issue.issueImage) :  Issue.issueImage.filter((images, index) => !(indexToDelete.includes(index)));
             Issue.issueDescription = issueDescription;
             Issue.status = status;
 

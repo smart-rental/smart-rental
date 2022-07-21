@@ -1,12 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-    Grid,
-    Paper,
-    Avatar,
-    TextField,
-    Button,
-    Typography
-} from "@mui/material";
+import { Avatar, Button, Grid, Paper, TextField, Typography } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
 import HouseIcon from "@mui/icons-material/House";
 import MenuItem from "@mui/material/MenuItem";
@@ -28,7 +21,9 @@ const EditProperty = () => {
     };
     const [utilities, setUtilities] = React.useState("");
     const [pets, setPets] = React.useState("");
-    const [propertyImage, setPropertyImage] = React.useState("");
+    const [selectedFiles, setSelectedFiles] = useState([]);
+    const [selectedFilesArray, setSelectedFilesArray] = useState([]);
+    const [indexToDelete, setIndexToDelete] = useState([]);
     const [{ propertyLocation, propertyCreated, propertyValue, rentPerMonth, maxCapacity, parkingStalls, contract }, setValues] = useState(initialState);
 
     useEffect(() => {
@@ -45,7 +40,11 @@ const EditProperty = () => {
                 contract,
                 tenant,
             });
-            setPropertyImage(propertyImage);
+            setSelectedFilesArray(propertyImage);
+            const imageArray = propertyImage.map((image) => {
+                return `http://localhost:5000/${image.filePath}`;
+            });
+            setSelectedFiles(imageArray);
             setPets(pets);
             setUtilities(utilities);
         });
@@ -56,7 +55,13 @@ const EditProperty = () => {
     };
 
     const handleFileChange = (event) => {
-        setPropertyImage(event.target.files);
+        const selectedFiles = event.target.files;
+        const selectedFilesArray = Array.from(selectedFiles);
+        setSelectedFilesArray(prevState => prevState.concat(selectedFilesArray));
+        const imageArray = selectedFilesArray.map((image) => {
+            return URL.createObjectURL(image);
+        });
+        setSelectedFiles(prevState => prevState.concat(imageArray));
     };
     
     const handlePetsChange = (event) => {
@@ -81,11 +86,15 @@ const EditProperty = () => {
         margin: "8px 0"
     };
 
+    console.log(indexToDelete);
     const updateProperty = (e) => {
         e.preventDefault();
         const formData = new FormData();
-        for (const image of propertyImage) {
+        for (const image of selectedFilesArray) {
             formData.append("propertyImage", image);
+        }
+        for (const index of indexToDelete) { 
+            formData.set("indexToDelete", index);
         }
         formData.append("location", propertyLocation);
         formData.append("propertyCreated", propertyCreated.toString());
@@ -103,8 +112,9 @@ const EditProperty = () => {
                 Swal.fire("Congratulations", "Your property has been updated", "success");
                 navigate(`/landlord/${ownerId}`);
             })
-            .catch(() => {
+            .catch((e) => {
                 Swal.fire("Try Again", "Your property has not been added", "error");
+                console.log(e);
             });
     };    
 
@@ -250,6 +260,22 @@ const EditProperty = () => {
                         name="propertyImage"
                         multiple
                     />
+                    {selectedFiles && selectedFiles.map((image, index) => {
+                        return (
+                            <div key={index}>
+                                <img
+                                    src={image}
+                                    alt="error"/>
+                                <Button onClick={() => {
+                                    setSelectedFiles(selectedFiles.filter((e, ind) => ind !== index))
+                                    setSelectedFilesArray(selectedFilesArray.filter((e, ind) => ind !== index));
+                                    setIndexToDelete(prevState => [...prevState, index]);
+                                }}>  
+                                    Delete Image
+                                </Button>
+                            </div>
+                        )
+                    })}
                     <Button type="submit" color="primary" variant="contained" style={btnStyle} fullWidth>
                         <Typography fontFamily="Noto Sans">Submit</Typography>
                     </Button>

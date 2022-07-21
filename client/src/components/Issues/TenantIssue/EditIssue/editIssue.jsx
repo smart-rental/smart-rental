@@ -19,6 +19,9 @@ const EditIssue = () => {
     }
     const [{issueType, issueDescription}, setValues] = useState(initialState);
     const [issueImage, setIssueImage] = useState("");
+    const [selectedFiles, setSelectedFiles] = useState([]);
+    const [selectedFilesArray, setSelectedFilesArray] = useState([]);
+    const [indexToDelete, setIndexToDelete] = useState([]);
     const [res, setRes] = useState("");
     useEffect(() => {
         retrieveIssue(issueId)
@@ -28,6 +31,11 @@ const EditIssue = () => {
                     issueType: res.data.issueType,
                     issueDescription: res.data.issueDescription
                 })
+                setSelectedFilesArray(res.data.issueImage);
+                const imageArray = res.data.issueImage.map((image) => {
+                    return `http://localhost:5000/${image.filePath}`;
+                });
+                setSelectedFiles(imageArray);
                 setIssueImage(res.data.issueImage);
             })
             .catch((e) => {
@@ -49,7 +57,13 @@ const EditIssue = () => {
     };
 
     const handleFileChange = (event) => {
-        setIssueImage(event.target.files);
+        const selectedFiles = event.target.files;
+        const selectedFilesArray = Array.from(selectedFiles);
+        setSelectedFilesArray(prevState => prevState.concat(selectedFilesArray));
+        const imageArray = selectedFilesArray.map((image) => {
+            return URL.createObjectURL(image);
+        });
+        setSelectedFiles(prevState => prevState.concat(imageArray));
     }
 
     const handleChange = (event) => {
@@ -61,8 +75,11 @@ const EditIssue = () => {
         e.preventDefault();
         const { status, propertyId } = res;
         const issueData = new FormData();
-        for (const image of issueImage) {
+        for (const image of selectedFilesArray) {
             issueData.append("issueImage", image);
+        }
+        for (const index of indexToDelete) {
+            issueData.set("indexToDelete", index);
         }
         issueData.append("issueType", issueType);
         issueData.append("issueDescription", issueDescription);
@@ -72,9 +89,7 @@ const EditIssue = () => {
             .then(() => {
                 Swal.fire("Congratulations", "Your issue has been successfully edited", "success")
                     .then(() => {
-                        if (userType === "Tenant") {
-                            navigate(`/issue/${isLoggedIn}`);
-                        }
+                        window.history.back()
                     });
             })
             .catch((e) => {
@@ -135,6 +150,22 @@ const EditIssue = () => {
                         name="issueImage"
                         multiple
                     />
+                    {selectedFiles && selectedFiles.map((image, index) => {
+                        return (
+                            <div key={index}>
+                                <img
+                                    src={image}
+                                    alt="error"/>
+                                <Button onClick={() => {
+                                    setSelectedFiles(selectedFiles.filter((e, ind) => ind !== index))
+                                    setSelectedFilesArray(selectedFilesArray.filter((e, ind) => ind !== index));
+                                    setIndexToDelete(prevState => [...prevState, index]);
+                                }}>
+                                    Delete Image
+                                </Button>
+                            </div>
+                        )
+                    })}
                     <Button type="submit" color="primary" variant="contained" fullWidth style={btnStyle}>
                         <Typography fontFamily="Noto Sans">Submit</Typography>
                     </Button>

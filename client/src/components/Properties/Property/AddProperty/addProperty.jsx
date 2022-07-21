@@ -26,7 +26,8 @@ const AddProperty = () => {
     };
     const [utilities, setUtilities] = React.useState("");
     const [pet, setPets] = React.useState("");
-    const [propertyImage, setPropertyImage] = React.useState("");
+    const [selectedFiles, setSelectedFiles] = useState([]);
+    const [selectedFilesArray, setSelectedFilesArray] = useState([]);
     const imageInputRef = React.useRef();
     const [{ propertyLocation, propertyCreated, propertyValue, rentPerMonth, maxCapacity, parkingStalls }, setValues] = useState(initialState);
 
@@ -37,9 +38,15 @@ const AddProperty = () => {
     const handlePetsChange = (event) => {
         setPets(event.target.value);
     };
-
+    
     const handleFileChange = (event) => {
-        setPropertyImage(event.target.files);
+        const selectedFiles = event.target.files;
+        const selectedFilesArray = Array.from(selectedFiles);
+        const imageArray = selectedFilesArray.map((image) => {
+            return URL.createObjectURL(image);
+        });
+        setSelectedFilesArray(prevState => prevState.concat(selectedFilesArray));
+        setSelectedFiles(prevState => prevState.concat(imageArray));
     }
 
     const handleChange = (event) => {
@@ -67,6 +74,8 @@ const AddProperty = () => {
     const reset = () => {
         setPets("");
         setUtilities("");
+        setSelectedFilesArray([]);
+        setSelectedFiles([]);
         imageInputRef.current.value = "";
         setValues({ ...initialState });
     };
@@ -74,7 +83,7 @@ const AddProperty = () => {
     const createProperty = (e) => {
         e.preventDefault();
         const propertyData = new FormData();
-        for (const image of propertyImage) {
+        for (const image of selectedFilesArray) {
             propertyData.append("propertyImage", image);
         }
         propertyData.append("location", propertyLocation);
@@ -85,7 +94,7 @@ const AddProperty = () => {
         propertyData.append("parkingStalls", parkingStalls);
         propertyData.append("pets", pet);
         propertyData.append("utilities", utilities);
-        propertyData.append("contract", "someContract");
+        propertyData.append("contract", "blob:http://localhost:3000/a4861fda-4252-40f7-8f99-96d2df5a8415");
         propertyData.append("ownerId", id);
         addProperty(id, propertyData)
             .then((r) => {
@@ -227,6 +236,21 @@ const AddProperty = () => {
                         name="propertyImage"
                         multiple
                     />
+                    {selectedFiles && selectedFiles.map((image, index) => { 
+                        return (
+                            <div key={index}>
+                                <img
+                                    src={image}
+                                  alt="tower"/>
+                                <Button onClick={() => { 
+                                    setSelectedFiles(selectedFiles.filter(e => e !== image)) 
+                                    setSelectedFilesArray(selectedFilesArray.filter((e, ind) => ind !== index));
+                                }}>
+                                    Delete Image
+                                </Button>
+                            </div>
+                        )
+                    })}
                     <Button type="submit" color="primary" variant="contained" style={btnStyle} fullWidth>
                         <Typography fontFamily="Noto Sans">Submit</Typography>
                     </Button>
