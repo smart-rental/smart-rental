@@ -132,6 +132,13 @@ const ResponsiveAppBar = () => {
                                                 fontFamily="Noto Sans">Info</Typography>
                                 </Button> 
                             </Link> : ""}
+                        {isLoggedIn == null ?
+                            <Link style={classes.link} to="/house">
+                                <Button style={classes.mobileButton} size="large">
+                                    <Typography textAlign="center" style={{ color: "white" }}
+                                                fontFamily="Noto Sans">View Available Houses</Typography>
+                                </Button>
+                            </Link> : ""}
                         {isLoggedIn != null && userType === LANDLORD ? <Link style={classes.link} to={`/landlord/${isLoggedIn}`}>
                             <Button style={classes.mobileButton} size="large">
                                 <Typography textAlign="center" style={{ color: "white" }} fontFamily="Noto Sans">Manage

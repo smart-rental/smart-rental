@@ -15,6 +15,8 @@ import EditTenant from "./components/Properties/Property/EditTenant/EditTenant";
 import Issues from "./components/Issues/Issues";
 import AddIssue from "./components/Issues/TenantIssue/AddIssue/addIssue";
 import EditIssue from "./components/Issues/TenantIssue/EditIssue/editIssue";
+import Houses from "./components/HousesForRent/Houses";
+import HouseCardMap from "./components/HousesForRent/HouseCardMap/HouseCardMap";
 
 const App = function () { 
     return (
@@ -26,6 +28,8 @@ const App = function () {
                         <Route path="/" element={<Home/>}/>
                         <Route path="/login" element={<Login/>}/>
                         <Route path="/signup" element={<Signup/>}/>
+                        <Route path="/house" element={<Houses/>}/>
+                        <Route path="/map/:propertyLocation/:propertyId" element={<HouseCardMap/>}/>
                         <Route element={<ProtectedRoutes/>}>
                             <Route path="/landlord/:id" element={<Properties/>}/>
                             <Route path="/addProperty/:id" element={<AddProperty/>}/>

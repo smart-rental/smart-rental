@@ -44,7 +44,6 @@ const Issue = ({
                         Delete
                     </Button>
                 </CardActions>
-
             </Card>
         </Grid>
     );
