@@ -5,6 +5,7 @@ import HouseIcon from "@mui/icons-material/House";
 import MenuItem from "@mui/material/MenuItem";
 import Swal from "sweetalert2";
 import { editProperty, getProperty } from "../../../../api";
+import PlacesAutoComplete from "../../../PlacesAutoComplete/PlacesAutoComplete";
 
 const EditProperty = () => {
     let { ownerId, propertyId } = useParams();
@@ -86,7 +87,6 @@ const EditProperty = () => {
         margin: "8px 0"
     };
 
-    console.log(indexToDelete);
     const updateProperty = (e) => {
         e.preventDefault();
         const formData = new FormData();
@@ -128,18 +128,12 @@ const EditProperty = () => {
                         <Typography variant="h5" fontFamily="Noto Sans">Properties that have not been rented out will be
                             displayed for renters to see</Typography>
                     </Grid>
-                    <TextField
-                        required
-                        style={btnStyle}
-                        fullWidth
-                        onChange={handleChange}
+                    <PlacesAutoComplete
                         name="propertyLocation"
-                        id="outlined-required"
                         label="Property Location"
-                        value={propertyLocation}
-                        InputLabelProps={{
-                            shrink: true
-                        }}
+                        handleChange={setValues}
+                        style={btnStyle}
+                        valueProp={propertyLocation}
                     />
                     <TextField
                         id="outlined-required"

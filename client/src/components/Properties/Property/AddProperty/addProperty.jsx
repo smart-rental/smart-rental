@@ -12,6 +12,7 @@ import HouseIcon from "@mui/icons-material/House";
 import MenuItem from "@mui/material/MenuItem";
 import Swal from "sweetalert2";
 import { addProperty } from "../../../../api";
+import PlacesAutoComplete from "../../../PlacesAutoComplete/PlacesAutoComplete";
 
 const AddProperty = () => {
     let { id } = useParams();
@@ -116,18 +117,12 @@ const AddProperty = () => {
                         <Typography variant="h5" fontFamily="Noto Sans">Properties that have not been rented out will be
                             displayed for renters to see</Typography>
                     </Grid>
-                    <TextField
-                        required
-                        style={btnStyle}
-                        fullWidth
-                        onChange={handleChange}
+                    <PlacesAutoComplete
                         name="propertyLocation"
-                        id="outlined-required"
                         label="Property Location"
-                        value={propertyLocation}
-                        InputLabelProps={{
-                            shrink: true
-                        }}
+                        handleChange={setValues}
+                        style={btnStyle}
+                        valueProp={propertyLocation}
                     />
                     <TextField
                         id="outlined-required"
