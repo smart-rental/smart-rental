@@ -64,11 +64,13 @@ const Properties = () => {
                         <TableRow>
                             <TableCell>Location</TableCell>
                             <TableCell align="center">Date built</TableCell>
-                            <TableCell align="center">Property Value</TableCell>
+                            <TableCell align="center">Square Feet</TableCell>
                             <TableCell align="center">Rent per month</TableCell>
                             <TableCell align="center">Max Capacity</TableCell>
                             <TableCell align="center">Images</TableCell>
                             <TableCell align="center">Parking Stalls</TableCell>
+                            <TableCell align="center">Bed</TableCell>
+                            <TableCell align="center">Bath</TableCell>
                             <TableCell align="center">Pets</TableCell>
                             <TableCell align="center">Utilities</TableCell>
                             <TableCell align="center">Edit</TableCell>

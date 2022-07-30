@@ -10,7 +10,7 @@ import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import Gallery from "../../Gallery/Gallery";
 
-const Property = ({property: { _id, location, propertyCreated, propertyValue, rentPerMonth, maxCapacity, propertyImage, parkingStalls, pets, utilities, tenant }, removeProperty, editProperty, addTenant, users}) => {
+const Property = ({property: { _id, location, built, squareFeet, images, rent, capacity, parkingStalls, pets, utilities, bed, bath, tenant }, removeProperty, editProperty, addTenant, users}) => {
     const checkOrX = (bool) => {
         return bool ? <CheckCircleIcon/> : <CancelIcon/>
     }
@@ -28,7 +28,7 @@ const Property = ({property: { _id, location, propertyCreated, propertyValue, re
     }
 
     const dateToString = () => {
-        const date = new Date(propertyCreated);
+        const date = new Date(built);
         const day = date.getUTCDate();
         const month = date.getUTCMonth() + 1;
         const year = date.getUTCFullYear();
@@ -43,13 +43,15 @@ const Property = ({property: { _id, location, propertyCreated, propertyValue, re
                 {location}
             </TableCell>
             <TableCell align="center">{dateToString()}</TableCell>
-            <TableCell align="center">${propertyValue}</TableCell>
-            <TableCell align="center">${rentPerMonth}</TableCell>
-            <TableCell align="center">{maxCapacity}</TableCell>
+            <TableCell align="center">${squareFeet}</TableCell>
+            <TableCell align="center">${rent}</TableCell>
+            <TableCell align="center">{capacity}</TableCell>
             <TableCell align="center">
-                <Gallery images={propertyImage}/>
+                <Gallery images={images}/>
             </TableCell>
             <TableCell align="center">{parkingStalls}</TableCell>
+            <TableCell align="center">{bed}</TableCell>
+            <TableCell align="center">{bath}</TableCell>
             <TableCell align="center">{checkOrX(pets)}</TableCell>
             <TableCell align="center">{utilities}</TableCell>
             <TableCell align="center"><EditIcon onClick={() => {editProperty(_id)}}/></TableCell>

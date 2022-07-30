@@ -1,36 +1,33 @@
 import React from "react";
-import { Button, Card, CardActionArea, CardActions, CardContent, Typography } from "@mui/material";
+import { Button, Card, CardActions, CardContent, Typography } from "@mui/material";
 import Gallery from "../../Gallery/Gallery";
 import { useNavigate } from "react-router-dom";
 
-const HouseCard = ({propertyInfo: { location, propertyImage, maxCapacity, parkingStalls, pets, utilities, propertyCreated, rentPerMonth, _id } }) => {
+const HouseCard = ({propertyInfo: { _id, location, built, squareFeet, images, rent, capacity, bed, bath } }) => {
     const navigate = useNavigate();
-    const petToString = () => { 
-        return pets ? "Allowed" : "Not Allowed";
-    }
     return (
         <Card sx={{ maxWidth: 345 }}>
                 <div style={{ display: "flex", justifyContent: "center"}}>
-                    <Gallery images={propertyImage}/>
+                    <Gallery images={images}/>
                 </div>
                 <CardContent>
                     <Typography gutterBottom variant="h5" component="div">
                         Location: {location}
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
-                        Capacity: {maxCapacity}
+                        Capacity: {capacity}
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
-                        Parking Stalls: {parkingStalls}
+                        Bed: {bed}
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
-                        Pets: {petToString()}
+                        Bath: {bath}
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
-                        Utilities: {utilities}
+                        Square Feet: {squareFeet}
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
-                        Rent Price: ${rentPerMonth}
+                        Rent Price: ${rent}
                     </Typography>
                 </CardContent>
             <CardActions>

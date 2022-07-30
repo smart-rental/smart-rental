@@ -3,11 +3,12 @@ import User from "../models/user.model.js";
 import { upload } from "../middleware/propertyImageHelper.js";
 import express from "express";
 import imageHelper from "../middleware/imageHelper.js";
+import deleteImageHelper from "../middleware/deleteImageHelper.js";
 
 const router = express.Router();
 
 router.route('/').get((req, res) => {
-    Property.find()
+    Property.find({ post: true })
         .then((Property) => {
             res.json(Property); })
         .catch(e => res.status(400).json(`Error: ${e}`));
@@ -69,30 +70,33 @@ router.route('/deleteTenant/:owner/:property').post((req, res) => {
     
 });
 
-router.route('/:id').post(upload.array("propertyImage", 7), (req, res) => {
+router.route('/:id').post(upload.array("images", 7), (req, res) => {
     const ownerId = req.params.id;
-    let fileArray = [];
+    let images = [];
     req.files.forEach(element => {
         const file = {
             fileName: element.originalname,
             filePath: element.path,
         }
-        fileArray.push(file);
+        images.push(file);
     });
-    const { location, propertyCreated, propertyValue, rentPerMonth, maxCapacity, parkingStalls, pets, utilities, tenant, contract } = req.body;
+    const { location, built, squareFeet, rent, capacity, parkingStalls, pets, utilities, bed, bath, post, description, tenant } = req.body;
     const newProperty = new Property({
         location,
-        propertyCreated,
-        propertyValue,
-        rentPerMonth,
-        maxCapacity,
-        propertyImage: fileArray,
+        built,
+        squareFeet,
+        images,
+        rent,
+        capacity,
         parkingStalls,
         pets,
         utilities,
-        tenant,
-        contract, 
-        ownerId
+        bed,
+        bath,
+        post,
+        description,
+        ownerId,
+        tenant
     });
 
     newProperty.save()
@@ -107,7 +111,7 @@ router.route('/:id').delete((req, res) => {
         .catch(e => res.status(404).json(`Error: ${e}`));
 });
 
-router.route('/update/:ownerId/:id').post(upload.array("propertyImage", 7), (req, res) => {
+router.route('/update/:ownerId/:id').post(upload.array("images", 7), (req, res) => {
     const { id, ownerId } = req.params;
     let fileArray = [];
     req.files.forEach(element => {
@@ -117,19 +121,22 @@ router.route('/update/:ownerId/:id').post(upload.array("propertyImage", 7), (req
         }
         fileArray.push(file);
     });
-    const { location, propertyCreated, propertyValue, rentPerMonth, maxCapacity, indexToDelete, parkingStalls, pets, utilities, contract } = req.body;
+    const { location, built, squareFeet, rent, capacity, parkingStalls, pets, utilities, bed, bath, post, description, indexToDelete } = req.body;
     Property.findByIdAndUpdate(id)
         .then(Property => {
             Property.location = location;
-            Property.propertyCreated = Date.parse(propertyCreated);
-            Property.propertyValue = Number(propertyValue);
-            Property.rentPerMonth = Number(rentPerMonth);
-            Property.maxCapacity = Number(maxCapacity);
-            Property.propertyImage = indexToDelete == null ? imageHelper(fileArray, Property.propertyImage) :  Property.propertyImage.filter((images, index) => !(indexToDelete.includes(index)));
-            Property.pets = Boolean(pets);
+            Property.built = Date.parse(built);
+            Property.squareFeet = Number(squareFeet);
+            Property.images = indexToDelete == null ? imageHelper(fileArray, Property.images) : deleteImageHelper(Property.images, indexToDelete, fileArray);
+            Property.rent = Number(rent);
+            Property.capacity = Number(capacity);
             Property.parkingStalls = Number(parkingStalls);
+            Property.pets = Boolean(pets);
             Property.utilities = utilities;
-            Property.contract = contract;
+            Property.bed = bed;
+            Property.bath = bath;
+            Property.post = post;
+            Property.description = description;
             Property.ownerId = ownerId;
 
             Property.save()

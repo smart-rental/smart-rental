@@ -7,18 +7,30 @@ import Gallery from "../../Gallery/Gallery";
 
 const HouseCardMap = () => { 
     const { propertyId } = useParams();
-    const initialState = { 
-        propertyImage: [],
+    const initialState = {
         location: "",
-        maxCapacity: "",
+        images: [],
+        built: new Date(),
+        squareFeet: "",
+        rent: "",
+        capacity: "",
         parkingStalls: "",
         pets: "",
         utilities: "",
-        rentPerMonth: ""
+        bed: "",
+        bath: "",
+        description: ""
     }
-    const [{propertyImage, location, maxCapacity, parkingStalls, pets, utilities, rentPerMonth}, setProperty] = useState(initialState);
+    const [{images, location, built, squareFeet, rent, capacity, pets, utilities, parkingStalls, bed, bath, description}, setProperty] = useState(initialState);
     const petToString = () => {
         return pets ? "Allowed" : "Not Allowed";
+    }
+    const dateToString = () => {
+        const date = new Date(built);
+        const day = date.getUTCDate();
+        const month = date.getUTCMonth() + 1;
+        const year = date.getUTCFullYear();
+        return `${month}/${day}/${year}`
     }
     useEffect(() => {
         getPropertyByID(propertyId)
@@ -34,14 +46,14 @@ const HouseCardMap = () => {
             <Grid item xs={3}>
                 <Card style={{height: "100vh"}}>
                         <div style={{ display: "flex", justifyContent: "center"}}>
-                            <Gallery images={propertyImage}/>
+                            <Gallery images={images}/>
                         </div>
                         <CardContent>
                             <Typography gutterBottom variant="h5" component="div">
                                 Location: {location}
                             </Typography>
                             <Typography variant="body2" color="text.secondary">
-                                Capacity: {maxCapacity}
+                                Capacity: {capacity}
                             </Typography>
                             <Typography variant="body2" color="text.secondary">
                                 Parking Stalls: {parkingStalls}
@@ -53,8 +65,24 @@ const HouseCardMap = () => {
                                 Utilities: {utilities}
                             </Typography>
                             <Typography variant="body2" color="text.secondary">
-                                Rent Price: ${rentPerMonth}
+                                Bed: {bed}
                             </Typography>
+                            <Typography variant="body2" color="text.secondary">
+                                Bath: {bath}
+                            </Typography>
+                            <Typography variant="body2" color="text.secondary">
+                                Square Feet: {squareFeet}
+                            </Typography>
+                            <Typography variant="body2" color="text.secondary">
+                                Rent Price: ${rent}
+                            </Typography>
+                            <Typography variant="body2" color="text.secondary">
+                                Built: {dateToString()}
+                            </Typography>
+                            { description ? 
+                                <Typography variant="body2" color="text.secondary">
+                                    Description: {description}
+                                </Typography> : ""}
                         </CardContent>
                 </Card>
             </Grid>

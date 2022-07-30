@@ -5,7 +5,7 @@ import {
     Avatar,
     TextField,
     Button,
-    Typography
+    Typography, Checkbox, FormControlLabel, TextareaAutosize
 } from "@mui/material";
 import { useParams } from "react-router-dom";
 import HouseIcon from "@mui/icons-material/House";
@@ -17,20 +17,23 @@ import PlacesAutoComplete from "../../../PlacesAutoComplete/PlacesAutoComplete";
 const AddProperty = () => {
     let { id } = useParams();
     const initialState = {
-        propertyLocation: "",
-        propertyCreated: new Date(),
-        propertyValue: "",
-        rentPerMonth: "",
-        maxCapacity: "",
+        location: "",
+        built: new Date(),
+        squareFeet: "",
+        rent: "",
+        capacity: "",
         parkingStalls: "",
-        contract: "",
+        bed: "",
+        description: "",
+        bath: "",
     };
     const [utilities, setUtilities] = React.useState("");
-    const [pet, setPets] = React.useState("");
+    const [pets, setPets] = React.useState("");
+    const [post, setPost] = React.useState("");
     const [selectedFiles, setSelectedFiles] = useState([]);
     const [selectedFilesArray, setSelectedFilesArray] = useState([]);
     const imageInputRef = React.useRef();
-    const [{ propertyLocation, propertyCreated, propertyValue, rentPerMonth, maxCapacity, parkingStalls }, setValues] = useState(initialState);
+    const [{ location, built, squareFeet, rent, capacity, parkingStalls, bed, bath, description }, setValues] = useState(initialState);
 
     const handleUtilitiesChange = (event) => {
         setUtilities(event.target.value);
@@ -39,6 +42,10 @@ const AddProperty = () => {
     const handlePetsChange = (event) => {
         setPets(event.target.value);
     };
+    
+    const handlePost = (event) => { 
+        setPost(event.target.checked);
+    }
     
     const handleFileChange = (event) => {
         const selectedFiles = event.target.files;
@@ -52,7 +59,7 @@ const AddProperty = () => {
 
     const handleChange = (event) => {
         let { name, value } = event.target;
-        const numbersInput = ["propertyValue", "rentPerMonth", "maxCapacity", "parkingStalls"];
+        const numbersInput = ["squareFeet", "rent", "capacity", "parkingStalls", "bed", "bath"];
         if (numbersInput.includes(name) && value < 0) {
             value = 0;
         }
@@ -75,6 +82,7 @@ const AddProperty = () => {
     const reset = () => {
         setPets("");
         setUtilities("");
+        setPost("");
         setSelectedFilesArray([]);
         setSelectedFiles([]);
         imageInputRef.current.value = "";
@@ -85,17 +93,20 @@ const AddProperty = () => {
         e.preventDefault();
         const propertyData = new FormData();
         for (const image of selectedFilesArray) {
-            propertyData.append("propertyImage", image);
+            propertyData.append("images", image);
         }
-        propertyData.append("location", propertyLocation);
-        propertyData.append("propertyCreated", propertyCreated.toString());
-        propertyData.append("propertyValue", propertyValue);
-        propertyData.append("rentPerMonth", rentPerMonth);
-        propertyData.append("maxCapacity", maxCapacity);
+        propertyData.append("location", location);
+        propertyData.append("built", built.toString());
+        propertyData.append("squareFeet", squareFeet);
+        propertyData.append("rent", rent);
+        propertyData.append("capacity", capacity);
         propertyData.append("parkingStalls", parkingStalls);
-        propertyData.append("pets", pet);
+        propertyData.append("pets", pets);
         propertyData.append("utilities", utilities);
-        propertyData.append("contract", "blob:http://localhost:3000/a4861fda-4252-40f7-8f99-96d2df5a8415");
+        propertyData.append("bed", bed);
+        propertyData.append("bath", bath);
+        propertyData.append("post", post);
+        propertyData.append("description", description);
         propertyData.append("ownerId", id);
         addProperty(id, propertyData)
             .then((r) => {
@@ -114,37 +125,35 @@ const AddProperty = () => {
                     <Grid align="center">
                         <Avatar style={avatarStyle}><HouseIcon/></Avatar>
                         <Typography variant="h5" fontFamily="Noto Sans">Add Property</Typography>
-                        <Typography variant="h5" fontFamily="Noto Sans">Properties that have not been rented out will be
-                            displayed for renters to see</Typography>
                     </Grid>
                     <PlacesAutoComplete
-                        name="propertyLocation"
+                        name="location"
                         label="Property Location"
                         handleChange={setValues}
                         style={btnStyle}
-                        valueProp={propertyLocation}
+                        valueProp={location}
                     />
                     <TextField
                         id="outlined-required"
                         label="Property Built"
                         onChange={handleChange}
-                        name="propertyCreated"
+                        name="built"
                         style={btnStyle}
                         type="date"
                         fullWidth
-                        value={propertyCreated}
+                        value={built}
                         InputLabelProps={{
                             shrink: true
                         }}
                     />
                     <TextField
                         id="outlined-number"
-                        label="Property Value"
+                        label="Square Feet"
                         type="number"
                         onChange={handleChange}
-                        name="propertyValue"
+                        name="squareFeet"
                         fullWidth
-                        value={propertyValue}
+                        value={squareFeet}
                         style={btnStyle}
                         InputLabelProps={{
                             shrink: true
@@ -154,10 +163,10 @@ const AddProperty = () => {
                         id="outlined-number"
                         label="Rent Per Month"
                         onChange={handleChange}
-                        name="rentPerMonth"
+                        name="rent"
                         type="number"
                         fullWidth
-                        value={rentPerMonth}
+                        value={rent}
                         style={btnStyle}
                         InputLabelProps={{
                             shrink: true
@@ -167,10 +176,36 @@ const AddProperty = () => {
                         id="outlined-number"
                         label="Max Capacity"
                         onChange={handleChange}
-                        name="maxCapacity"
+                        name="capacity"
                         type="number"
                         fullWidth
-                        value={maxCapacity}
+                        value={capacity}
+                        style={btnStyle}
+                        InputLabelProps={{
+                            shrink: true
+                        }}
+                    />
+                    <TextField
+                        id="outlined-number"
+                        label="Bath"
+                        onChange={handleChange}
+                        name="bath"
+                        type="number"
+                        fullWidth
+                        value={bath}
+                        style={btnStyle}
+                        InputLabelProps={{
+                            shrink: true
+                        }}
+                    />
+                    <TextField
+                        id="outlined-number"
+                        label="Bedrooms"
+                        onChange={handleChange}
+                        name="bed"
+                        type="number"
+                        fullWidth
+                        value={bed}
                         style={btnStyle}
                         InputLabelProps={{
                             shrink: true
@@ -193,7 +228,7 @@ const AddProperty = () => {
                         fullWidth
                         id="select"
                         label="Pets"
-                        value={pet}
+                        value={pets}
                         style={btnStyle}
                         onChange={handlePetsChange}
                         select
@@ -222,13 +257,30 @@ const AddProperty = () => {
                         <MenuItem value={"Only Water"}>Only Water</MenuItem>
                         <MenuItem value={"None"}>None</MenuItem>
                     </TextField>
+                    <TextareaAutosize
+                        aria-label="minimum height"
+                        minRows={8}
+                        onChange={handleChange}
+                        name="issueDescription"
+                        value={description}
+                        placeholder="Brief description of your property (optional)"
+                        style={{ width: 1904 }}
+                    />
+                    <FormControlLabel 
+                        style={btnStyle}
+                        control={<Checkbox
+                        checked={post}
+                        onChange={handlePost}
+                        inputProps={{ 'aria-label': 'controlled' }}
+                    />} label="Post this property on our website so others can find it"/>
+                    <br/> 
                     <input
                         type="file"
                         style={btnStyle}
                         id="outlined-required"
                         onChange={handleFileChange}
                         ref={imageInputRef}
-                        name="propertyImage"
+                        name="images"
                         multiple
                     />
                     {selectedFiles && selectedFiles.map((image, index) => { 
