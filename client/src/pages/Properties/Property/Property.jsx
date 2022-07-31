@@ -6,16 +6,16 @@ import CancelIcon from "@mui/icons-material/Cancel";
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import PersonAddAltIcon from '@mui/icons-material/PersonAddAlt';
-import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
+import PersonIcon from '@mui/icons-material/Person';
+import { Link, useNavigate } from "react-router-dom";
 import Gallery from "../../../components/Gallery/Gallery";
+import Kebab from "../../../components/Kebab/Kebab";
 
-const Property = ({property: { _id, location, built, squareFeet, images, rent, capacity, parkingStalls, pets, utilities, bed, bath, tenant }, removeProperty, editProperty, addTenant, users}) => {
+const Property = ({property: { _id, location, built, squareFeet, images, rent, capacity, parkingStalls, pets, utilities, bed, bath, tenant }, landlordId, removeProperty, users}) => {
     const checkOrX = (bool) => {
         return bool ? <CheckCircleIcon/> : <CancelIcon/>
     }
 
-    const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
     //Move this to the backend
     //This finds a user that matches the tenant id
     const displayTenant = () => {
@@ -23,9 +23,24 @@ const Property = ({property: { _id, location, built, squareFeet, images, rent, c
         if (tenant) {
             isTenant = users.find(user => user._id === tenant._id);
         }
-        return isTenant == null ? <PersonAddAltIcon onClick={() => {
-            addTenant(_id);}}/> : <Link to={`/editTenant/${isLoggedIn}/${_id}`}>{isTenant.name}</Link>;
+        return isTenant == null ? {
+            navigationLink: `/addTenant/${landlordId}/${_id}`,
+            name: "Add Tenant",
+            icon: <PersonAddAltIcon/>
+        } : {
+            navigationLink: `/editTenant/${landlordId}/${_id}`,
+            name: "Edit Tenant",
+            icon: <PersonIcon/>
+        };
     }
+    const options = [
+        {
+            navigationLink: `/editProperty/${landlordId}/${_id}`,
+            name: "Edit",
+            icon: <EditIcon/>
+        },
+        displayTenant()
+    ]
 
     const dateToString = () => {
         const date = new Date(built);
@@ -39,11 +54,11 @@ const Property = ({property: { _id, location, built, squareFeet, images, rent, c
         <TableRow
             sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
         >
-            <TableCell component="th" scope="row">
+            <TableCell align="center" component="th" scope="row">
                 {location}
             </TableCell>
             <TableCell align="center">{dateToString()}</TableCell>
-            <TableCell align="center">${squareFeet}</TableCell>
+            <TableCell align="center">{squareFeet}</TableCell>
             <TableCell align="center">${rent}</TableCell>
             <TableCell align="center">{capacity}</TableCell>
             <TableCell align="center">
@@ -54,11 +69,14 @@ const Property = ({property: { _id, location, built, squareFeet, images, rent, c
             <TableCell align="center">{bath}</TableCell>
             <TableCell align="center">{checkOrX(pets)}</TableCell>
             <TableCell align="center">{utilities}</TableCell>
-            <TableCell align="center"><EditIcon onClick={() => {editProperty(_id)}}/></TableCell>
+            <TableCell align="center"><Link to={`/issue/${_id}`} style={{textDecoration: "none" }}>Manage Issues</Link></TableCell>
             <TableCell align="center"><DeleteForeverIcon onClick={() => {
                 removeProperty(_id);}}/></TableCell>
-            <TableCell align="center">{displayTenant()}</TableCell>
-            <TableCell align="center"><Link to={`/issue/${_id}`}>Issue</Link></TableCell>
+            <TableCell align="center">
+                <Kebab
+                    options={options}
+                />
+            </TableCell>
         </TableRow>
     );
 }

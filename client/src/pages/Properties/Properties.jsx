@@ -8,11 +8,12 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { useEffect, useState } from "react";
 import { deleteProperty, getProperties, getUsers } from "../../api";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Property from "./Property/Property";
 import Swal from "sweetalert2";
-import { Typography } from "@mui/material";
+import { tableCellClasses, Typography } from "@mui/material";
 import Container from "@mui/material/Container";
+import { useSelector } from "react-redux";
 
 const table = {
     margin: "100px auto"
@@ -21,10 +22,10 @@ const table = {
 const Properties = () => {
     const [properties, setProperties] = useState([]);
     const [users, setUsers] = useState([]);
-    const params = useParams();
+    const landlordId = useSelector((state) => state.auth.isLoggedIn);
     const navigate = useNavigate();
     useEffect(() => {
-        getProperties(params.id)
+        getProperties(landlordId)
             .then((res) => {
                 setProperties(res.data);
             })
@@ -34,7 +35,7 @@ const Properties = () => {
             .then((res) => {
                 setUsers(res.data);
             });
-    }, [params.id]);
+    }, [landlordId]);
 
     const removeProperty = (propertyId) => {
         deleteProperty(propertyId)
@@ -48,46 +49,46 @@ const Properties = () => {
             });
     }
 
-    const editProperty = (propertyId) => {
-        navigate(`/editProperty/${params.id}/${propertyId}`);
-    }
-
-    const addTenant = (propertyId) => {
-        navigate(`/addTenant/${params.id}/${propertyId}`);
-    }
-
     return (
         <Container maxWidth="125rem">
-            <Typography textAlign="center" variant="h3">Properties</Typography>
-            {properties != null ? <TableContainer component={Paper} style={table} sx={{ maxHeight: "10000px" }}>
-                <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                    <TableHead>
-                        <TableRow>
-                            <TableCell>Location</TableCell>
-                            <TableCell align="center">Date built</TableCell>
-                            <TableCell align="center">Square Feet</TableCell>
-                            <TableCell align="center">Rent per month</TableCell>
-                            <TableCell align="center">Max Capacity</TableCell>
-                            <TableCell align="center">Images</TableCell>
-                            <TableCell align="center">Parking Stalls</TableCell>
-                            <TableCell align="center">Bed</TableCell>
-                            <TableCell align="center">Bath</TableCell>
-                            <TableCell align="center">Pets</TableCell>
-                            <TableCell align="center">Utilities</TableCell>
-                            <TableCell align="center">Edit</TableCell>
-                            <TableCell align="center">Delete</TableCell>
-                            <TableCell align="center">Tenant</TableCell>
-                            <TableCell align="center">Issues</TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {properties.map((property) => (
-                            <Property property={property} users={users} removeProperty={removeProperty}
-                                      editProperty={editProperty} addTenant={addTenant} key={property._id}/>
-                        ))}
-                    </TableBody>
-                </Table>
-            </TableContainer> : <Typography>No properties</Typography>}
+            {properties.length > 0 ? 
+                <TableContainer component={Paper} style={table}>
+                    <Table sx={{[`& .${tableCellClasses.root}`]: {
+                            borderBottom: "1px solid"
+                        }}} aria-label="simple table">
+                        <TableHead>
+                            <TableRow>
+                                <TableCell style={{ borderBottom: "none" }} align="center" colSpan={30}>
+                                    <Typography variant="h4">
+                                        <b>Manage Properties</b>
+                                    </Typography>
+                                </TableCell>
+                            </TableRow>
+                            <TableRow>
+                                <TableCell align="center">Location</TableCell>
+                                <TableCell align="center">Date built</TableCell>
+                                <TableCell align="center">Square Feet</TableCell>
+                                <TableCell align="center">Rent per month</TableCell>
+                                <TableCell align="center">Max Capacity</TableCell>
+                                <TableCell align="center">Images</TableCell>
+                                <TableCell align="center">Parking Stalls</TableCell>
+                                <TableCell align="center">Bed</TableCell>
+                                <TableCell align="center">Bath</TableCell>
+                                <TableCell align="center">Pets</TableCell>
+                                <TableCell align="center">Utilities</TableCell>
+                                <TableCell align="center"></TableCell>
+                                <TableCell align="center"></TableCell>
+                                <TableCell align="center"></TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {properties.map((property) => (
+                                <Property property={property} landlordId={landlordId} users={users} removeProperty={removeProperty}
+                                           key={property._id}/>
+                            ))}
+                        </TableBody>
+                    </Table>
+            </TableContainer> :  <Typography variant="h4" align="center"><b>No properties to manage</b></Typography>}
         </Container>
     );
 }
