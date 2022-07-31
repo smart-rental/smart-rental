@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useId } from "react";
-import Issue from "./TenantIssue/Issue/Issue";
+import Issue from "./Issue/Issue";
 import { useSelector } from "react-redux";
 import { deleteIssue, retrieveIssueFromProperty, retrieveIssues, updateIssue } from "../../api";
 import { useNavigate, useParams } from "react-router-dom";

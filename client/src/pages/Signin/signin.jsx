@@ -15,13 +15,14 @@ import { Link, useNavigate } from "react-router-dom";
 import IconButton from "@mui/material/IconButton";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { getUsers, validateUser } from "../../api";
-import Swal from "sweetalert2";
 import classes from "./styles";
 import { useDispatch } from "react-redux";
 import authActions from "../../Store/slices/auth-slice";
 import userActions from "../../Store/slices/users-slice";
+import Swal from "sweetalert2";
 
-const Signin = () => {
+const SignIn = () => {
+    const { paper, avatar, link, btnStyle, formControl } = classes;
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const [values, setValues] = useState({
@@ -79,12 +80,12 @@ const Signin = () => {
     return (
         <form onSubmit={submitLogin}>
             <Grid>
-                <Paper elevation={10} style={classes.paper}>
+                <Paper elevation={10} style={paper}>
                     <Grid align="center">
-                        <Avatar style={classes.avatar}><LockOutlinedIcon/></Avatar>
+                        <Avatar style={avatar}><LockOutlinedIcon/></Avatar>
                         <Typography variant="h5" fontFamily="Noto Sans">Sign in</Typography>
                     </Grid>
-                    <FormControl style={classes.formControl} fullWidth>
+                    <FormControl style={formControl} fullWidth>
                         <InputLabel htmlFor="outlined-adornment-password">Email</InputLabel>
                         <OutlinedInput variant="standard" value={values.email} onChange={handleChange("email")}
                                        label="Email" placeholder="Enter email" fullWidth required/>
@@ -106,11 +107,16 @@ const Signin = () => {
                             </InputAdornment>
                         } fullWidth required/>
                     </FormControl>
-                    <Button type="submit" color="primary" variant="contained" style={classes.btnStyle} fullWidth><Typography
-                        fontFamily="Noto Sans">Sign in</Typography></Button>
+                    <Button type="submit" color="primary" variant="contained" style={btnStyle} fullWidth>
+                        <Typography
+                            fontFamily="Noto Sans"
+                        >
+                            Sign in
+                        </Typography>
+                    </Button>
                     <Typography fontFamily="Noto Sans">
                         Don't have an account? &nbsp;
-                        <Link to="/signup" style={classes.link}>
+                        <Link to="/signup" style={link}>
                             Sign up
                         </Link>
                     </Typography>
@@ -120,4 +126,4 @@ const Signin = () => {
     );
 };
 
-export default Signin;
+export default SignIn;

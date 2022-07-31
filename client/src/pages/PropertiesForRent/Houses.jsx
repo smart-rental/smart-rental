@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { getAllProperties } from "../../api";
-import Error from "../Error/Error";
 import HouseCard from "./HouseCard/HouseCard";
 import { Grid, Typography } from "@mui/material";
+import Error from "../../components/Error/Error";
 
 const Houses = () => {
     const [properties, setProperties] = useState([]);

@@ -1,6 +1,6 @@
 import React from "react";
 import { Button, Card, CardActions, CardContent, Grid, Typography } from "@mui/material";
-import Gallery from "../../../Gallery/Gallery";
+import Gallery from "../../../components/Gallery/Gallery";
 
 const Issue = ({
                    issue: { _id, issueImage, issueType, issueDescription, status, timeStamp},

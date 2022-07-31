@@ -12,6 +12,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import Property from "./Property/Property";
 import Swal from "sweetalert2";
 import { Typography } from "@mui/material";
+import Container from "@mui/material/Container";
 
 const table = {
     margin: "100px auto"
@@ -56,10 +57,10 @@ const Properties = () => {
     }
 
     return (
-        <div>
+        <Container maxWidth="125rem">
             <Typography textAlign="center" variant="h3">Properties</Typography>
-            <TableContainer component={Paper} style={table} sx={{ maxHeight: '10000px'}}>
-                <Table sx={{ minWidth: 650 }} aria-label="simple table" >
+            {properties != null ? <TableContainer component={Paper} style={table} sx={{ maxHeight: "10000px" }}>
+                <Table sx={{ minWidth: 650 }} aria-label="simple table">
                     <TableHead>
                         <TableRow>
                             <TableCell>Location</TableCell>
@@ -81,12 +82,13 @@ const Properties = () => {
                     </TableHead>
                     <TableBody>
                         {properties.map((property) => (
-                            <Property property={property} users={users} removeProperty={removeProperty} editProperty={editProperty} addTenant={addTenant} key={property._id}/>
+                            <Property property={property} users={users} removeProperty={removeProperty}
+                                      editProperty={editProperty} addTenant={addTenant} key={property._id}/>
                         ))}
                     </TableBody>
                 </Table>
-            </TableContainer>
-        </div>
+            </TableContainer> : <Typography>No properties</Typography>}
+        </Container>
     );
 }
 

@@ -14,8 +14,8 @@ const styles = ({
         textDecoration: "none"
     },
 
-    btnStyle: {
-        margin: "10px"
+    topMargin: {
+        marginTop: "10px"
     },
 
     formControl: {

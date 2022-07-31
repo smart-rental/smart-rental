@@ -1,9 +1,9 @@
 import React from "react";
 import { Button, Card, CardActions, CardContent, Typography } from "@mui/material";
-import Gallery from "../../Gallery/Gallery";
 import { useNavigate } from "react-router-dom";
+import Gallery from "../../../components/Gallery/Gallery";
 
-const HouseCard = ({propertyInfo: { _id, location, built, squareFeet, images, rent, capacity, bed, bath } }) => {
+const HouseCard = ({propertyInfo: { _id, location, squareFeet, images, rent, capacity, bed, bath } }) => {
     const navigate = useNavigate();
     return (
         <Card sx={{ maxWidth: 345 }}>

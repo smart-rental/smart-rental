@@ -1,11 +1,21 @@
 import React from "react";
+import { Alert,  Snackbar } from "@mui/material";
 
-const Error = () => { 
+const Error = ({ message, open, onClose}) => {
+    const origin = {
+        vertical: 'top',
+        horizontal: 'center'
+    }
+    const { vertical, horizontal } = origin;
     return (
-        <div>
-            There was an error loading this page.
-        </div>
-    );
-
+        <Snackbar
+            open={open}
+            anchorOrigin={{ vertical, horizontal }}
+            autoHideDuration={2000}
+            onClose={onClose}
+        >
+            <Alert severity="error">{message}</Alert>
+        </Snackbar>
+    )
 }
 export default Error;

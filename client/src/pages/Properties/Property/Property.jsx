@@ -8,7 +8,7 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import PersonAddAltIcon from '@mui/icons-material/PersonAddAlt';
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
-import Gallery from "../../Gallery/Gallery";
+import Gallery from "../../../components/Gallery/Gallery";
 
 const Property = ({property: { _id, location, built, squareFeet, images, rent, capacity, parkingStalls, pets, utilities, bed, bath, tenant }, removeProperty, editProperty, addTenant, users}) => {
     const checkOrX = (bool) => {

@@ -15,7 +15,7 @@ const styles = ({
     },
 
     btnStyle: {
-        margin: "10px"
+        marginTop: "10px",
     },
 
     formControl: {

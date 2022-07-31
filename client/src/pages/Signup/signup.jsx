@@ -23,6 +23,7 @@ import authActions from "../../Store/slices/auth-slice";
 import userActions from "../../Store/slices/users-slice";
 
 const Signup = () => {
+    const { paper, avatar, link, topMargin, formControl } = classes;
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const [values, setValues] = useState({
@@ -57,8 +58,8 @@ const Signup = () => {
             dispatch(authActions.actions.login(userInfo._id));
             dispatch(userActions.actions.setUserType(userInfo.userType));
         });
-    }
-    
+    };
+
     const submitLogin = (e) => {
         e.preventDefault();
         const { name, email, password, userType, phoneNumber } = values;
@@ -74,8 +75,19 @@ const Signup = () => {
                 retrieveNewUser(userLogin);
             })
             .catch((res) => {
-                if (res.data.message === "User with given email already Exist!") {
-                    Swal.fire("Email already exits", "Seems that a user with given email already exits", "error");
+                switch (res.response.status) {
+                    case 409:
+                        Swal.fire("Email already exits", "Seems that a user with given email already exits", "error");
+                        break;
+                    case 500:
+                        Swal.fire("This ones on us", "Looks like there was an internal server error", "error");
+                        break;
+                    case 400:
+                        let message = "";
+                        for (const response of res.response.data.message) {
+                            message = `${response.message}`;
+                        }
+                        Swal.fire("", `${message}`, "error");
                 }
             });
     };
@@ -83,28 +95,28 @@ const Signup = () => {
     return (
         <form onSubmit={submitLogin}>
             <Grid>
-                <Paper elevation={10} style={classes.paper}>
+                <Paper elevation={10} style={paper}>
                     <Grid align="center">
-                        <Avatar style={classes.avatar}><LockOutlinedIcon/></Avatar>
+                        <Avatar style={avatar}><LockOutlinedIcon/></Avatar>
                         <Typography variant="h5" fontFamily="Noto Sans">Sign up</Typography>
                     </Grid>
-                    <FormControl style={classes.formControl} fullWidth>
+                    <FormControl style={formControl} fullWidth>
                         <InputLabel htmlFor="outlined-adornment-password">Email</InputLabel>
                         <OutlinedInput variant="standard" value={values.email} onChange={handleChange("email")}
                                        label="Email" placeholder="Enter email" fullWidth required/>
                     </FormControl>
-                    <FormControl style={classes.formControl} fullWidth>
+                    <FormControl style={formControl} fullWidth>
                         <InputLabel htmlFor="outlined-adornment-password">Name</InputLabel>
                         <OutlinedInput variant="standard" value={values.name} onChange={handleChange("name")}
                                        label="Name" placeholder="Enter name" fullWidth required/>
                     </FormControl>
-                    <FormControl style={classes.formControl} fullWidth>
+                    <FormControl style={formControl} fullWidth>
                         <InputLabel htmlFor="outlined-adornment-password">Phone</InputLabel>
                         <OutlinedInput variant="standard" value={values.phoneNumber}
                                        onChange={handleChange("phoneNumber")} label="Email"
                                        placeholder="Enter phone number xxxxxxxxxx" fullWidth required/>
                     </FormControl>
-                    <FormControl style={classes.formControl} fullWidth>
+                    <FormControl style={formControl} fullWidth>
                         <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
                         <OutlinedInput variant="standard" value={values.password} onChange={handleChange("password")}
                                        label="Password" placeholder="Enter password"
@@ -121,7 +133,7 @@ const Signup = () => {
                             </InputAdornment>
                         } fullWidth required/>
                     </FormControl>
-                    <FormControl style={classes.formControl} fullWidth>
+                    <FormControl style={formControl} fullWidth>
                         <OutlinedInput variant="standard" value={values.confirmPassword}
                                        onChange={handleChange("confirmPassword")} label="Password"
                                        placeholder="Re-enter password" type={values.showPassword ? "text" : "password"}
@@ -151,11 +163,17 @@ const Signup = () => {
                             <FormControlLabel value="Tenant" control={<Radio/>} label="Tenant"/>
                         </RadioGroup>
                     </FormControl>
-                    <Button type="submit" color="primary" variant="contained" style={classes.btnStyle} fullWidth><Typography
-                        fontFamily="Noto Sans">Sign up</Typography></Button>
-                    <Typography fontFamily="Noto Sans">
+                    <Button type="submit" color="primary" variant="contained" style={topMargin}
+                            fullWidth>
+                        <Typography
+                            fontFamily="Noto Sans"
+                        >
+                            Sign up
+                        </Typography>
+                    </Button>
+                    <Typography style={topMargin} fontFamily="Noto Sans">
                         Already have an account? &nbsp;
-                        <Link to="/login" style={classes.link}>
+                        <Link to="/login" style={link}>
                             Sign in
                         </Link>
                     </Typography>

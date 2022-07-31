@@ -1,25 +1,21 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
-    Avatar,
-    Button,
-    Checkbox,
-    FormControlLabel,
     Grid,
     Paper,
-    TextareaAutosize,
+    Avatar,
     TextField,
-    Typography
+    Button,
+    Typography, Checkbox, FormControlLabel, TextareaAutosize
 } from "@mui/material";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import HouseIcon from "@mui/icons-material/House";
 import MenuItem from "@mui/material/MenuItem";
 import Swal from "sweetalert2";
-import { editProperty, getProperty } from "../../../../api";
-import PlacesAutoComplete from "../../../PlacesAutoComplete/PlacesAutoComplete";
+import { addProperty } from "../../../../api";
+import PlacesAutoComplete from "../../../../components/PlacesAutoComplete/PlacesAutoComplete";
 
-const EditProperty = () => {
-    let { ownerId, propertyId } = useParams();
-    const navigate = useNavigate();
+const AddProperty = () => {
+    let { id } = useParams();
     const initialState = {
         location: "",
         built: new Date(),
@@ -36,61 +32,40 @@ const EditProperty = () => {
     const [post, setPost] = React.useState("");
     const [selectedFiles, setSelectedFiles] = useState([]);
     const [selectedFilesArray, setSelectedFilesArray] = useState([]);
-    const [indexToDelete, setIndexToDelete] = useState([]);
+    const imageInputRef = React.useRef();
     const [{ location, built, squareFeet, rent, capacity, parkingStalls, bed, bath, description }, setValues] = useState(initialState);
-
-    useEffect(() => {
-        getProperty(ownerId, propertyId).then((res) => {
-            const { location, built, squareFeet, images, rent, capacity, parkingStalls, pets, utilities, bed, bath, post, description } = res.data;
-            setValues({
-                location,
-                built,
-                squareFeet,
-                rent,
-                capacity,
-                parkingStalls,
-                bed,
-                bath,
-                description
-            });
-            setSelectedFilesArray(images);
-            const imageArray = images.map((image) => {
-                return `http://localhost:5000/${image.filePath}`;
-            });
-            setSelectedFiles(imageArray);
-            setPets(pets);
-            setPost(post);
-            setUtilities(utilities);
-        });
-    }, [ownerId, propertyId]);
 
     const handleUtilitiesChange = (event) => {
         setUtilities(event.target.value);
-    }
-
-    const handlePost = (event) => {
-        setPost(event.target.checked);
-    }
-
-    const handleFileChange = (event) => {
-        const selectedFiles = event.target.files;
-        const selectedFilesArray = Array.from(selectedFiles);
-        setSelectedFilesArray(prevState => prevState.concat(selectedFilesArray));
-        const imageArray = selectedFilesArray.map((image) => {
-            return URL.createObjectURL(image);
-        });
-        setSelectedFiles(prevState => prevState.concat(imageArray));
     };
-    
+
     const handlePetsChange = (event) => {
         setPets(event.target.value);
     };
+    
+    const handlePost = (event) => { 
+        setPost(event.target.checked);
+    }
+    
+    const handleFileChange = (event) => {
+        const selectedFiles = event.target.files;
+        const selectedFilesArray = Array.from(selectedFiles);
+        const imageArray = selectedFilesArray.map((image) => {
+            return URL.createObjectURL(image);
+        });
+        setSelectedFilesArray(prevState => prevState.concat(selectedFilesArray));
+        setSelectedFiles(prevState => prevState.concat(imageArray));
+    }
 
     const handleChange = (event) => {
-        const { name, value } = event.target;
+        let { name, value } = event.target;
+        const numbersInput = ["squareFeet", "rent", "capacity", "parkingStalls", "bed", "bath"];
+        if (numbersInput.includes(name) && value < 0) {
+            value = 0;
+        }
         setValues((prevState) => ({ ...prevState, [name]: value }));
     };
-    
+
     const paperStyle = {
         padding: 20,
         margin: "20px auto"
@@ -104,14 +79,19 @@ const EditProperty = () => {
         margin: "8px 0"
     };
 
-    const updateProperty = (e) => {
+    const reset = () => {
+        setPets("");
+        setUtilities("");
+        setPost("");
+        setSelectedFilesArray([]);
+        setSelectedFiles([]);
+        imageInputRef.current.value = "";
+        setValues({ ...initialState });
+    };
+
+    const createProperty = (e) => {
         e.preventDefault();
         const propertyData = new FormData();
-        for (const index of indexToDelete) {
-            if (typeof index === "object") {
-                propertyData.append("indexToDelete", index.filePath);
-            }
-        }
         for (const image of selectedFilesArray) {
             propertyData.append("images", image);
         }
@@ -127,27 +107,24 @@ const EditProperty = () => {
         propertyData.append("bath", bath);
         propertyData.append("post", post);
         propertyData.append("description", description);
-        propertyData.append("ownerId", ownerId);
-        editProperty(ownerId, propertyId, propertyData)
-            .then((r) => {
-                console.log(r);
-                Swal.fire("Congratulations", "Your property has been updated", "success");
-                navigate(`/landlord/${ownerId}`);
+        propertyData.append("ownerId", id);
+        addProperty(id, propertyData)
+            .then(() => {
+                Swal.fire("Congratulations", "Your property has been added", "success").then(reset);
             })
             .catch((e) => {
-                Swal.fire("Try Again", "Your property has not been added", "error");
                 console.log(e);
+                Swal.fire("Try Again", "Your property has not been added", "error");
             });
     };
+
     return (
-        <form onSubmit={updateProperty}>
+        <form onSubmit={createProperty}>
             <Grid>
                 <Paper elevation={10} style={paperStyle}>
                     <Grid align="center">
                         <Avatar style={avatarStyle}><HouseIcon/></Avatar>
-                        <Typography variant="h5" fontFamily="Noto Sans">Edit Property</Typography>
-                        <Typography variant="h5" fontFamily="Noto Sans">Properties that have not been rented out will be
-                            displayed for renters to see</Typography>
+                        <Typography variant="h5" fontFamily="Noto Sans">Add Property</Typography>
                     </Grid>
                     <PlacesAutoComplete
                         name="location"
@@ -162,16 +139,16 @@ const EditProperty = () => {
                         onChange={handleChange}
                         name="built"
                         style={btnStyle}
-                        value={new Date(built).toISOString().split('T')[0]}
                         type="date"
                         fullWidth
+                        value={built}
                         InputLabelProps={{
                             shrink: true
                         }}
                     />
                     <TextField
                         id="outlined-number"
-                        label="Property Value"
+                        label="Square Feet"
                         type="number"
                         onChange={handleChange}
                         name="squareFeet"
@@ -200,9 +177,35 @@ const EditProperty = () => {
                         label="Max Capacity"
                         onChange={handleChange}
                         name="capacity"
-                        value={capacity}
                         type="number"
                         fullWidth
+                        value={capacity}
+                        style={btnStyle}
+                        InputLabelProps={{
+                            shrink: true
+                        }}
+                    />
+                    <TextField
+                        id="outlined-number"
+                        label="Bath"
+                        onChange={handleChange}
+                        name="bath"
+                        type="number"
+                        fullWidth
+                        value={bath}
+                        style={btnStyle}
+                        InputLabelProps={{
+                            shrink: true
+                        }}
+                    />
+                    <TextField
+                        id="outlined-number"
+                        label="Bedrooms"
+                        onChange={handleChange}
+                        name="bed"
+                        type="number"
+                        fullWidth
+                        value={bed}
                         style={btnStyle}
                         InputLabelProps={{
                             shrink: true
@@ -213,9 +216,9 @@ const EditProperty = () => {
                         label="Parking Stalls"
                         type="number"
                         onChange={handleChange}
-                        value={parkingStalls}
                         name="parkingStalls"
                         fullWidth
+                        value={parkingStalls}
                         style={btnStyle}
                         InputLabelProps={{
                             shrink: true
@@ -258,38 +261,38 @@ const EditProperty = () => {
                         aria-label="minimum height"
                         minRows={8}
                         onChange={handleChange}
-                        name="issueDescription"
+                        name="description"
                         value={description}
                         placeholder="Brief description of your property (optional)"
                         style={{ width: 1904 }}
                     />
-                    <FormControlLabel
+                    <FormControlLabel 
                         style={btnStyle}
                         control={<Checkbox
-                            checked={post}
-                            onChange={handlePost}
-                            inputProps={{ 'aria-label': 'controlled' }}
-                        />} label="Post this property on our website so others can find it"/>
-                    <br/>
+                        checked={post}
+                        onChange={handlePost}
+                        inputProps={{ 'aria-label': 'controlled' }}
+                    />} label="Post this property on our website so others can find it"/>
+                    <br/> 
                     <input
                         type="file"
                         style={btnStyle}
                         id="outlined-required"
                         onChange={handleFileChange}
+                        ref={imageInputRef}
                         name="images"
                         multiple
                     />
-                    {selectedFiles && selectedFiles.map((image, index) => {
+                    {selectedFiles && selectedFiles.map((image, index) => { 
                         return (
                             <div key={index}>
                                 <img
                                     src={image}
-                                    alt="error"/>
-                                <Button onClick={() => {
-                                    setSelectedFiles(selectedFiles.filter((e, ind) => ind !== index))
+                                  alt="tower"/>
+                                <Button onClick={() => { 
+                                    setSelectedFiles(selectedFiles.filter(e => e !== image)) 
                                     setSelectedFilesArray(selectedFilesArray.filter((e, ind) => ind !== index));
-                                    setIndexToDelete(prevState => [...prevState, selectedFilesArray[index]]);
-                                }}>  
+                                }}>
                                     Delete Image
                                 </Button>
                             </div>
@@ -304,4 +307,4 @@ const EditProperty = () => {
     );
 };
 
-export default (EditProperty);
+export default (AddProperty);

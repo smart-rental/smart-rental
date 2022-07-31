@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import Map from "../../Map/Map";
-import { Card, CardActionArea, CardContent, Grid, Typography } from "@mui/material";
+import { Card, CardContent, Grid, Typography } from "@mui/material";
 import { useParams } from "react-router-dom";
 import { getPropertyByID } from "../../../api";
-import Gallery from "../../Gallery/Gallery";
+import Gallery from "../../../components/Gallery/Gallery";
+import Map from "../../../components/Map/Map";
 
 const HouseCardMap = () => { 
     const { propertyId } = useParams();
