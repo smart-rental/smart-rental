@@ -5,6 +5,9 @@ import FeedbackIcon from '@mui/icons-material/Feedback';
 import { useSelector } from "react-redux";
 import { addIssue } from "../../../api";
 import Swal from "sweetalert2";
+import ListImage from "../../../components/ListImage/ListImage";
+import { FileUpload } from "@mui/icons-material";
+import Container from "@mui/material/Container";
 
 const AddIssue = () => {
     const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
@@ -78,7 +81,7 @@ const AddIssue = () => {
     
     return (
         <form onSubmit={createIssue}>
-            <Grid>
+            <Container width="xl">
                 <Paper elevation={10} style={paperStyle}>
                     <Grid align="center">
                         <Avatar style={avatarStyle}><FeedbackIcon/></Avatar>
@@ -114,38 +117,23 @@ const AddIssue = () => {
                         name="issueDescription"
                         value={issueDescription}
                         placeholder="Brief description of your issue (optional)"
-                        style={{ width: 1904 }}
+                        style={{ width: 1000 }}
                     />
-                    <input
-                        type="file"
-                        required
-                        style={btnStyle}
-                        id="outlined-required"
-                        ref={imageInputRef}
-                        onChange={handleFileChange}
-                        name="issueImage"
-                        multiple
+                    <Button variant="contained" style={btnStyle} endIcon={<FileUpload/>} component="label">
+                        Upload Issue Images
+                        <input onChange={handleFileChange} hidden multiple type="file" />
+                    </Button>
+                    <ListImage
+                        selectedFiles={selectedFiles}
+                        selectedFilesArray={selectedFilesArray}
+                        setSelectedFiles={setSelectedFiles}
+                        setSelectedFilesArray={setSelectedFilesArray}
                     />
-                    {selectedFiles && selectedFiles.map((image, index) => {
-                        return (
-                            <div key={index}>
-                                <img
-                                    src={image}
-                                    alt="tower"/>
-                                <Button onClick={() => {
-                                    setSelectedFiles(selectedFiles.filter(e => e !== image))
-                                    setSelectedFilesArray(selectedFilesArray.filter((e, ind) => ind !== index));
-                                }}>
-                                    Delete Image
-                                </Button>
-                            </div>
-                        )
-                    })}
                     <Button type="submit" color="primary" variant="contained" fullWidth style={btnStyle}>
                         <Typography fontFamily="Noto Sans">Submit</Typography>
                     </Button>
                 </Paper>
-            </Grid>
+            </Container>
         </form>
     );
 };

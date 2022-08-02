@@ -16,6 +16,7 @@ import MenuItem from "@mui/material/MenuItem";
 import Swal from "sweetalert2";
 import { editProperty, getProperty } from "../../../../api";
 import PlacesAutoComplete from "../../../../components/PlacesAutoComplete/PlacesAutoComplete";
+import ListImage from "../../../../components/ListImage/ListImage";
 
 const EditProperty = () => {
     let { ownerId, propertyId } = useParams();
@@ -149,7 +150,7 @@ const EditProperty = () => {
                         <Typography variant="h5" fontFamily="Noto Sans">Properties that have not been rented out will be
                             displayed for renters to see</Typography>
                     </Grid>
-                    <PlacesAutoComplete
+                    <   PlacesAutoComplete
                         name="location"
                         label="Property Location"
                         handleChange={setValues}
@@ -279,22 +280,13 @@ const EditProperty = () => {
                         name="images"
                         multiple
                     />
-                    {selectedFiles && selectedFiles.map((image, index) => {
-                        return (
-                            <div key={index}>
-                                <img
-                                    src={image}
-                                    alt="error"/>
-                                <Button onClick={() => {
-                                    setSelectedFiles(selectedFiles.filter((e, ind) => ind !== index))
-                                    setSelectedFilesArray(selectedFilesArray.filter((e, ind) => ind !== index));
-                                    setIndexToDelete(prevState => [...prevState, selectedFilesArray[index]]);
-                                }}>  
-                                    Delete Image
-                                </Button>
-                            </div>
-                        )
-                    })}
+                    <ListImage
+                        selectedFiles={selectedFiles}
+                        selectedFilesArray={selectedFilesArray}
+                        setSelectedFiles={setSelectedFiles}
+                        setSelectedFilesArray={setSelectedFilesArray}
+                        setIndexToDelete={setIndexToDelete}
+                    />
                     <Button type="submit" color="primary" variant="contained" style={btnStyle} fullWidth>
                         <Typography fontFamily="Noto Sans">Submit</Typography>
                     </Button>

@@ -23,7 +23,6 @@ const Properties = () => {
     const [properties, setProperties] = useState([]);
     const [users, setUsers] = useState([]);
     const landlordId = useSelector((state) => state.auth.isLoggedIn);
-    const navigate = useNavigate();
     useEffect(() => {
         getProperties(landlordId)
             .then((res) => {

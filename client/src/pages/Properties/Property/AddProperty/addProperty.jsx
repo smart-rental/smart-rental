@@ -13,6 +13,9 @@ import MenuItem from "@mui/material/MenuItem";
 import Swal from "sweetalert2";
 import { addProperty } from "../../../../api";
 import PlacesAutoComplete from "../../../../components/PlacesAutoComplete/PlacesAutoComplete";
+import Container from "@mui/material/Container";
+import ListImage from "../../../../components/ListImage/ListImage";
+import { FileUpload } from "@mui/icons-material";
 
 const AddProperty = () => {
     let { id } = useParams();
@@ -29,10 +32,9 @@ const AddProperty = () => {
     };
     const [utilities, setUtilities] = React.useState("");
     const [pets, setPets] = React.useState("");
-    const [post, setPost] = React.useState("");
+    const [post, setPost] = React.useState(false);
     const [selectedFiles, setSelectedFiles] = useState([]);
     const [selectedFilesArray, setSelectedFilesArray] = useState([]);
-    const imageInputRef = React.useRef();
     const [{ location, built, squareFeet, rent, capacity, parkingStalls, bed, bath, description }, setValues] = useState(initialState);
 
     const handleUtilitiesChange = (event) => {
@@ -67,8 +69,8 @@ const AddProperty = () => {
     };
 
     const paperStyle = {
-        padding: 20,
-        margin: "20px auto"
+        padding: 80,
+        marginTop: "20px"
     };
 
     const avatarStyle = {
@@ -85,7 +87,6 @@ const AddProperty = () => {
         setPost("");
         setSelectedFilesArray([]);
         setSelectedFiles([]);
-        imageInputRef.current.value = "";
         setValues({ ...initialState });
     };
 
@@ -120,7 +121,7 @@ const AddProperty = () => {
 
     return (
         <form onSubmit={createProperty}>
-            <Grid>
+            <Container maxWidth="xl">
                 <Paper elevation={10} style={paperStyle}>
                     <Grid align="center">
                         <Avatar style={avatarStyle}><HouseIcon/></Avatar>
@@ -259,50 +260,38 @@ const AddProperty = () => {
                     </TextField>
                     <TextareaAutosize
                         aria-label="minimum height"
-                        minRows={8}
+                        minRows={7}
                         onChange={handleChange}
                         name="description"
                         value={description}
                         placeholder="Brief description of your property (optional)"
-                        style={{ width: 1904 }}
+                        style={{ width: "83rem" }}
                     />
-                    <FormControlLabel 
+                    <FormControlLabel
                         style={btnStyle}
                         control={<Checkbox
-                        checked={post}
-                        onChange={handlePost}
-                        inputProps={{ 'aria-label': 'controlled' }}
-                    />} label="Post this property on our website so others can find it"/>
-                    <br/> 
-                    <input
-                        type="file"
-                        style={btnStyle}
-                        id="outlined-required"
-                        onChange={handleFileChange}
-                        ref={imageInputRef}
-                        name="images"
-                        multiple
+                            checked={post}
+                            onChange={handlePost}
+                            inputProps={{ 'aria-label': 'controlled' }}
+                        />} 
+                        label="Post this property on our website so others can find it"
                     />
-                    {selectedFiles && selectedFiles.map((image, index) => { 
-                        return (
-                            <div key={index}>
-                                <img
-                                    src={image}
-                                  alt="tower"/>
-                                <Button onClick={() => { 
-                                    setSelectedFiles(selectedFiles.filter(e => e !== image)) 
-                                    setSelectedFilesArray(selectedFilesArray.filter((e, ind) => ind !== index));
-                                }}>
-                                    Delete Image
-                                </Button>
-                            </div>
-                        )
-                    })}
-                    <Button type="submit" color="primary" variant="contained" style={btnStyle} fullWidth>
+                    <br/>
+                    <Button variant="contained" style={btnStyle} endIcon={<FileUpload/>} component="label">
+                        Upload Property Images
+                        <input onChange={handleFileChange} hidden multiple type="file" />
+                    </Button>
+                    <ListImage
+                        selectedFiles={selectedFiles}
+                        selectedFilesArray={selectedFilesArray}
+                        setSelectedFiles={setSelectedFiles}
+                        setSelectedFilesArray={setSelectedFilesArray}
+                    />
+                    <Button type="submit" color="primary" variant="contained" fullWidth style={btnStyle} >
                         <Typography fontFamily="Noto Sans">Submit</Typography>
                     </Button>
                 </Paper>
-            </Grid>
+            </Container>
         </form>
     );
 };

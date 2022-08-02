@@ -45,7 +45,7 @@ const Kebab = ({options, position }) => {
             >
                 {options.map((option, index) => (
                     <MenuItem key={index}  onClick={() => { navigate(option.navigationLink) }}>
-                        {option.icon}{option.name}
+                        {option.icon}&nbsp;&nbsp;{option.name}
                     </MenuItem>
                 ))}
             </Menu>

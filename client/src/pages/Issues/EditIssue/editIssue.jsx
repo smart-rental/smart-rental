@@ -5,6 +5,7 @@ import FeedbackIcon from '@mui/icons-material/Feedback';
 import { retrieveIssue, updateIssue } from "../../../api";
 import Swal from "sweetalert2";
 import { useParams } from "react-router-dom";
+import ListImage from "../../../components/ListImage/ListImage";
 
 const EditIssue = () => {
     const { issueId } = useParams();
@@ -144,22 +145,13 @@ const EditIssue = () => {
                         name="issueImage"
                         multiple
                     />
-                    {selectedFiles && selectedFiles.map((image, index) => {
-                        return (
-                            <div key={index}>
-                                <img
-                                    src={image}
-                                    alt="error"/>
-                                <Button onClick={() => {
-                                    setSelectedFiles(selectedFiles.filter((e, ind) => ind !== index))
-                                    setSelectedFilesArray(selectedFilesArray.filter((e, ind) => ind !== index));
-                                    setIndexToDelete(prevState => [...prevState, index]);
-                                }}>
-                                    Delete Image
-                                </Button>
-                            </div>
-                        )
-                    })}
+                    <ListImage
+                        selectedFiles={selectedFiles}
+                        selectedFilesArray={selectedFilesArray}
+                        setSelectedFiles={setSelectedFiles}
+                        setSelectedFilesArray={setSelectedFilesArray}
+                        setIndexToDelete={setIndexToDelete}
+                    />
                     <Button type="submit" color="primary" variant="contained" fullWidth style={btnStyle}>
                         <Typography fontFamily="Noto Sans">Submit</Typography>
                     </Button>

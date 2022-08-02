@@ -13,7 +13,7 @@ import Kebab from "../../../components/Kebab/Kebab";
 
 const Property = ({property: { _id, location, built, squareFeet, images, rent, capacity, parkingStalls, pets, utilities, bed, bath, tenant }, landlordId, removeProperty, users}) => {
     const checkOrX = (bool) => {
-        return bool ? <CheckCircleIcon/> : <CancelIcon/>
+        return bool ? <CheckCircleIcon style={{color: "green"}}/> : <CancelIcon style={{color: "red"}}/>
     }
 
     //Move this to the backend
@@ -70,7 +70,7 @@ const Property = ({property: { _id, location, built, squareFeet, images, rent, c
             <TableCell align="center">{checkOrX(pets)}</TableCell>
             <TableCell align="center">{utilities}</TableCell>
             <TableCell align="center"><Link to={`/issue/${_id}`} style={{textDecoration: "none" }}>Manage Issues</Link></TableCell>
-            <TableCell align="center"><DeleteForeverIcon onClick={() => {
+            <TableCell align="center"><DeleteForeverIcon style={{color: "#cc0000"}} onClick={() => {
                 removeProperty(_id);}}/></TableCell>
             <TableCell align="center">
                 <Kebab
