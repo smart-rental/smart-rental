@@ -6,6 +6,8 @@ import { retrieveIssue, updateIssue } from "../../../api";
 import Swal from "sweetalert2";
 import { useParams } from "react-router-dom";
 import ListImage from "../../../components/ListImage/ListImage";
+import { FileUpload } from "@mui/icons-material";
+import Container from "@mui/material/Container";
 
 const EditIssue = () => {
     const { issueId } = useParams();
@@ -99,7 +101,7 @@ const EditIssue = () => {
 
     return (
         <form onSubmit={changeIssue}>
-            <Grid>
+            <Container width="xl">
                 <Paper elevation={10} style={paperStyle}>
                     <Grid align="center">
                         <Avatar style={avatarStyle}><FeedbackIcon/></Avatar>
@@ -128,23 +130,21 @@ const EditIssue = () => {
                         <MenuItem value={"Roof Leaks"}>Roof Leaks</MenuItem>
                         <MenuItem value={"Other"}>Other</MenuItem>
                     </TextField>
-                    <TextareaAutosize
-                        aria-label="minimum height"
-                        minRows={8}
+                    <TextField
+                        rows={8}
+                        fullWidth
+                        multiline
                         onChange={handleChange}
                         name="issueDescription"
                         value={issueDescription}
                         placeholder="Brief description of your issue (optional)"
-                        style={{ width: 1904 }}
                     />
-                    <input
-                        type="file"
-                        style={btnStyle}
-                        id="outlined-required"
-                        onChange={handleFileChange}
-                        name="issueImage"
-                        multiple
-                    />
+                    <Button variant="contained" style={btnStyle} endIcon={<FileUpload/>} component="label">
+                        <Typography variant="contained">
+                            Upload Issue Images
+                        </Typography>
+                        <input onChange={handleFileChange} hidden multiple type="file" />
+                    </Button>
                     <ListImage
                         selectedFiles={selectedFiles}
                         selectedFilesArray={selectedFilesArray}
@@ -156,7 +156,7 @@ const EditIssue = () => {
                         <Typography fontFamily="Noto Sans">Submit</Typography>
                     </Button>
                 </Paper>
-            </Grid>
+            </Container>
         </form>
     );
 };

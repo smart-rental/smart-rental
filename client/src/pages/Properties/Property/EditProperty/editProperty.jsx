@@ -17,6 +17,7 @@ import Swal from "sweetalert2";
 import { editProperty, getProperty } from "../../../../api";
 import PlacesAutoComplete from "../../../../components/PlacesAutoComplete/PlacesAutoComplete";
 import ListImage from "../../../../components/ListImage/ListImage";
+import { FileUpload } from "@mui/icons-material";
 
 const EditProperty = () => {
     let { ownerId, propertyId } = useParams();
@@ -34,7 +35,7 @@ const EditProperty = () => {
     };
     const [utilities, setUtilities] = React.useState("");
     const [pets, setPets] = React.useState("");
-    const [post, setPost] = React.useState("");
+    const [post, setPost] = React.useState(false);
     const [selectedFiles, setSelectedFiles] = useState([]);
     const [selectedFilesArray, setSelectedFilesArray] = useState([]);
     const [indexToDelete, setIndexToDelete] = useState([]);
@@ -255,14 +256,14 @@ const EditProperty = () => {
                         <MenuItem value={"Only Water"}>Only Water</MenuItem>
                         <MenuItem value={"None"}>None</MenuItem>
                     </TextField>
-                    <TextareaAutosize
-                        aria-label="minimum height"
-                        minRows={8}
+                    <TextField
+                        rows={8}
+                        fullWidth
+                        multiline
                         onChange={handleChange}
-                        name="issueDescription"
+                        name="description"
                         value={description}
                         placeholder="Brief description of your property (optional)"
-                        style={{ width: 1904 }}
                     />
                     <FormControlLabel
                         style={btnStyle}
@@ -272,14 +273,12 @@ const EditProperty = () => {
                             inputProps={{ 'aria-label': 'controlled' }}
                         />} label="Post this property on our website so others can find it"/>
                     <br/>
-                    <input
-                        type="file"
-                        style={btnStyle}
-                        id="outlined-required"
-                        onChange={handleFileChange}
-                        name="images"
-                        multiple
-                    />
+                    <Button variant="contained" style={btnStyle} endIcon={<FileUpload/>} component="label">
+                        <Typography variant="contained">
+                            Upload Issue Images
+                        </Typography>
+                        <input onChange={handleFileChange} hidden multiple type="file" />
+                    </Button>
                     <ListImage
                         selectedFiles={selectedFiles}
                         selectedFilesArray={selectedFilesArray}

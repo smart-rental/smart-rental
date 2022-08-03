@@ -43,14 +43,13 @@ router.route('/:ownerId/:propertyId').get((req, res) => {
         .catch(e => res.status(400).json(`Error: ${e}`));
 });
 
-router.route('/addTenant/:owner/:property').post((req, res) => { 
-   const tenantPhoneNumber = req.body.phoneNumber;
-   const tenantName = req.body.name;
-   const tenantEmail = req.body.email;
-   User.User.findOne({ phoneNumber: tenantPhoneNumber, name: tenantName, email: tenantEmail })
+router.route('/addTenant/:owner/:property').post((req, res) => {
+   const {phoneNumber, name, email} = req.body; 
+   const {property} = req.params;
+   User.User.findOne({ phoneNumber, name, email })
        .then(user => {
            if (user != null) {
-               Property.findByIdAndUpdate(req.params.property, { tenant: user._id })
+               Property.findByIdAndUpdate(property, { tenant: user._id })
                    .then((Property) =>  {
                        res.json(Property);
                    }).catch(err => res.status(400).json(`Error: ${err}`));

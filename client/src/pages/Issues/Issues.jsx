@@ -139,7 +139,7 @@ const Issues = () => {
                                                         : "lightgrey",
                                                     padding: 4,
                                                     width: 250,
-                                                    minHeight: 500
+                                                    minHeight: "82vh"
                                                 }}
                                             >
                                                 {column.items.map((item, index) => {

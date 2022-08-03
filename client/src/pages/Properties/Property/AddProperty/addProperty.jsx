@@ -258,14 +258,14 @@ const AddProperty = () => {
                         <MenuItem value={"Only Water"}>Only Water</MenuItem>
                         <MenuItem value={"None"}>None</MenuItem>
                     </TextField>
-                    <TextareaAutosize
-                        aria-label="minimum height"
-                        minRows={7}
+                    <TextField
+                        rows={8}
+                        fullWidth
+                        multiline
                         onChange={handleChange}
                         name="description"
                         value={description}
                         placeholder="Brief description of your property (optional)"
-                        style={{ width: "83rem" }}
                     />
                     <FormControlLabel
                         style={btnStyle}
@@ -278,7 +278,9 @@ const AddProperty = () => {
                     />
                     <br/>
                     <Button variant="contained" style={btnStyle} endIcon={<FileUpload/>} component="label">
-                        Upload Property Images
+                        <Typography variant="contained">
+                            Upload Issue Images
+                        </Typography>
                         <input onChange={handleFileChange} hidden multiple type="file" />
                     </Button>
                     <ListImage

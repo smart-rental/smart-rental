@@ -110,17 +110,19 @@ const AddIssue = () => {
                         <MenuItem value={"Roof Leaks"}>Roof Leaks</MenuItem>
                         <MenuItem value={"Other"}>Other</MenuItem>
                     </TextField>
-                    <TextareaAutosize
-                        aria-label="minimum height"
-                        minRows={8}
+                    <TextField
+                        rows={8}
+                        fullWidth
+                        multiline
                         onChange={handleChange}
                         name="issueDescription"
                         value={issueDescription}
                         placeholder="Brief description of your issue (optional)"
-                        style={{ width: 1000 }}
                     />
                     <Button variant="contained" style={btnStyle} endIcon={<FileUpload/>} component="label">
-                        Upload Issue Images
+                        <Typography variant="contained">
+                            Upload Issue Images
+                        </Typography>
                         <input onChange={handleFileChange} hidden multiple type="file" />
                     </Button>
                     <ListImage

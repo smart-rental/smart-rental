@@ -11,6 +11,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import HouseIcon from "@mui/icons-material/House";
 import Swal from "sweetalert2";
 import { addTenant, deleteTenant } from "../../../../api";
+import Container from "@mui/material/Container";
 
 const AddTenant = () => {
     let { ownerId, propertyId } = useParams();
@@ -47,12 +48,13 @@ const AddTenant = () => {
     const addUser = (e) => {
         e.preventDefault();
         const tenantToAdd = {
+            email,
             phoneNumber,
-            name,
-            email
+            name
         };
         addTenant(ownerId, propertyId, tenantToAdd)
             .then(() => {
+                console.log("entered");
                 Swal.fire("Congratulations", "The tenant has been added", "success").then(reset);
             })
             .catch((e) => {
@@ -74,7 +76,7 @@ const AddTenant = () => {
 
     return (
         <form onSubmit={addUser}>
-            <Grid>
+            <Container width="xl">
                 <Paper elevation={10} style={paperStyle}>
                     <Grid align="center">
                         <Avatar style={avatarStyle}><HouseIcon/></Avatar>
@@ -122,11 +124,11 @@ const AddTenant = () => {
                     <Button type="submit" color="primary" variant="contained" style={btnStyle} fullWidth>
                         <Typography fontFamily="Noto Sans">Add</Typography>
                     </Button>
-                    <Button type="submit" sx={{bgcolor: "red"}} variant="contained" style={btnStyle} onClick={() => removeTenant} fullWidth>
+                    <Button sx={{bgcolor: "red"}} variant="contained" style={btnStyle} onClick={() => removeTenant} fullWidth>
                         <Typography fontFamily="Noto Sans">Remove</Typography>
                     </Button>
                 </Paper>
-            </Grid>
+            </Container>
         </form>
     );
 };
