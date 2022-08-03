@@ -10,7 +10,7 @@ import { FileUpload } from "@mui/icons-material";
 import Container from "@mui/material/Container";
 
 const EditIssue = () => {
-    const { issueId } = useParams();
+    const { tenantId, issueId } = useParams();
     let initialState = {
         issueType: "",
         issueImage: "",
@@ -76,7 +76,9 @@ const EditIssue = () => {
             issueData.append("issueImage", image);
         }
         for (const index of indexToDelete) {
-            issueData.set("indexToDelete", index);
+            if (typeof index === "object") {
+                issueData.append("indexToDelete", index.filePath);
+            }
         }
         issueData.append("issueType", issueType);
         issueData.append("issueDescription", issueDescription);
@@ -93,7 +95,7 @@ const EditIssue = () => {
                 if (e.response.status === 404) {
                     Swal.fire("Error", "You have not been added to a property. <br/> If this is a mistake please contact your landlord to add you to their list of properties", "error");
                 } else {
-                    Swal.fire("Error", "There was an issue adding your error", "error");
+                    Swal.fire("Error", "There was an issue editing your error", "error");
                     console.log(e);
                 }
             })

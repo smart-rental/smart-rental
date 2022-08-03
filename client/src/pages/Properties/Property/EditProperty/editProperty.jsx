@@ -151,7 +151,7 @@ const EditProperty = () => {
                         <Typography variant="h5" fontFamily="Noto Sans">Properties that have not been rented out will be
                             displayed for renters to see</Typography>
                     </Grid>
-                    <   PlacesAutoComplete
+                    <PlacesAutoComplete
                         name="location"
                         label="Property Location"
                         handleChange={setValues}

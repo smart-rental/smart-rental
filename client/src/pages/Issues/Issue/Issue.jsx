@@ -38,10 +38,14 @@ const Issue = ({
                 </CardContent>
                 <CardActions>
                     <Button size="small" onClick={() => editIssue(_id)}>
-                        Edit
+                        <Typography variant="contained">
+                            Edit
+                        </Typography>
                     </Button>
                     <Button size="small" onClick={() => removeIssue(_id)}>
-                        Delete
+                        <Typography variant="contained">
+                            Delete
+                        </Typography>
                     </Button>
                 </CardActions>
             </Card>

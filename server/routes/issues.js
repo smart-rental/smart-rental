@@ -4,6 +4,7 @@ import express from "express";
 import mongoose from "mongoose";
 import { upload } from "../middleware/issueImageHelper.js";
 import imageHelper from "../middleware/imageHelper.js";
+import deleteImageHelper from "../middleware/deleteImageHelper.js";
 
 const router = express.Router();
 
@@ -92,10 +93,10 @@ router.route("/update/:id").patch(upload.array("issueImage", 5), (req, res) => {
         .then(Issue => {
             Issue.propertyId = propertyId;
             Issue.issueType = issueType;
-            Issue.issueImage = indexToDelete == null ? imageHelper(fileArray, Issue.issueImage) :  Issue.issueImage.filter((images, index) => !(indexToDelete.includes(index)));
+            Issue.issueImage = indexToDelete == null ? imageHelper(fileArray, Issue.issueImage) :  deleteImageHelper(Issue.issueImage, indexToDelete, fileArray);
             Issue.issueDescription = issueDescription;
             Issue.status = status;
-
+            
             Issue.save()
                 .then(() => res.json(Issue))
                 .catch(e => res.status(400).json(e));

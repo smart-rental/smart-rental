@@ -10,7 +10,7 @@ const ListImage = ({
                        setSelectedFilesArray,
                        setIndexToDelete
                    }) => {
-    const [setObjToDelete] = useState();
+    const [objToDelete, setObjToDelete] = useState();
 
     function setTheObjToDelete(index) {
         if (setIndexToDelete !== undefined) {
