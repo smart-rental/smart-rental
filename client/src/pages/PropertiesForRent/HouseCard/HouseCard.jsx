@@ -1,42 +1,68 @@
 import React from "react";
-import { Button, Card, CardActions, CardContent, Typography } from "@mui/material";
+import { Button, Card, CardActions, CardContent, Stack, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import PlaceIcon from '@mui/icons-material/Place';
+import BedIcon from '@mui/icons-material/Bed';
+import PeopleOutlineIcon from '@mui/icons-material/PeopleOutline';
+import BathtubIcon from '@mui/icons-material/Bathtub';
+import StraightenIcon from '@mui/icons-material/Straighten';
+import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import Gallery from "../../../components/Gallery/Gallery";
 
 const HouseCard = ({propertyInfo: { _id, location, squareFeet, images, rent, capacity, bed, bath } }) => {
     const navigate = useNavigate();
     return (
-        <Card sx={{ maxWidth: 345 }}>
-                <div style={{ display: "flex", justifyContent: "center"}}>
+        <Card sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", alignContent: "center"}}>
+                <div style={{ width: "200px"}}>
                     <Gallery images={images}/>
                 </div>
                 <CardContent>
-                    <Typography gutterBottom variant="h5" component="div">
-                        Location: {location}
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary">
-                        Capacity: {capacity}
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary">
-                        Bed: {bed}
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary">
-                        Bath: {bath}
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary">
-                        Square Feet: {squareFeet}
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary">
-                        Rent Price: ${rent}
-                    </Typography>
+                    <Stack direction="row" alignItems="center" gap={1}>
+                        <PlaceIcon/>
+                        <Typography>
+                            {location}
+                        </Typography>
+                    </Stack>
+                    <Stack direction="row" alignItems="center" gap={1}>
+                        <PeopleOutlineIcon/>
+                        <Typography>
+                            Capacity: {capacity}
+                        </Typography>
+                    </Stack>
+                    <Stack direction="row" alignItems="center" gap={1}>
+                        <BedIcon/>
+                        <Typography>
+                            Bed: {bed}
+                        </Typography>
+                    </Stack>
+                    <Stack direction="row" alignItems="center" gap={1}>
+                        <BathtubIcon/>
+                        <Typography>
+                            Bath: {bath}
+                        </Typography>
+                    </Stack>
+                    <Stack direction="row" alignItems="center" gap={1}>
+                        <StraightenIcon/>
+                        <Typography>
+                            Square Feet: {squareFeet}
+                        </Typography>
+                    </Stack>
+                    <Stack direction="row" alignItems="center" gap={1}>
+                        <AttachMoneyIcon/>
+                        <Typography>
+                            Rent Price: ${rent}
+                        </Typography>
+                    </Stack>
                 </CardContent>
-            <CardActions>
-                <Button size="small" color="primary" onClick={() => {
-                    navigate(`/map/${location}/${_id}`);
-                }}>
-                    Click for more information
-                </Button>
-            </CardActions>
+                <CardActions>
+                    <Button size="large" color="primary" onClick={() => {
+                        navigate(`/map/${location}/${_id}`);
+                    }}>
+                        <Typography variant="contained">
+                            View Listing
+                        </Typography>
+                    </Button>
+                </CardActions>
         </Card>
     )
 }

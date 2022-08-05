@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { CircularProgress } from "@mui/material";
 import { GoogleMap, Marker, useLoadScript } from "@react-google-maps/api";
 import { getGeocode } from "../../api";
@@ -14,7 +14,6 @@ const Map = () => {
     useEffect(() => {
         getGeocode(propertyLocation)
             .then((res) => {
-                console.log(res);
                 setGeoCodeData(res.data.results[0].geometry.location);
             })
             .catch((e) => {
@@ -38,9 +37,10 @@ const Map = () => {
 };
 
 function Mappers({ lat, lng }) {
+    const center = useMemo(() => ({lat, lng}), [lat, lng])
     return (
-        <GoogleMap zoom={15} center={{ lat, lng }} options={{ gestureHandling: "none" }}
-                   mapContainerStyle={{ width: "100", height: "100vh" }}>
+        <GoogleMap zoom={15} center={center}
+                   mapContainerStyle={{ width: "100", height: "93vh" }}>
             <Marker position={{ lat, lng }}/>
         </GoogleMap>
     );

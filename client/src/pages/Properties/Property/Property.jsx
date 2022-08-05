@@ -62,7 +62,7 @@ const Property = ({property: { _id, location, built, squareFeet, images, rent, c
             <TableCell align="center">${rent}</TableCell>
             <TableCell align="center">{capacity}</TableCell>
             <TableCell align="center">
-                <Gallery images={images}/>
+                <Gallery images={images} width="18%"/>
             </TableCell>
             <TableCell align="center">{parkingStalls}</TableCell>
             <TableCell align="center">{bed}</TableCell>

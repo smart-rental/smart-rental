@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { getAllProperties } from "../../api";
 import HouseCard from "./HouseCard/HouseCard";
-import { Grid, Typography } from "@mui/material";
+import { Grid } from "@mui/material";
 import Error from "../../components/Error/Error";
 
 const Houses = () => {
@@ -19,13 +19,20 @@ const Houses = () => {
     }, []);
     return (
         <>
-            <Typography align="center" variant="h2">List of places to rent from</Typography>
-            <Grid container justifyContent="center">
-                <>
+            <Grid container 
+                  style={{marginTop: "20px"}} 
+                  justifyContent="center" 
+                  alignItems="center"
+                  direction="column"
+                  spacing={2}
+            >
                     {properties.map((propertyInfo, index) => {
-                        return <HouseCard propertyInfo={propertyInfo} key={index}/>;
+                        return (
+                            <Grid item minWidth={1000} key={index}>
+                                <HouseCard propertyInfo={propertyInfo}/>
+                            </Grid>
+                        );
                     })}
-                </>
             </Grid>
         </>
     )

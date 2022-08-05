@@ -24,8 +24,7 @@ const Gallery = (props) => {
             <img
                 src={imageLinks[0]}
                 onClick={() => openImageViewer(0)}
-                width="100"
-                style={{ margin: "2px" }}
+                width={props.width === undefined ? "100%" : props.width}
                 alt=""
             />
 
