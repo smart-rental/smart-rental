@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { Card, CardContent, Grid, Stack, Typography } from "@mui/material";
+import { Card, CardActions, CardContent, Grid, Modal, Stack, Typography } from "@mui/material";
 import { useParams } from "react-router-dom";
-import { getPropertyByID } from "../../../api";
+import { getPropertyByID, getUsers } from "../../../api";
 import Gallery from "../../../components/Gallery/Gallery";
 import Map from "../../../components/Map/Map";
 import PlaceIcon from "@mui/icons-material/Place";
@@ -12,8 +12,11 @@ import StraightenIcon from "@mui/icons-material/Straighten";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import LocalParkingIcon from '@mui/icons-material/LocalParking';
 import PetsIcon from '@mui/icons-material/Pets';
-import CancelIcon from '@mui/icons-material/Cancel';
-import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import BuildIcon from '@mui/icons-material/Build';
+import { OtherHouses } from "@mui/icons-material";
+import Button from "@mui/material/Button";
+import Box from "@mui/material/Box";
+
 const HouseCardMap = () => { 
     const { propertyId } = useParams();
     const initialState = {
@@ -30,9 +33,30 @@ const HouseCardMap = () => {
         bath: "",
         description: ""
     }
-    const [{images, location, built, squareFeet, rent, capacity, pets, utilities, parkingStalls, bed, bath, description}, setProperty] = useState(initialState);
+    const [{images, location, built, squareFeet, rent, capacity, pets, utilities, parkingStalls, bed, bath, description, ownerId}, setProperty] = useState(initialState);
+    const [{landlordName, phoneNumber, email}, setLandlord] = useState({
+        landlordName: "", 
+        phoneNumber: "",
+        email: ""
+    })
+    const [open, setOpen] = useState(false);
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
+
+    const style = {
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        width: 400,
+        bgcolor: 'background.paper',
+        border: '2px solid #000',
+        boxShadow: 24,
+        p: 4,
+    };
+    
     const petToString = () => {
-        return pets ? <CheckCircleIcon/> : <CancelIcon/>;
+        return pets ? "Allowed" : "Not Allowed";
     }
     const dateToString = () => {
         const date = new Date(built);
@@ -46,7 +70,17 @@ const HouseCardMap = () => {
             .then((res) => {
                 setProperty(res.data);
             })
-    })
+        getUsers().then(r => {
+            const data = r.data.filter(user => user._id === ownerId);
+            const {name, phoneNumber, email} = data[0];
+            setLandlord({
+                landlordName: name,
+                phoneNumber, 
+                email
+            })
+        })
+    }, [ownerId]);
+
     return (
         <Grid container spacing={0}>
             <Grid item xs={9}>
@@ -107,25 +141,40 @@ const HouseCardMap = () => {
                                 </Typography>
                             </Stack>
                             <Stack direction="row" alignItems="center" gap={1}>
-                                <PetsIcon/>
+                                <OtherHouses/>
                                 <Typography>
                                     Utilities: {utilities}
                                 </Typography>
                             </Stack>
-                            <Typography variant="body2" color="text.secondary">
-                                Built: {dateToString()}
-                            </Typography>
-                            { description ? 
-                                <Typography variant="body2" color="text.secondary">
-                                    Description: {description}
-                                </Typography> : ""}
-                            <Typography>
+                            <Stack direction="row" alignItems="center" gap={1}>
+                                <BuildIcon/>
+                                <Typography>
+                                    Built: {dateToString()}
+                                </Typography>
+                            </Stack>
+                            { description ?
+                                <Stack direction="row" alignItems="center" gap={1}>
+                                    <Typography>
+                                        Description: {description}
+                                    </Typography>
+                                </Stack>: "" }
+                        </CardContent>
+                    <Stack justifyContent="center" alignItems="center">
+                        <Box>
+                            <Typography variant="h5">
                                 Contact Information
                             </Typography>
                             <Typography>
-                                Apply
+                                LandLord: {landlordName}
                             </Typography>
-                        </CardContent>
+                            <Typography>
+                                Phone Number: {phoneNumber}
+                            </Typography>
+                            <Typography>
+                                Email: {email}
+                            </Typography>
+                        </Box>
+                    </Stack>
                 </Card>
             </Grid>
         </Grid>
