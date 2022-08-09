@@ -7,11 +7,10 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import PersonAddAltIcon from '@mui/icons-material/PersonAddAlt';
 import PersonIcon from '@mui/icons-material/Person';
-import { Link, useNavigate } from "react-router-dom";
-import Gallery from "../../../components/Gallery/Gallery";
+import { Link } from "react-router-dom";
 import Kebab from "../../../components/Kebab/Kebab";
 
-const Property = ({property: { _id, location, built, squareFeet, images, rent, capacity, parkingStalls, pets, utilities, bed, bath, tenant }, landlordId, removeProperty, users}) => {
+const Property = ({property: { _id, location, built, squareFeet, rent, capacity, parkingStalls, pets, utilities, bed, bath, tenant }, landlordId, removeProperty, users}) => {
     const checkOrX = (bool) => {
         return bool ? <CheckCircleIcon style={{color: "green"}}/> : <CancelIcon style={{color: "red"}}/>
     }
@@ -61,9 +60,6 @@ const Property = ({property: { _id, location, built, squareFeet, images, rent, c
             <TableCell align="center">{squareFeet}</TableCell>
             <TableCell align="center">${rent}</TableCell>
             <TableCell align="center">{capacity}</TableCell>
-            <TableCell align="center">
-                <Gallery images={images} width="18%"/>
-            </TableCell>
             <TableCell align="center">{parkingStalls}</TableCell>
             <TableCell align="center">{bed}</TableCell>
             <TableCell align="center">{bath}</TableCell>

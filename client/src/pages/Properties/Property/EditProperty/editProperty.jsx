@@ -6,7 +6,6 @@ import {
     FormControlLabel,
     Grid,
     Paper,
-    TextareaAutosize,
     TextField,
     Typography
 } from "@mui/material";

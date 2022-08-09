@@ -5,7 +5,7 @@ import {
     Avatar,
     TextField,
     Button,
-    Typography, Checkbox, FormControlLabel, TextareaAutosize
+    Typography, Checkbox, FormControlLabel
 } from "@mui/material";
 import { useParams } from "react-router-dom";
 import HouseIcon from "@mui/icons-material/House";

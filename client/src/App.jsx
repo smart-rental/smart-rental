@@ -17,6 +17,8 @@ import AddTenant from "./pages/Properties/Tenant/AddTenant/AddTenant";
 import EditTenant from "./pages/Properties/Tenant/EditTenant/EditTenant";
 import Signup from "./pages/Signup/signup";
 import Signin from "./pages/Signin/signin";
+import LandlordHome from "./pages/LandlordHome/LandlordHome";
+import RenterHome from "./pages/RenterHome/RenterHome";
 
 const App = function () { 
     return (
@@ -26,6 +28,8 @@ const App = function () {
                         <Navbar/>
                         <Routes>
                             <Route path="/" element={<Home/>}/>
+                            <Route path="/landlord" element={<LandlordHome/>}/>
+                            <Route path="/tenant" element={<RenterHome/>}/>
                             <Route path="/login" element={<Signin/>}/>
                             <Route path="/signup" element={<Signup/>}/>
                             <Route path="/house" element={<Houses/>}/>

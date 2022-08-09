@@ -88,6 +88,9 @@ const Signup = () => {
                             message = `${response.message}`;
                         }
                         Swal.fire("", `${message}`, "error");
+                        break;
+                    default:
+                        break;
                 }
             });
     };

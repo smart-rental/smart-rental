@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Avatar, Button, Grid, Paper, TextareaAutosize, TextField, Typography } from "@mui/material";
+import { Avatar, Button, Grid, Paper, TextField, Typography } from "@mui/material";
 import MenuItem from "@mui/material/MenuItem";
 import FeedbackIcon from '@mui/icons-material/Feedback';
 import { retrieveIssue, updateIssue } from "../../../api";
@@ -10,7 +10,7 @@ import { FileUpload } from "@mui/icons-material";
 import Container from "@mui/material/Container";
 
 const EditIssue = () => {
-    const { tenantId, issueId } = useParams();
+    const { issueId } = useParams();
     let initialState = {
         issueType: "",
         issueImage: "",
@@ -38,7 +38,7 @@ const EditIssue = () => {
             .catch((e) => {
                 console.log(e);
             })
-    }, []);
+    }, [issueId]);
 
     const paperStyle = {
         padding: 20,

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Card, CardActions, CardContent, Grid, Modal, Stack, Typography } from "@mui/material";
+import { Card, CardContent, Grid, Stack, Typography } from "@mui/material";
 import { useParams } from "react-router-dom";
 import { getPropertyByID, getUsers } from "../../../api";
 import Gallery from "../../../components/Gallery/Gallery";
@@ -14,7 +14,6 @@ import LocalParkingIcon from '@mui/icons-material/LocalParking';
 import PetsIcon from '@mui/icons-material/Pets';
 import BuildIcon from '@mui/icons-material/Build';
 import { OtherHouses } from "@mui/icons-material";
-import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 
 const HouseCardMap = () => { 
@@ -39,22 +38,7 @@ const HouseCardMap = () => {
         phoneNumber: "",
         email: ""
     })
-    const [open, setOpen] = useState(false);
-    const handleOpen = () => setOpen(true);
-    const handleClose = () => setOpen(false);
 
-    const style = {
-        position: 'absolute',
-        top: '50%',
-        left: '50%',
-        transform: 'translate(-50%, -50%)',
-        width: 400,
-        bgcolor: 'background.paper',
-        border: '2px solid #000',
-        boxShadow: 24,
-        p: 4,
-    };
-    
     const petToString = () => {
         return pets ? "Allowed" : "Not Allowed";
     }
@@ -79,7 +63,7 @@ const HouseCardMap = () => {
                 email
             })
         })
-    }, [ownerId]);
+    }, [ownerId, propertyId]);
 
     return (
         <Grid container spacing={0}>

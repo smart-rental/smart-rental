@@ -19,7 +19,7 @@ const Map = () => {
             .catch((e) => {
                 console.log(e);
             });
-    }, []);
+    }, [propertyLocation]);
 
     if (!isLoaded) {
         return (

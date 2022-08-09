@@ -16,7 +16,7 @@ import IconButton from "@mui/material/IconButton";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { getUsers, validateUser } from "../../api";
 import classes from "./styles";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import authActions from "../../Store/slices/auth-slice";
 import userActions from "../../Store/slices/users-slice";
 import Swal from "sweetalert2";
@@ -66,10 +66,14 @@ const SignIn = () => {
             email,
             password
         };
-        let userInfo = users.find(users => users.email === values.email);
+        let userInfo = users.find(users => users.email === email);
         //Call the backend
         validateUser(userCredentials)
-            .then(() => {
+            .then((validation ) => {
+                getUsers(userInfo._id).then((user) => {
+                    let userInfo = user.data.find(users => users.email === validation.data.message.email);
+                    userInfo.userType === "Landlord" ? navigate(`/landlord`) : navigate(`/tenant`);
+                })
                 navigate(`/`);
                 dispatch(authActions.actions.login(userInfo._id)); 
                 dispatch(userActions.actions.setUserType(userInfo.userType));

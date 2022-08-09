@@ -10,6 +10,7 @@ const ListImage = ({
                        setSelectedFilesArray,
                        setIndexToDelete
                    }) => {
+    // eslint-disable-next-line
     const [objToDelete, setObjToDelete] = useState();
 
     function setTheObjToDelete(index) {

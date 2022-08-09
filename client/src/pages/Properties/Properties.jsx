@@ -8,7 +8,6 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { useEffect, useState } from "react";
 import { deleteProperty, getProperties, getUsers } from "../../api";
-import { useNavigate } from "react-router-dom";
 import Property from "./Property/Property";
 import Swal from "sweetalert2";
 import { tableCellClasses, Typography } from "@mui/material";
@@ -69,7 +68,6 @@ const Properties = () => {
                                 <TableCell align="center">Square Feet</TableCell>
                                 <TableCell align="center">Rent per month</TableCell>
                                 <TableCell align="center">Max Capacity</TableCell>
-                                <TableCell align="center">Images</TableCell>
                                 <TableCell align="center">Parking Stalls</TableCell>
                                 <TableCell align="center">Bed</TableCell>
                                 <TableCell align="center">Bath</TableCell>

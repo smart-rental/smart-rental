@@ -7,11 +7,21 @@ import deleteImageHelper from "../middleware/deleteImageHelper.js";
 
 const router = express.Router();
 
-router.route('/').get((req, res) => {
-    Property.find({ post: true })
-        .then((Property) => {
-            res.json(Property); })
-        .catch(e => res.status(400).json(`Error: ${e}`));
+router.route('/').get(async (req, res) => {
+    try {
+        const PAGE_SIZE = 3;
+        const page = parseInt(req.query.page || "0");
+        const total = await Property.countDocuments({post: true});
+        const property = await Property.find({ post: true })
+            .limit(PAGE_SIZE)
+            .skip(PAGE_SIZE * page)
+        res.json({
+            property,
+            totalPages: Math.ceil(total / PAGE_SIZE)
+        });
+    } catch (e) { 
+        res.sendStatus(400).json(e);
+    }
 });
 
 router.route('/:id').get((req, res) => {

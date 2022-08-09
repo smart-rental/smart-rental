@@ -12,10 +12,10 @@ const PlacesAutoComplete = ({ name, label, style, valueProp, handleChange }) => 
         setValue,
         clearSuggestions
     } = usePlacesAutocomplete();
-    
+
     useEffect(() => { 
         setValue(valueProp);
-    }, [valueProp])
+    }, [valueProp, setValue])
     const ref = useOnclickOutside(() => {
         // When user clicks outside the component, we can dismiss
         // the searched suggestions by calling this method
@@ -32,8 +32,9 @@ const PlacesAutoComplete = ({ name, label, style, valueProp, handleChange }) => 
                 autoHighlight
                 disablePortal
                 options={data}
-                value={{ description: value }}
+                value={{ description: value.toString() }}
                 getOptionLabel={(option) => option.description}
+                isOptionEqualToValue={(option, value) => option.id === value.id}
                 onChange={(event, value) => {
                     const { description } = value;
                     handleInput(event);
@@ -43,7 +44,6 @@ const PlacesAutoComplete = ({ name, label, style, valueProp, handleChange }) => 
                 renderInput={(params) =>
                     <TextField {...params} 
                                required
-                               isOptionEqualToValue={(option, value) => option.description === value.description}
                                name={name}
                                onChange={handleInput}
                                label={label}
