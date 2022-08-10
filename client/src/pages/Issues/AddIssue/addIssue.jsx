@@ -125,7 +125,8 @@ const AddIssue = () => {
                         setSelectedFiles={setSelectedFiles}
                         setSelectedFilesArray={setSelectedFilesArray}
                     />
-                    <Button type="submit" color="primary" variant="contained" fullWidth style={btnStyle}>
+                    <br/>
+                    <Button type="submit" color="primary" variant="contained">
                         <Typography fontFamily="Noto Sans">Submit</Typography>
                     </Button>
             </Container>

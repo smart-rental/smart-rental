@@ -9,7 +9,7 @@ const router = express.Router();
 
 router.route('/').get(async (req, res) => {
     try {
-        const PAGE_SIZE = 3;
+        const PAGE_SIZE = 10;
         const page = parseInt(req.query.page || "0");
         const total = await Property.countDocuments({post: true});
         const property = await Property.find({ post: true })

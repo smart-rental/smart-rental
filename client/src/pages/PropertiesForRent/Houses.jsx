@@ -1,15 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { getAllProperties } from "../../api";
 import HouseCard from "./HouseCard/HouseCard";
-import { Grid, Pagination } from "@mui/material";
+import { CircularProgress, Grid, Pagination } from "@mui/material";
 import Error from "../../components/Error/Error";
+import Box from "@mui/material/Box";
 
 const Houses = () => {
     const [properties, setProperties] = useState([]);
     const [numberOfPages, setNumberOfPages] = useState(0);
     const [pageNumber, setPageNumber] = useState(0);
+    const [loading, setLoading] = useState(false);
     const pages = new Array(numberOfPages).fill(null).map((v, i) => i);
     useEffect(() => {
+        setLoading(true);
         getAllProperties(pageNumber)
             .then((res) => {
                 setProperties(res.data.property);

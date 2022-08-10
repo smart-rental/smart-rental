@@ -8,7 +8,9 @@ const ListImage = ({
                        selectedFilesArray,
                        setSelectedFiles,
                        setSelectedFilesArray,
-                       setIndexToDelete
+                       setIndexToDelete,
+                       width,
+                       height
                    }) => {
     // eslint-disable-next-line
     const [objToDelete, setObjToDelete] = useState();
@@ -22,7 +24,7 @@ const ListImage = ({
     return (
         <>
             {selectedFiles.length > 0 ?
-                <ImageList sx={{ width: 1300, height: 300 }} cols={4} rowHeight={200}>
+                <ImageList sx={{ width, height }} cols={4} rowHeight={200}>
                     {selectedFiles && selectedFiles.map((image, index) => {
                         return (
                             <ImageListItem key={index}>

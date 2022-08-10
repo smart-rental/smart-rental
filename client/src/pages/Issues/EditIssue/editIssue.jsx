@@ -148,7 +148,8 @@ const EditIssue = () => {
                         setSelectedFilesArray={setSelectedFilesArray}
                         setIndexToDelete={setIndexToDelete}
                     />
-                    <Button type="submit" color="primary" variant="contained" fullWidth style={btnStyle}>
+                    <br/>
+                    <Button type="submit" color="primary" variant="contained" >
                         <Typography fontFamily="Noto Sans">Submit</Typography>
                     </Button>
             </Container>
