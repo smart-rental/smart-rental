@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import { Avatar, Button, Grid, Paper, TextField, Typography } from "@mui/material";
+import { Avatar, Button, Grid, TextField, Typography } from "@mui/material";
 import MenuItem from "@mui/material/MenuItem";
 import FeedbackIcon from '@mui/icons-material/Feedback';
 import { useSelector } from "react-redux";
@@ -15,11 +15,6 @@ const AddIssue = () => {
         issueType: "",
         issueDescription: ""
     }
-
-    const paperStyle = {
-        padding: 20,
-        margin: "20px auto"
-    };
 
     const avatarStyle = {
         backgroundColor: "#26a69a"
@@ -81,9 +76,8 @@ const AddIssue = () => {
     
     return (
         <form onSubmit={createIssue}>
-            <Container width="xl">
-                <Paper elevation={10} style={paperStyle}>
-                    <Grid align="center">
+            <Container>
+                    <Grid align="center" style={{marginTop: "20px"}}>
                         <Avatar style={avatarStyle}><FeedbackIcon/></Avatar>
                         <Typography variant="h5" fontFamily="Noto Sans">Create An Issue</Typography>
                         <Typography variant="h5" fontFamily="Noto Sans">
@@ -134,7 +128,6 @@ const AddIssue = () => {
                     <Button type="submit" color="primary" variant="contained" fullWidth style={btnStyle}>
                         <Typography fontFamily="Noto Sans">Submit</Typography>
                     </Button>
-                </Paper>
             </Container>
         </form>
     );

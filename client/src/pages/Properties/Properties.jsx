@@ -1,11 +1,10 @@
-import * as React from 'react';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
+import * as React from "react";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
 import { useEffect, useState } from "react";
 import { deleteProperty, getProperties, getUsers } from "../../api";
 import Property from "./Property/Property";
@@ -14,9 +13,6 @@ import { tableCellClasses, Typography } from "@mui/material";
 import Container from "@mui/material/Container";
 import { useSelector } from "react-redux";
 
-const table = {
-    margin: "100px auto"
-}
 
 const Properties = () => {
     const [properties, setProperties] = useState([]);
@@ -39,21 +35,24 @@ const Properties = () => {
         deleteProperty(propertyId)
             .then(() => {
                 setProperties(properties.filter(property => property._id !== propertyId));
-                Swal.fire("Property Deleted", `The property has been deleted`, 'success');
+                Swal.fire("Property Deleted", `The property has been deleted`, "success");
             })
             .catch((e) => {
                 console.error(e);
                 Swal.fire("Error", "There was an error deleting your property", "error");
             });
-    }
+    };
 
     return (
         <Container maxWidth="125rem">
-            {properties.length > 0 ? 
-                <TableContainer component={Paper} style={table}>
-                    <Table sx={{[`& .${tableCellClasses.root}`]: {
+            {properties === [] ?
+                <Typography variant="h4" align="center"><b>No properties to manage</b></Typography>
+                : <TableContainer>
+                    <Table sx={{
+                        [`& .${tableCellClasses.root}`]: {
                             borderBottom: "1px solid"
-                        }}} aria-label="simple table">
+                        }
+                    }} aria-label="simple table">
                         <TableHead>
                             <TableRow>
                                 <TableCell style={{ borderBottom: "none" }} align="center" colSpan={30}>
@@ -80,14 +79,16 @@ const Properties = () => {
                         </TableHead>
                         <TableBody>
                             {properties.map((property) => (
-                                <Property property={property} landlordId={landlordId} users={users} removeProperty={removeProperty}
-                                           key={property._id}/>
+                                <Property property={property} landlordId={landlordId} users={users}
+                                          removeProperty={removeProperty}
+                                          key={property._id}/>
                             ))}
                         </TableBody>
                     </Table>
-            </TableContainer> :  <Typography variant="h4" align="center"><b>No properties to manage</b></Typography>}
+                </TableContainer>}
+
         </Container>
     );
-}
+};
 
 export default Properties;

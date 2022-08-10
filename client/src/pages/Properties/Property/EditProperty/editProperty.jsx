@@ -5,7 +5,6 @@ import {
     Checkbox,
     FormControlLabel,
     Grid,
-    Paper,
     TextField,
     Typography
 } from "@mui/material";
@@ -17,6 +16,7 @@ import { editProperty, getProperty } from "../../../../api";
 import PlacesAutoComplete from "../../../../components/PlacesAutoComplete/PlacesAutoComplete";
 import ListImage from "../../../../components/ListImage/ListImage";
 import { FileUpload } from "@mui/icons-material";
+import Container from "@mui/material/Container";
 
 const EditProperty = () => {
     let { ownerId, propertyId } = useParams();
@@ -92,11 +92,6 @@ const EditProperty = () => {
         setValues((prevState) => ({ ...prevState, [name]: value }));
     };
     
-    const paperStyle = {
-        padding: 20,
-        margin: "20px auto"
-    };
-
     const avatarStyle = {
         backgroundColor: "#26a69a"
     };
@@ -142,9 +137,9 @@ const EditProperty = () => {
     };
     return (
         <form onSubmit={updateProperty}>
-            <Grid>
-                <Paper elevation={10} style={paperStyle}>
-                    <Grid align="center">
+            <Container>
+                <Grid>
+                    <Grid align="center" style={{ marginTop: "20px" }}>
                         <Avatar style={avatarStyle}><HouseIcon/></Avatar>
                         <Typography variant="h5" fontFamily="Noto Sans">Edit Property</Typography>
                         <Typography variant="h5" fontFamily="Noto Sans">Properties that have not been rented out will be
@@ -235,8 +230,8 @@ const EditProperty = () => {
                             shrink: true
                         }}
                     >
-                        <MenuItem value={true}>Allowed</MenuItem>
-                        <MenuItem value={false}>Not Allowed</MenuItem>
+                        <MenuItem value={"true"}>Allowed</MenuItem>
+                        <MenuItem value={"false"}>Not Allowed</MenuItem>
                     </TextField>
                     <TextField
                         fullWidth
@@ -288,8 +283,8 @@ const EditProperty = () => {
                     <Button type="submit" color="primary" variant="contained" style={btnStyle} fullWidth>
                         <Typography fontFamily="Noto Sans">Submit</Typography>
                     </Button>
-                </Paper>
-            </Grid>
+                </Grid>
+            </Container>
         </form>
     );
 };

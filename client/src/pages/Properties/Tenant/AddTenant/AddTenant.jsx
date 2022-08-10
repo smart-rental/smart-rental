@@ -18,21 +18,17 @@ const AddTenant = () => {
     const initialState = {
         name: "",
         email: "",
-        phoneNumber: ""   
+        phoneNumber: ""
     };
     const [{ name, email, phoneNumber }, setValues] = useState(initialState);
     const navigate = useNavigate();
-    const paperStyle = {
-        padding: 20,
-        margin: "20px auto"
-    };
 
     const avatarStyle = {
         backgroundColor: "#26a69a"
     };
 
     const btnStyle = {
-        margin: "8px 0"
+        margin: "8px 4px"
     };
 
     const reset = () => {
@@ -62,8 +58,8 @@ const AddTenant = () => {
                 Swal.fire("Try Again", "There does not seem to be a user that matches", "error");
             });
     };
-    
-    const removeTenant = () => { 
+
+    const removeTenant = () => {
         deleteTenant(ownerId, propertyId)
             .then(() => {
                 Swal.fire("Congratulations", "The tenant has been removed", "success").then(reset);
@@ -72,62 +68,60 @@ const AddTenant = () => {
                 console.log(e);
                 Swal.fire("Try Again", "There was an error removing the tenant", "error");
             });
-    }
+    };
 
     return (
         <form onSubmit={addUser}>
-            <Container width="xl">
-                <Paper elevation={10} style={paperStyle}>
-                    <Grid align="center">
-                        <Avatar style={avatarStyle}><HouseIcon/></Avatar>
-                        <Typography variant="h5" fontFamily="Noto Sans">Add Tenant</Typography>
-                    </Grid>
-                    <TextField
-                        required
-                        style={btnStyle}
-                        fullWidth
-                        onChange={handleChange}
-                        name="name"
-                        value={name}
-                        id="outlined-required"
-                        label="Tenant Name"
-                        InputLabelProps={{
-                            shrink: true
-                        }}
-                    />
-                    <TextField
-                        required
-                        style={btnStyle}
-                        fullWidth
-                        onChange={handleChange}
-                        name="email"
-                        value={email}
-                        id="outlined-required"
-                        label="Tenant Email"
-                        InputLabelProps={{
-                            shrink: true
-                        }}
-                    />
-                    <TextField
-                        required
-                        style={btnStyle}
-                        fullWidth
-                        onChange={handleChange}
-                        name="phoneNumber"
-                        value={phoneNumber}
-                        id="outlined-required"
-                        label="Tenant Phone Number"
-                        InputLabelProps={{
-                            shrink: true
-                        }}
-                    />
-                    <Button type="submit" color="primary" variant="contained" style={btnStyle} fullWidth>
-                        <Typography fontFamily="Noto Sans">Add</Typography>
-                    </Button>
-                    <Button sx={{bgcolor: "red"}} variant="contained" style={btnStyle} onClick={() => removeTenant} fullWidth>
-                        <Typography fontFamily="Noto Sans">Remove</Typography>
-                    </Button>
-                </Paper>
+            <Container>
+                <Grid align="center" style={{marginTop: "20px"}}>
+                    <Avatar style={avatarStyle}><HouseIcon/></Avatar>
+                    <Typography variant="h5" fontFamily="Noto Sans">Add Tenant</Typography>
+                </Grid>
+                <TextField
+                    required
+                    style={btnStyle}
+                    fullWidth
+                    onChange={handleChange}
+                    name="name"
+                    value={name}
+                    id="outlined-required"
+                    label="Tenant Name"
+                    InputLabelProps={{
+                        shrink: true
+                    }}
+                />
+                <TextField
+                    required
+                    style={btnStyle}
+                    fullWidth
+                    onChange={handleChange}
+                    name="email"
+                    value={email}
+                    id="outlined-required"
+                    label="Tenant Email"
+                    InputLabelProps={{
+                        shrink: true
+                    }}
+                />
+                <TextField
+                    required
+                    style={btnStyle}
+                    fullWidth
+                    onChange={handleChange}
+                    name="phoneNumber"
+                    value={phoneNumber}
+                    id="outlined-required"
+                    label="Tenant Phone Number"
+                    InputLabelProps={{
+                        shrink: true
+                    }}
+                />
+                <Button type="submit" color="primary" variant="contained" style={btnStyle}>
+                    <Typography fontFamily="Noto Sans">Add</Typography>
+                </Button>
+                <Button sx={{ bgcolor: "red" }} variant="contained" style={btnStyle} onClick={() => removeTenant}>
+                    <Typography fontFamily="Noto Sans">Remove</Typography>
+                </Button>
             </Container>
         </form>
     );
