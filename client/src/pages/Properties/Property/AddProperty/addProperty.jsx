@@ -78,11 +78,6 @@ const AddProperty = () => {
         setValues((prevState) => ({ ...prevState, [name]: value }));
     };
 
-    const paperStyle = {
-        padding: 80,
-        marginTop: "20px"
-    };
-
     const avatarStyle = {
         backgroundColor: "#26a69a"
     };

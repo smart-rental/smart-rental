@@ -15,6 +15,8 @@ import PetsIcon from '@mui/icons-material/Pets';
 import BuildIcon from '@mui/icons-material/Build';
 import { OtherHouses } from "@mui/icons-material";
 import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import EasyApplyModal from "../../../components/EasyApplyModal/EasyApplyModal";
 
 const HouseCardMap = () => { 
     const { propertyId } = useParams();
@@ -37,7 +39,10 @@ const HouseCardMap = () => {
         landlordName: "", 
         phoneNumber: "",
         email: ""
-    })
+    });
+    const [open, setOpen] = React.useState(false);
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
 
     const petToString = () => {
         return pets ? "Allowed" : "Not Allowed";
@@ -159,6 +164,22 @@ const HouseCardMap = () => {
                             </Typography>
                         </Box>
                     </Stack>
+                    <Box sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        marginTop: "3%"
+                    }}>
+                        <Button variant="contained" onClick={handleOpen}>
+                            <Typography fontFamily="Noto Sans">
+                                Easy Apply
+                            </Typography>
+                        </Button>
+                        <EasyApplyModal
+                            open={open}
+                            handleClose={handleClose}
+                        />
+                    </Box>
                 </Card>
             </Grid>
         </Grid>

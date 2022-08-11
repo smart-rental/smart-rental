@@ -66,6 +66,7 @@ const Property = ({property: { _id, location, built, squareFeet, rent, capacity,
             <TableCell align="center">{checkOrX(pets)}</TableCell>
             <TableCell align="center">{utilities}</TableCell>
             <TableCell align="center"><Link to={`/issue/${_id}`} style={{textDecoration: "none" }}>Manage Issues</Link></TableCell>
+            <TableCell align="center"><Link to={`/applications/${_id}`} style={{textDecoration: "none" }}>Applications</Link></TableCell>
             <TableCell align="center"><DeleteForeverIcon style={{color: "#cc0000"}} onClick={() => {
                 removeProperty(_id);}}/></TableCell>
             <TableCell align="center">

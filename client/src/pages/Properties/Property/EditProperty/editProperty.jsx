@@ -88,7 +88,11 @@ const EditProperty = () => {
     };
 
     const handleChange = (event) => {
-        const { name, value } = event.target;
+        let { name, value } = event.target;
+        const numbersInput = ["squareFeet", "rent", "capacity", "parkingStalls", "bed", "bath"];
+        if (numbersInput.includes(name) && value < 0) {
+            value = 0;
+        }
         setValues((prevState) => ({ ...prevState, [name]: value }));
     };
     
@@ -145,127 +149,24 @@ const EditProperty = () => {
                         <Typography variant="h5" fontFamily="Noto Sans">Properties that have not been rented out will be
                             displayed for renters to see</Typography>
                     </Grid>
-                    <PlacesAutoComplete
-                        name="location"
-                        label="Property Location"
-                        handleChange={setValues}
-                        style={btnStyle}
-                        valueProp={location}
-                    />
-                    <TextField
-                        id="outlined-required"
-                        label="Property Built"
-                        onChange={handleChange}
-                        name="built"
-                        style={btnStyle}
-                        value={new Date(built).toISOString().split('T')[0]}
-                        type="date"
-                        fullWidth
-                        InputLabelProps={{
-                            shrink: true
-                        }}
-                    />
-                    <TextField
-                        id="outlined-number"
-                        label="Property Value"
-                        type="number"
-                        onChange={handleChange}
-                        name="squareFeet"
-                        fullWidth
-                        value={squareFeet}
-                        style={btnStyle}
-                        InputLabelProps={{
-                            shrink: true
-                        }}
-                    />
-                    <TextField
-                        id="outlined-number"
-                        label="Rent Per Month"
-                        onChange={handleChange}
-                        name="rent"
-                        type="number"
-                        fullWidth
-                        value={rent}
-                        style={btnStyle}
-                        InputLabelProps={{
-                            shrink: true
-                        }}
-                    />
-                    <TextField
-                        id="outlined-number"
-                        label="Max Capacity"
-                        onChange={handleChange}
-                        name="capacity"
-                        value={capacity}
-                        type="number"
-                        fullWidth
-                        style={btnStyle}
-                        InputLabelProps={{
-                            shrink: true
-                        }}
-                    />
-                    <TextField
-                        id="outlined-number"
-                        label="Parking Stalls"
-                        type="number"
-                        onChange={handleChange}
-                        value={parkingStalls}
-                        name="parkingStalls"
-                        fullWidth
-                        style={btnStyle}
-                        InputLabelProps={{
-                            shrink: true
-                        }}
-                    />
-                    <TextField
-                        fullWidth
-                        id="select"
-                        label="Pets"
-                        value={pets}
-                        style={btnStyle}
-                        onChange={handlePetsChange}
-                        select
-                        required
-                        InputLabelProps={{
-                            shrink: true
-                        }}
-                    >
+                    <PlacesAutoComplete name="location" label="Property Location" handleChange={setValues} style={btnStyle} valueProp={location}/>
+                    <TextField label="Property Built" onChange={handleChange} name="built" style={btnStyle} value={new Date(built).toISOString().split('T')[0]} type="date" fullWidth InputLabelProps={{shrink: true }}/>
+                    <TextField label="Property Value" type="number" onChange={handleChange} name="squareFeet" fullWidth value={squareFeet} style={btnStyle} InputLabelProps={{ shrink: true }}/>
+                    <TextField label="Rent Per Month" onChange={handleChange} name="rent" type="number" fullWidth value={rent} style={btnStyle} InputLabelProps={{ shrink: true }}/>
+                    <TextField label="Max Capacity" onChange={handleChange} name="capacity" value={capacity} type="number" fullWidth style={btnStyle} InputLabelProps={{ shrink: true }}/>
+                    <TextField label="Parking Stalls" type="number" onChange={handleChange} value={parkingStalls} name="parkingStalls" fullWidth style={btnStyle} InputLabelProps={{ shrink: true }}/>
+                    <TextField label="Pets" value={pets} onChange={handlePetsChange} select required fullWidth style={btnStyle} InputLabelProps={{ shrink: true }}>
                         <MenuItem value={"true"}>Allowed</MenuItem>
                         <MenuItem value={"false"}>Not Allowed</MenuItem>
                     </TextField>
-                    <TextField
-                        fullWidth
-                        id="select"
-                        label="Utilities"
-                        value={utilities}
-                        style={btnStyle}
-                        onChange={handleUtilitiesChange}
-                        select
-                        required
-                        InputLabelProps={{
-                            shrink: true
-                        }}>
+                    <TextField fullWidth id="select" label="Utilities" value={utilities} style={btnStyle} onChange={handleUtilitiesChange} select required InputLabelProps={{ shrink: true }}>
                         <MenuItem value={"Water & Electricity"}>Water & Electricity</MenuItem>
                         <MenuItem value={"Only Electricity"}>Only Electricity</MenuItem>
                         <MenuItem value={"Only Water"}>Only Water</MenuItem>
                         <MenuItem value={"None"}>None</MenuItem>
                     </TextField>
-                    <TextField
-                        rows={8}
-                        fullWidth
-                        multiline
-                        onChange={handleChange}
-                        name="description"
-                        value={description}
-                        placeholder="Brief description of your property (optional)"
-                    />
-                    <FormControlLabel
-                        style={btnStyle}
-                        control={<Checkbox
-                            checked={post}
-                            onChange={handlePost}
-                            inputProps={{ 'aria-label': 'controlled' }}
-                        />} label="Post this property on our website so others can find it"/>
+                    <TextField rows={8} fullWidth multiline onChange={handleChange} name="description" value={description} placeholder="Brief description of your property (optional)"/>
+                    <FormControlLabel style={btnStyle} control={<Checkbox checked={post} onChange={handlePost} inputProps={{ 'aria-label': 'controlled' }}/>} label="Post this property on our website so others can find it"/>
                     <br/>
                     <Button variant="contained" style={btnStyle} endIcon={<FileUpload/>} component="label">
                         <Typography variant="contained">
