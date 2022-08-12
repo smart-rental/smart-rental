@@ -74,7 +74,6 @@ const Properties = () => {
                                 <TableCell align="center">Utilities</TableCell>
                                 <TableCell align="center"></TableCell>
                                 <TableCell align="center"></TableCell>
-                                <TableCell align="center"></TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>

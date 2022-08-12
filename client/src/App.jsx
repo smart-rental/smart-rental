@@ -19,7 +19,7 @@ import Signup from "./pages/Signup/signup";
 import Signin from "./pages/Signin/signin";
 import LandlordHome from "./pages/LandlordHome/LandlordHome";
 import RenterHome from "./pages/RenterHome/RenterHome";
-import Application from "./pages/Application/Application";
+import Applications from "./pages/Applications/Applications";
 
 const App = function () { 
     return (
@@ -45,7 +45,7 @@ const App = function () {
                                 <Route path="/issue/:propertyId" element={<Issues/>}/>
                                 <Route path="/addIssue/:tenantId" element={<AddIssue/>}/>
                                 <Route path="/editIssue/:tenantId/:issueId" element={<EditIssue/>}/>
-                                <Route path="/applications/:propertyId" element={<Application/>}/>
+                                <Route path="/applications/:propertyId" element={<Applications/>}/>
                             </Route>
                         </Routes>
                     </ThemeProvider>

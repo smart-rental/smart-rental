@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { getAllProperties } from "../../api";
 import HouseCard from "./HouseCard/HouseCard";
-import { CircularProgress, Grid, Pagination } from "@mui/material";
+import { Grid, Pagination } from "@mui/material";
 import Error from "../../components/Error/Error";
-import Box from "@mui/material/Box";
 
 const Houses = () => {
     const [properties, setProperties] = useState([]);

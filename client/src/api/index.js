@@ -25,7 +25,7 @@ export const retrieveIssueFromProperty = (propertyId) => axios.get(`${url}/issue
 export const addIssue = (tenantId, issue) => axios.post(`${url}/issue/${tenantId}`, issue);
 export const deleteIssue = (tenantId, issueId) => axios.delete(`${url}/issue/${tenantId}/${issueId}`);
 export const updateIssue = (issueId, issueToEdit) => axios.patch(`${url}/issue/update/${issueId}`, issueToEdit);
-//Application
+//Applications
 export const retrieveApplication = (propertyId) => axios.get(`${url}/application/${propertyId}`);
 export const addApplication = (propertyId, application) => axios.post(`${url}/application/apply/${propertyId}`, application);
 export const deleteApplication = (applicationId) => axios.delete(`${url}/application/delete/${applicationId}`);

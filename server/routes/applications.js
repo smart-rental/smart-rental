@@ -5,9 +5,17 @@ const router = express.Router();
 
 router.route("/:propertyId").get(async (req, res) => { 
     try {
+        const PAGE_SIZE = 12;
+        const page = parseInt(req.query.page || "0");
+        const total = await AppliedApplications.countDocuments({});
         const { propertyId } = req.params;
-        const applications = await AppliedApplications.find({ propertyId });
-        res.json(applications);
+        const applications = await AppliedApplications.find({ propertyId })
+            .limit(PAGE_SIZE)
+            .skip(PAGE_SIZE * page);
+        res.json({
+            applications,
+            totalPages: Math.ceil(total/PAGE_SIZE)
+        });
     } catch (e) {
         res.send(400).json({error: e});
     }

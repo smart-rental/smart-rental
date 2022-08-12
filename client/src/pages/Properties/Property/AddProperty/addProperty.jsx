@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import {
     Grid,
-    Paper,
     Avatar,
     TextField,
     Button,
@@ -257,10 +256,10 @@ const AddProperty = () => {
                     InputLabelProps={{
                         shrink: true
                     }}>
-                    <MenuItem value={"Water & Electricity"}>Water & Electricity</MenuItem>
-                    <MenuItem value={"Only Electricity"}>Only Electricity</MenuItem>
-                    <MenuItem value={"Only Water"}>Only Water</MenuItem>
-                    <MenuItem value={"None"}>None</MenuItem>
+                        <MenuItem value={"Water & Electricity"}>Water & Electricity</MenuItem>
+                        <MenuItem value={"Electricity"}>Electricity</MenuItem>
+                        <MenuItem value={"Water"}>Water</MenuItem>
+                        <MenuItem value={"None"}>None</MenuItem>
                 </TextField>
                 <TextField
                     rows={8}

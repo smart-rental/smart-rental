@@ -7,8 +7,9 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import PersonAddAltIcon from '@mui/icons-material/PersonAddAlt';
 import PersonIcon from '@mui/icons-material/Person';
-import { Link } from "react-router-dom";
 import Kebab from "../../../components/Kebab/Kebab";
+import DescriptionIcon from '@mui/icons-material/Description';
+import BugReportIcon from '@mui/icons-material/BugReport';
 
 const Property = ({property: { _id, location, built, squareFeet, rent, capacity, parkingStalls, pets, utilities, bed, bath, tenant }, landlordId, removeProperty, users}) => {
     const checkOrX = (bool) => {
@@ -38,6 +39,16 @@ const Property = ({property: { _id, location, built, squareFeet, rent, capacity,
             name: "Edit",
             icon: <EditIcon/>
         },
+        {
+            navigationLink: `/applications/${_id}`,
+            name: "Applications",
+            icon: <DescriptionIcon/>
+        },
+        {
+            navigationLink: `/issue/${_id}`,
+            name: "Manage Issues",
+            icon: <BugReportIcon/>
+        },
         displayTenant()
     ]
 
@@ -65,8 +76,6 @@ const Property = ({property: { _id, location, built, squareFeet, rent, capacity,
             <TableCell align="center">{bath}</TableCell>
             <TableCell align="center">{checkOrX(pets)}</TableCell>
             <TableCell align="center">{utilities}</TableCell>
-            <TableCell align="center"><Link to={`/issue/${_id}`} style={{textDecoration: "none" }}>Manage Issues</Link></TableCell>
-            <TableCell align="center"><Link to={`/applications/${_id}`} style={{textDecoration: "none" }}>Applications</Link></TableCell>
             <TableCell align="center"><DeleteForeverIcon style={{color: "#cc0000"}} onClick={() => {
                 removeProperty(_id);}}/></TableCell>
             <TableCell align="center">
