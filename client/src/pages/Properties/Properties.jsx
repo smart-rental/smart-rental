@@ -9,7 +9,7 @@ import { useEffect, useState } from "react";
 import { deleteProperty, getProperties, getUsers } from "../../api";
 import Property from "./Property/Property";
 import Swal from "sweetalert2";
-import { tableCellClasses, Typography } from "@mui/material";
+import { tableCellClasses, TableFooter, TablePagination, Typography } from "@mui/material";
 import Container from "@mui/material/Container";
 import { useSelector } from "react-redux";
 
@@ -17,6 +17,15 @@ import { useSelector } from "react-redux";
 const Properties = () => {
     const [properties, setProperties] = useState([]);
     const [users, setUsers] = useState([]);
+    const [page, setPage] = useState(0);
+    const [rowsPerPage, setRowsPerPage] = useState(10);
+    const handleChangePage = (event, newPage) => { 
+        setPage(newPage);
+    }
+    const handleChangeRowsPerPage = (event) => { 
+        setRowsPerPage(parseInt(event.target.value, 10));
+        setPage(0);
+    }
     const landlordId = useSelector((state) => state.auth.isLoggedIn);
     useEffect(() => {
         getProperties(landlordId)
@@ -50,7 +59,7 @@ const Properties = () => {
                 : <TableContainer>
                     <Table sx={{
                         [`& .${tableCellClasses.root}`]: {
-                            borderBottom: "1px solid"
+                            borderBottom: "0.5px solid"
                         }
                     }} aria-label="simple table">
                         <TableHead>
@@ -77,12 +86,23 @@ const Properties = () => {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {properties.map((property) => (
+                            {properties
+                                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                .map((property) => (
                                 <Property property={property} landlordId={landlordId} users={users}
                                           removeProperty={removeProperty}
                                           key={property._id}/>
                             ))}
                         </TableBody>
+                        <TableFooter>
+                            <TablePagination count={properties.length}
+                                             onPageChange={(event, page) => handleChangePage(event, page)}
+                                             onRowsPerPageChange={handleChangeRowsPerPage}
+                                             page={page} 
+                                             rowsPerPage={rowsPerPage} 
+                                             rowsPerPageOptions={[5, 10, 25, 50]} 
+                                             />
+                        </TableFooter>
                     </Table>
                 </TableContainer>}
 
