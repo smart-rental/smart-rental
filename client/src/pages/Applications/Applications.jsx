@@ -46,6 +46,8 @@ const Applications = () => {
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
+                mt: 3,
+                mb: 4
             }}>
                 <Typography variant="h4" component="h1" fontFamily="Noto Sans">
                     Displaying Applications for {propertyName}
