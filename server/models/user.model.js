@@ -9,6 +9,7 @@ const userModel = mongoose.Schema({
     phoneNumber: { type: Number, required: true },
     password: { type: String, required: true },
     userType: { type: String, required: true },
+    stripe_account: { type: String }
 }, { timeStamp: true });
 
 userModel.methods.generateAuthToken = function () {

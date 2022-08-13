@@ -15,6 +15,7 @@ const propertiesModel = mongoose.Schema({
     bath: { type: Number, required: true },
     post: { type: Boolean, required: true },
     description: { type: String },
+    priceId: {type: String},
     ownerId: { type: String, required: true },
     tenant: { type: mongoose.Schema.Types.ObjectId, ref: User.User }
 });

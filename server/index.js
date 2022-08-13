@@ -8,6 +8,7 @@ import authRouter from './routes/auth.js';
 import propertyRouter from './routes/properties.js';
 import tenantRouter from './routes/tenant.js';
 import applicationRouter from './routes/applications.js';
+import connectRouter from './routes/account.js';
 import path from "path";
 
 import { fileURLToPath } from 'url';
@@ -28,6 +29,7 @@ app.use('/api/property', propertyRouter);
 app.use('/api/issue', issueRouter);
 app.use('/api/tenant', tenantRouter);
 app.use('/api/application', applicationRouter);
+app.use('/api/connect', connectRouter);
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use("*", (req, res) => { res.status(404).json({ error: " Page Not found "})});
 

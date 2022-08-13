@@ -161,8 +161,8 @@ const EditProperty = () => {
                     </TextField>
                     <TextField fullWidth id="select" label="Utilities" value={utilities} style={btnStyle} onChange={handleUtilitiesChange} select required InputLabelProps={{ shrink: true }}>
                         <MenuItem value={"Water & Electricity"}>Water & Electricity</MenuItem>
-                        <MenuItem value={"Only Electricity"}>Only Electricity</MenuItem>
-                        <MenuItem value={"Only Water"}>Only Water</MenuItem>
+                        <MenuItem value={"Electricity"}>Only Electricity</MenuItem>
+                        <MenuItem value={"Water"}>Only Water</MenuItem>
                         <MenuItem value={"None"}>None</MenuItem>
                     </TextField>
                     <TextField rows={8} fullWidth multiline onChange={handleChange} name="description" value={description} placeholder="Brief description of your property (optional)"/>
