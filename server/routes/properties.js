@@ -60,6 +60,19 @@ router.get('/:ownerId/:propertyId', async (req, res) => {
 });
 
 /**
+ * Retrieve all property owned by landlord
+ */
+router.get('/:ownerId', async (req, res) => {
+    try {
+        const {ownerId} = req.params;
+        const property = await Property.find({ownerId});
+        res.json(property);
+    } catch (e) {
+        res.status(400).json(`Error: ${e}`)
+    }
+});
+
+/**
  * Add a tenant to a property
  */
 router.post('/addTenant/:owner/:property', async (req, res) => {
