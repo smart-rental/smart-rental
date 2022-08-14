@@ -32,15 +32,17 @@ const PlacesAutoComplete = ({ name, label, style, valueProp, handleChange }) => 
                 autoHighlight
                 disablePortal
                 options={data}
+                sx={{mt: 1}}
                 value={{ description: value.toString() }}
                 getOptionLabel={(option) => option.description}
                 isOptionEqualToValue={(option, value) => option.id === value.id}
                 onChange={(event, value) => {
-                    const { description } = value;
-                    handleInput(event);
-                    handleChange((data) => ({...data, [name]: description}));
+                    if (value != null) {
+                        const { description } = value;
+                        handleInput(event);
+                        handleChange((data) => ({...data, [name]: description}));
+                    }
                 }}
-                
                 renderInput={(params) =>
                     <TextField {...params} 
                                required

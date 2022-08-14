@@ -40,7 +40,7 @@ function Mappers({ lat, lng }) {
     const center = useMemo(() => ({lat, lng}), [lat, lng])
     return (
         <GoogleMap zoom={15} center={center}
-                   mapContainerStyle={{ width: "100", height: "93vh" }}>
+                   mapContainerStyle={{ width: "100%", height: "30vh" }}>
             <Marker position={{ lat, lng }}/>
         </GoogleMap>
     );

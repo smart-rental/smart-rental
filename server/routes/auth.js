@@ -11,6 +11,16 @@ router.get("/", (req, res) => {
         .catch(e => res.status(400).json(e));
 });
 
+router.get("/:ownerId", async(req, res) => {
+    try {
+        const {ownerId} = req.params;
+        const userInfo = await User.findById(ownerId);
+        res.json(userInfo);
+    } catch (e) {
+        res.status(400).json(e);
+    }
+});
+
 router.post("/", async (req, res) => {
     try {
         const { error } = validate(req.body);

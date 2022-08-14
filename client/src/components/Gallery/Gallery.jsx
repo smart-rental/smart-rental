@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from "react";
 import ImageViewer from "react-simple-image-viewer";
 
-const Gallery = (props) => {
+const Gallery = ({images, width}) => {
     const [currentImage, setCurrentImage] = useState(0);
     const [isViewerOpen, setIsViewerOpen] = useState(false);
 
@@ -15,16 +15,16 @@ const Gallery = (props) => {
         setIsViewerOpen(false);
     };
 
-    const imageLinks = props.images.map((image) => {
+    const imageLinks = images.map((image) => {
         return `http://localhost:5000/${image.filePath}`;
     });
 
     return (
-        <div>
+        <>
             <img
                 src={imageLinks[0]}
                 onClick={() => openImageViewer(0)}
-                width={props.width === undefined ? "100%" : props.width}
+                width={width === undefined ? "100%" : width}
                 alt=""
             />
 
@@ -40,7 +40,7 @@ const Gallery = (props) => {
                     closeOnClickOutside={true}
                 />
             )}
-        </div>
+        </>
     );
 };
 

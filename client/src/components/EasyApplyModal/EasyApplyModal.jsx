@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Box from "@mui/material/Box";
-import { Divider, Modal, Stack, TextField } from "@mui/material";
+import { Divider, InputAdornment, Modal, Stack, TextField } from "@mui/material";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { addApplication } from "../../api";
@@ -114,7 +114,7 @@ const EasyApplyModal = ({ handleClose, open }) => {
                     <Divider orientation="horizontal"/>
                     <Stack direction="row" spacing={1} sx={{mt: 2}}>
                         <TextField name="occupation" value={occupation} onChange={handleChange} fullWidth InputLabelProps={{ shrink: true }} label="Occupation"/>
-                        <TextField name="monthlyIncome" value={monthlyIncome} onChange={handleChange} fullWidth InputLabelProps={{ shrink: true }} type="number" label="Monthly Income"/>
+                        <TextField name="monthlyIncome" value={monthlyIncome} onChange={handleChange} fullWidth InputLabelProps={{ shrink: true }} type="number" label="Monthly Income" InputProps={{startAdornment: <InputAdornment position="start">$</InputAdornment>}}/>
                     </Stack>
                     <TextField name="animals" value={animals} onChange={handleChange} fullWidth InputLabelProps={{ shrink: true }} type="number" label="Number of Animals" sx={{ mt: 2 }}/>
                     <TextField name="vehicles" value={vehicles} onChange={handleChange} fullWidth InputLabelProps={{ shrink: true }} type="number" label="Number of Vehicles" sx={{ mt: 2 }}/>

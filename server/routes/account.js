@@ -84,4 +84,6 @@ router.route('/delete/:userId').delete(async (req, res) => {
     }
 });
 
+//Checkout for renter
+
 export default router;

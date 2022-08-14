@@ -14,7 +14,7 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { Link, useNavigate } from "react-router-dom";
 import IconButton from "@mui/material/IconButton";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
-import { getUsers, validateUser } from "../../api";
+import { getUser, getUsers, validateUser } from "../../api";
 import classes from "./styles";
 import { useDispatch, useSelector } from "react-redux";
 import authActions from "../../Store/slices/auth-slice";
@@ -69,10 +69,9 @@ const SignIn = () => {
         let userInfo = users.find(users => users.email === email);
         //Call the backend
         validateUser(userCredentials)
-            .then((validation ) => {
-                getUsers(userInfo._id).then((user) => {
-                    let userInfo = user.data.find(users => users.email === validation.data.message.email);
-                    userInfo.userType === "Landlord" ? navigate(`/landlord`) : navigate(`/tenant`);
+            .then(() => {
+                getUser(userInfo._id).then((user) => {
+                    user.userType === "Landlord" ? navigate(`/landlord`) : navigate(`/tenant`);
                 })
                 navigate(`/`);
                 dispatch(authActions.actions.login(userInfo._id)); 

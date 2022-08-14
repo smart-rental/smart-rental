@@ -6,6 +6,7 @@ const propertiesModel = mongoose.Schema({
     built: { type: Date, required: true },
     squareFeet: { type: Number, required: true },
     images: [Object],
+    amenities: [String],
     rent: { type: Number, required: true },
     capacity: { type: Number, required: true },
     parkingStalls: { type: Number, required: true },

@@ -2,9 +2,9 @@ import React, { useEffect, useState } from "react";
 import {
     Avatar,
     Button,
-    Checkbox,
+    Checkbox, Divider,
     FormControlLabel,
-    Grid,
+    Grid, InputAdornment, Stack,
     TextField,
     Typography
 } from "@mui/material";
@@ -17,6 +17,7 @@ import PlacesAutoComplete from "../../../../components/PlacesAutoComplete/Places
 import ListImage from "../../../../components/ListImage/ListImage";
 import { FileUpload } from "@mui/icons-material";
 import Container from "@mui/material/Container";
+import AmenitiesAutoComplete from "../../../../components/AmenitiesAutoComplete/AmenitiesAutoComplete";
 
 const EditProperty = () => {
     let { ownerId, propertyId } = useParams();
@@ -37,12 +38,13 @@ const EditProperty = () => {
     const [post, setPost] = React.useState(false);
     const [selectedFiles, setSelectedFiles] = useState([]);
     const [selectedFilesArray, setSelectedFilesArray] = useState([]);
+    const [amenities, setAmenities] = useState([]);
     const [indexToDelete, setIndexToDelete] = useState([]);
     const [{ location, built, squareFeet, rent, capacity, parkingStalls, bed, bath, description }, setValues] = useState(initialState);
 
     useEffect(() => {
         getProperty(ownerId, propertyId).then((res) => {
-            const { location, built, squareFeet, images, rent, capacity, parkingStalls, pets, utilities, bed, bath, post, description } = res.data;
+            const { location, built, squareFeet, images, rent, capacity, parkingStalls, pets, utilities, bed, bath, post, description, amenities } = res.data;
             setValues({
                 location,
                 built,
@@ -61,6 +63,10 @@ const EditProperty = () => {
             setSelectedFiles(imageArray);
             setPets(pets);
             setPost(post);
+            const amen = amenities.map((a) => { 
+                return {amenities: a};
+            });
+            setAmenities(amen);
             setUtilities(utilities);
         });
     }, [ownerId, propertyId]);
@@ -149,24 +155,43 @@ const EditProperty = () => {
                         <Typography variant="h5" fontFamily="Noto Sans">Properties that have not been rented out will be
                             displayed for renters to see</Typography>
                     </Grid>
+                    <Typography variant="h6" component="h2" sx={{mt: 2}}>
+                        Property Information
+                    </Typography>
+                    <Divider/>
                     <PlacesAutoComplete name="location" label="Property Location" handleChange={setValues} style={btnStyle} valueProp={location}/>
-                    <TextField label="Property Built" onChange={handleChange} name="built" style={btnStyle} value={new Date(built).toISOString().split('T')[0]} type="date" fullWidth InputLabelProps={{shrink: true }}/>
-                    <TextField label="Property Value" type="number" onChange={handleChange} name="squareFeet" fullWidth value={squareFeet} style={btnStyle} InputLabelProps={{ shrink: true }}/>
-                    <TextField label="Rent Per Month" onChange={handleChange} name="rent" type="number" fullWidth value={rent} style={btnStyle} InputLabelProps={{ shrink: true }}/>
-                    <TextField label="Max Capacity" onChange={handleChange} name="capacity" value={capacity} type="number" fullWidth style={btnStyle} InputLabelProps={{ shrink: true }}/>
-                    <TextField label="Parking Stalls" type="number" onChange={handleChange} value={parkingStalls} name="parkingStalls" fullWidth style={btnStyle} InputLabelProps={{ shrink: true }}/>
-                    <TextField label="Pets" value={pets} onChange={handlePetsChange} select required fullWidth style={btnStyle} InputLabelProps={{ shrink: true }}>
-                        <MenuItem value={"true"}>Allowed</MenuItem>
-                        <MenuItem value={"false"}>Not Allowed</MenuItem>
-                    </TextField>
-                    <TextField fullWidth id="select" label="Utilities" value={utilities} style={btnStyle} onChange={handleUtilitiesChange} select required InputLabelProps={{ shrink: true }}>
-                        <MenuItem value={"Water & Electricity"}>Water & Electricity</MenuItem>
-                        <MenuItem value={"Electricity"}>Only Electricity</MenuItem>
-                        <MenuItem value={"Water"}>Only Water</MenuItem>
-                        <MenuItem value={"None"}>None</MenuItem>
-                    </TextField>
+                    <Stack direction="row" spacing={3} sx={{mt: 2}}>
+                        <TextField label="Property Built" onChange={handleChange} name="built" type="date" fullWidth value={built} InputLabelProps={{ shrink: true }}/>
+                        <TextField label="Square Feet" type="number" onChange={handleChange} name="squareFeet" fullWidth value={squareFeet} InputLabelProps={{ shrink: true }}/>
+                        <TextField label="Rent Per Month" onChange={handleChange} name="rent" type="number" fullWidth value={rent} InputLabelProps={{ shrink: true }} InputProps={{startAdornment: <InputAdornment position="start">$</InputAdornment>}}/>
+                        <TextField label="Max Capacity" onChange={handleChange} name="capacity" type="number" fullWidth value={capacity} InputLabelProps={{ shrink: true }}/>
+                        <TextField label="Bath" onChange={handleChange} name="bath" type="number" fullWidth value={bath} InputLabelProps={{shrink: true}}/>
+                        <TextField label="Bedrooms" onChange={handleChange} name="bed" type="number" fullWidth value={bed} InputLabelProps={{shrink: true}}/>
+                    </Stack>
+                    <Typography variant="h6" component="h2" sx={{mt: 1}}>
+                        Features
+                    </Typography>
+                    <Divider/>
+                    <Stack direction="row" spacing={3} sx={{mt: 2}}>
+                        <TextField label="Parking Stalls" type="number" onChange={handleChange} name="parkingStalls" fullWidth value={parkingStalls} InputLabelProps={{shrink: true}}/>
+                        <TextField fullWidth id="select" label="Pets" value={pets} onChange={handlePetsChange} select required InputLabelProps={{ shrink: true }}>
+                            <MenuItem value={"true"}>Allowed</MenuItem>
+                            <MenuItem value={"false"}>Not Allowed</MenuItem>
+                        </TextField>
+                        <TextField fullWidth id="select" label="Utilities" value={utilities} onChange={handleUtilitiesChange} select required InputLabelProps={{ shrink: true }}>
+                            <MenuItem value={"Water & Electricity"}>Water & Electricity</MenuItem>
+                            <MenuItem value={"Electricity"}>Electricity</MenuItem>
+                            <MenuItem value={"Water"}>Water</MenuItem>
+                            <MenuItem value={"None"}>None</MenuItem>
+                        </TextField>
+                    </Stack>
+                    <Typography variant="h6" component="h2" sx={{mt: 1}}>
+                        Amenities
+                    </Typography>
+                    <Divider/>
+                    <AmenitiesAutoComplete value={amenities} handleAmenities={setAmenities}/>
                     <TextField rows={8} fullWidth multiline onChange={handleChange} name="description" value={description} placeholder="Brief description of your property (optional)"/>
-                    <FormControlLabel style={btnStyle} control={<Checkbox checked={post} onChange={handlePost} inputProps={{ 'aria-label': 'controlled' }}/>} label="Post this property on our website so others can find it"/>
+                    <FormControlLabel style={btnStyle} label="Post this property on our website so others can find it" control={<Checkbox checked={post} onChange={handlePost} inputProps={{ "aria-label": "controlled" }}/>}/>
                     <br/>
                     <Button variant="contained" style={btnStyle} endIcon={<FileUpload/>} component="label">
                         <Typography variant="contained">

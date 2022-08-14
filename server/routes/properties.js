@@ -38,7 +38,7 @@ router.get('/', async (req, res) => {
 router.get('/locate/:propertyId', async (req, res) => {
     try {
         const { propertyId } = req.params;
-        const property = Property.findById(propertyId);
+        const property = await Property.findById(propertyId);
         res.json(property);
     } catch (e) {
         res.status(400).json(e);
@@ -117,7 +117,7 @@ router.post('/:id', upload.array("images", 7), async (req, res) => {
             }
             images.push(file);
         });
-        const { location, built, squareFeet, rent, capacity, parkingStalls, pets, utilities, bed, bath, post, description, tenant } = req.body;
+        const { location, built, squareFeet, rent, capacity, parkingStalls, pets, utilities, bed, bath, post, description, tenant, amenities } = req.body;
         const price = await stripe.prices.create({
             unit_amount: rent * 100,
             currency: 'usd',
@@ -145,6 +145,7 @@ router.post('/:id', upload.array("images", 7), async (req, res) => {
             built,
             squareFeet,
             images,
+            amenities,
             rent,
             capacity,
             parkingStalls,
@@ -161,7 +162,7 @@ router.post('/:id', upload.array("images", 7), async (req, res) => {
         const createProperty = await newProperty.save();
         res.json(createProperty);
     } catch(e) {
-        console.log(e);
+        res.status(400).json(e);
     }
 });
 
@@ -193,7 +194,7 @@ router.patch('/update/:ownerId/:id', upload.array('images', 7), async (req, res)
             }
             fileArray.push(file);
         });
-        const { location, built, squareFeet, rent, capacity, parkingStalls, pets, utilities, bed, bath, post, description, indexToDelete, priceId } = req.body;
+        const { location, built, squareFeet, amenities, rent, capacity, parkingStalls, pets, utilities, bed, bath, post, description, indexToDelete, priceId } = req.body;
         const property = await Property.findById(id);
         //Find property by the id and update it
         const updatedProperty = await Property.findByIdAndUpdate(id, {
@@ -201,6 +202,7 @@ router.patch('/update/:ownerId/:id', upload.array('images', 7), async (req, res)
             built,
             squareFeet,
             images: indexToDelete == null ? imageHelper(fileArray, property.images) : deleteImageHelper(property.images, indexToDelete, fileArray),
+            amenities,
             rent,
             capacity,
             parkingStalls,

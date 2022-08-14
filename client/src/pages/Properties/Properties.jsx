@@ -98,13 +98,15 @@ const Properties = () => {
                             <TablePagination count={properties.length}
                                              onPageChange={(event, page) => handleChangePage(event, page)}
                                              onRowsPerPageChange={handleChangeRowsPerPage}
-                                             page={page} 
-                                             rowsPerPage={rowsPerPage} 
-                                             rowsPerPageOptions={[5, 10, 25, 50]} 
-                                             />
+                                             page={page}
+                                             rowsPerPage={rowsPerPage}
+                                             rowsPerPageOptions={[5, 10, 25, 50]}
+                            />
                         </TableFooter>
                     </Table>
-                </TableContainer>}
+
+                </TableContainer>
+            }
 
         </Container>
     );
