@@ -83,6 +83,7 @@ const Properties = () => {
                                     <TableCell align="center">Bath</TableCell>
                                     <TableCell align="center">Pets</TableCell>
                                     <TableCell align="center">Utilities</TableCell>
+                                    <TableCell align="center">Payment Status</TableCell>
                                     <TableCell align="center"></TableCell>
                                     <TableCell align="center"></TableCell>
                                 </TableRow>

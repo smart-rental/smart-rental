@@ -10,10 +10,23 @@ import PersonIcon from '@mui/icons-material/Person';
 import Kebab from "../../../components/Kebab/Kebab";
 import DescriptionIcon from '@mui/icons-material/Description';
 import BugReportIcon from '@mui/icons-material/BugReport';
+import { Chip } from "@mui/material";
 
-const Property = ({property: { _id, location, built, squareFeet, rent, capacity, parkingStalls, pets, utilities, bed, bath, tenant }, landlordId, removeProperty, users}) => {
+const Property = ({property: { _id, location, built, squareFeet, rent, capacity, parkingStalls, pets, utilities, bed, bath, tenant, rent_payment_status }, landlordId, removeProperty, users}) => {
     const checkOrX = (bool) => {
         return bool ? <CheckCircleIcon style={{color: "green"}}/> : <CancelIcon style={{color: "red"}}/>
+    }
+    
+    const renderPaymentStatus = () => {
+        console.log(rent_payment_status);
+        switch(rent_payment_status) {
+            case "paid":
+                return (<Chip label={rent_payment_status} color="success"/>)
+            case "pending":
+                return (<Chip label={rent_payment_status} sx={{bgcolor: "#ffff33"}}/>)
+            case "n/a":
+                return (<Chip label={rent_payment_status}/>)
+        }
     }
 
     //Move this to the backend
@@ -76,6 +89,7 @@ const Property = ({property: { _id, location, built, squareFeet, rent, capacity,
             <TableCell align="center">{bath}</TableCell>
             <TableCell align="center">{checkOrX(pets)}</TableCell>
             <TableCell align="center">{utilities}</TableCell>
+            <TableCell align="center">{renderPaymentStatus()}</TableCell>
             <TableCell align="center"><DeleteForeverIcon style={{color: "#cc0000"}} onClick={() => {
                 removeProperty(_id);}}/></TableCell>
             <TableCell align="center">
