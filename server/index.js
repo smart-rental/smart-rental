@@ -1,6 +1,7 @@
 import express from 'express';
 import mongoose from "mongoose";
 import cors from "cors";
+import dotenv from "dotenv";
 
 import issueRouter from './routes/issues.js';
 import usersRouter from './routes/users.js';
@@ -16,6 +17,7 @@ import { dirname } from 'path';
 
 
 const app = express();
+dotenv.config();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
@@ -33,7 +35,7 @@ app.use('/api/connect', connectRouter);
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use("*", (req, res) => { res.status(404).json({ error: " Page Not found "})});
 
-const CONNECTION_URL = "mongodb+srv://gavpeng:gavpeng7447@cluster0.vq4nk.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
+const CONNECTION_URL = process.env.MONGOOSE_CONNECTION;
 const PORT = process.env.PORT || 5000;
 
 mongoose.connection.once('open', () => {
