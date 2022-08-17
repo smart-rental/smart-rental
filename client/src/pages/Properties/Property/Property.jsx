@@ -21,7 +21,7 @@ const Property = ({property: { _id, location, built, squareFeet, rent, capacity,
     const displayTenant = () => {
         let isTenant = null;
         if (tenant) {
-            isTenant = users.find(user => user._id === tenant._id);
+            isTenant = users.find(user => user._id === tenant);
         }
         return isTenant == null ? {
             navigationLink: `/addTenant/${landlordId}/${_id}`,

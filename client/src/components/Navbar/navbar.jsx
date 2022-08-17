@@ -33,6 +33,7 @@ const ResponsiveAppBar = () => {
     const logOut = () => { 
         dispatch(authActions.actions.logout(null));
         dispatch(userActions.actions.removeUserType(null));
+        dispatch(userActions.actions.removeUserData(null));
     }
     
     function displayLogIn() { 
@@ -184,9 +185,9 @@ const ResponsiveAppBar = () => {
                                 <Typography textAlign="center" style={{ color: "white" }} fontFamily="Noto Sans">Issues</Typography>
                             </Button>
                         </Link> : ""}
-                        {isLoggedIn != null ? <Link style={classes.link} to={`/stripejs/${isLoggedIn}`}>
+                        {isLoggedIn != null ? <Link style={classes.link} to={`/profile/${isLoggedIn}`}>
                             <Button style={classes.mobileButton} size="large">
-                                <Typography textAlign="center" style={{ color: "white" }} fontFamily="Noto Sans">Set up auto-payment</Typography>
+                                <Typography textAlign="center" style={{ color: "white" }} fontFamily="Noto Sans">Profile</Typography>
                             </Button>
                         </Link> : ""}
                     </Box>

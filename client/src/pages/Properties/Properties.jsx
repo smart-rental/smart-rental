@@ -56,58 +56,59 @@ const Properties = () => {
         <Container maxWidth="125rem">
             {properties === [] ?
                 <Typography variant="h4" align="center"><b>No properties to manage</b></Typography>
-                : <TableContainer>
-                    <Table sx={{
-                        [`& .${tableCellClasses.root}`]: {
-                            borderBottom: "0.5px solid"
-                        }
-                    }} aria-label="simple table">
-                        <TableHead>
-                            <TableRow>
-                                <TableCell style={{ borderBottom: "none" }} align="center" colSpan={30}>
-                                    <Typography variant="h4">
-                                        <b>Manage Properties</b>
-                                    </Typography>
-                                </TableCell>
-                            </TableRow>
-                            <TableRow>
-                                <TableCell align="center">Location</TableCell>
-                                <TableCell align="center">Date built</TableCell>
-                                <TableCell align="center">Square Feet</TableCell>
-                                <TableCell align="center">Rent per month</TableCell>
-                                <TableCell align="center">Max Capacity</TableCell>
-                                <TableCell align="center">Parking Stalls</TableCell>
-                                <TableCell align="center">Bed</TableCell>
-                                <TableCell align="center">Bath</TableCell>
-                                <TableCell align="center">Pets</TableCell>
-                                <TableCell align="center">Utilities</TableCell>
-                                <TableCell align="center"></TableCell>
-                                <TableCell align="center"></TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {properties
-                                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                                .map((property) => (
-                                <Property property={property} landlordId={landlordId} users={users}
-                                          removeProperty={removeProperty}
-                                          key={property._id}/>
-                            ))}
-                        </TableBody>
-                        <TableFooter>
-                            <TablePagination count={properties.length}
-                                             onPageChange={(event, page) => handleChangePage(event, page)}
-                                             onRowsPerPageChange={handleChangeRowsPerPage}
-                                             page={page}
-                                             rowsPerPage={rowsPerPage}
-                                             rowsPerPageOptions={[5, 10, 25, 50]}
-                            />
-                        </TableFooter>
-                    </Table>
-
-                </TableContainer>
+                : 
+                <>
+                    <TableContainer>
+                        <Table sx={{
+                            [`& .${tableCellClasses.root}`]: {
+                                borderBottom: "0.5px solid"
+                            }
+                        }} aria-label="simple table">
+                            <TableHead>
+                                <TableRow>
+                                    <TableCell style={{ borderBottom: "none" }} align="center" colSpan={30}>
+                                        <Typography variant="h4">
+                                            <b>Manage Properties</b>
+                                        </Typography>
+                                    </TableCell>
+                                </TableRow>
+                                <TableRow>
+                                    <TableCell align="center">Location</TableCell>
+                                    <TableCell align="center">Date built</TableCell>
+                                    <TableCell align="center">Square Feet</TableCell>
+                                    <TableCell align="center">Rent per month</TableCell>
+                                    <TableCell align="center">Max Capacity</TableCell>
+                                    <TableCell align="center">Parking Stalls</TableCell>
+                                    <TableCell align="center">Bed</TableCell>
+                                    <TableCell align="center">Bath</TableCell>
+                                    <TableCell align="center">Pets</TableCell>
+                                    <TableCell align="center">Utilities</TableCell>
+                                    <TableCell align="center"></TableCell>
+                                    <TableCell align="center"></TableCell>
+                                </TableRow>
+                            </TableHead>
+                                <TableBody>
+                                    {properties
+                                        .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                        .map((property) => (
+                                            <Property property={property} landlordId={landlordId} users={users}
+                                                      removeProperty={removeProperty}
+                                                      key={property._id}/>
+                                        ))}
+                                </TableBody>
+                            <TableFooter>
+                                <TablePagination count={properties.length}
+                                                 onPageChange={(event, page) => handleChangePage(event, page)}
+                                                 onRowsPerPageChange={handleChangeRowsPerPage}
+                                                 page={page}
+                                                 rowsPerPage={rowsPerPage}
+                                                 rowsPerPageOptions={[5, 10, 25, 50]}
+                                />
+                            </TableFooter>
+                        </Table>
+                    </TableContainer>
+                </>
             }
-
         </Container>
     );
 };

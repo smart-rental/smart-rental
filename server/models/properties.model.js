@@ -18,6 +18,7 @@ const propertiesModel = mongoose.Schema({
     description: { type: String },
     priceId: {type: String},
     ownerId: { type: String, required: true },
+    rent_payment_status: { type: String, required: true, default: "n/a" },
     tenant: { type: mongoose.Schema.Types.ObjectId, ref: User.User }
 });
 

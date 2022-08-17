@@ -23,8 +23,8 @@ const ListImage = ({
 
     return (
         <>
-            {selectedFiles.length > 0 ?
-                <ImageList sx={{ width, height }} cols={4} rowHeight={200}>
+            {selectedFiles.length > 0 &&
+                <ImageList sx={{ width, height }} cols={4} >
                     {selectedFiles && selectedFiles.map((image, index) => {
                         return (
                             <ImageListItem key={index}>
@@ -57,8 +57,7 @@ const ListImage = ({
                             </ImageListItem>
                         );
                     })}
-                </ImageList>
-                : ""}
+                </ImageList>}
         </>
     );
 };

@@ -20,7 +20,7 @@ import Signin from "./pages/Signin/signin";
 import LandlordHome from "./pages/LandlordHome/LandlordHome";
 import RenterHome from "./pages/RenterHome/RenterHome";
 import Applications from "./pages/Applications/Applications";
-import LandlordPaymentSetup from "./pages/Payment/LandlordPaymentSetup";
+import Profile from "./pages/Profile/Profile";
 
 const App = function () { 
     return (
@@ -47,7 +47,7 @@ const App = function () {
                                 <Route path="/addIssue/:tenantId" element={<AddIssue/>}/>
                                 <Route path="/editIssue/:tenantId/:issueId" element={<EditIssue/>}/>
                                 <Route path="/applications/:propertyId" element={<Applications/>}/>
-                                <Route path="/stripejs/:ownerId" element={<LandlordPaymentSetup/>}/>
+                                <Route path="/profile/:ownerId" element={<Profile/>}/>
                             </Route>
                         </Routes>
                     </ThemeProvider>

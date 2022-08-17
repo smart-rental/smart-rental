@@ -25,5 +25,33 @@ router.post("/", async(req, res) => {
     } catch(e) {
         res.status(500).send({ error: e.message });
     }
-})
+});
+
+router.patch("/:id", async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { name, email, phoneNumber, password } = req.body;
+        if (password) {
+            const salt = await bcrypt.genSalt(Number(process.env.SALT));
+            const hashPassword = await bcrypt.hash(password, salt);
+            const user = await User.findByIdAndUpdate(id, {
+                name,
+                email,
+                phoneNumber,
+                password: hashPassword
+            });
+            res.status(201).send({ message: "User profile updated successfully", user });
+        } else {
+            const user = await User.findByIdAndUpdate(id, {
+                name,
+                email,
+                phoneNumber,
+            });
+            res.status(201).send({ message: "User profile updated successfully", user });
+        }
+    } catch(e) {
+        res.status(500).send({ error: e.message });
+    }
+});
+
 export default router;

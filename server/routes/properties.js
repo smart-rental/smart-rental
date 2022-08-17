@@ -5,6 +5,7 @@ import express from "express";
 import imageHelper from "../middleware/imageHelper.js";
 import deleteImageHelper from "../middleware/deleteImageHelper.js";
 import Stripe from "stripe";
+import TenantCheckoutSessionModel from "../models/tenantCheckoutSession.model.js";
 
 const stripe = new Stripe('sk_test_51LAq93DVsFX5e9sJojJMIflKiw2CKP82HnyA9VxRKvuOVQ1dioE2UEKi6rBVPYefFmdWCrMG81PYs6SGHtqiPBWo00aPOfzEyN', {
     apiVersion: "2020-08-27"
@@ -65,8 +66,22 @@ router.get('/:ownerId/:propertyId', async (req, res) => {
 router.get('/:ownerId', async (req, res) => {
     try {
         const {ownerId} = req.params;
-        const property = await Property.find({ownerId});
-        res.json(property);
+        const properties = await Property.find({ownerId});
+        //Updates the 
+        const propertiesWithTenants =  properties.filter((property) => (property.tenant !== undefined));
+        propertiesWithTenants.map(async (property) => {
+            const tenantCheckoutSession = await TenantCheckoutSessionModel.findOne({ tenantId: property.tenant });
+            const { checkoutSessionId } = tenantCheckoutSession;
+            const session = await stripe.checkout.sessions.retrieve(
+                checkoutSessionId
+            );
+            const { payment_status } = session;
+            await Property.findOneAndUpdate({ tenant: property.tenant }, {
+                rent_payment_status: payment_status
+            });
+        });
+        const updatedProperties = await Property.find({ownerId});
+        res.json(updatedProperties);
     } catch (e) {
         res.status(400).json(`Error: ${e}`)
     }
@@ -109,58 +124,67 @@ router.post('/deleteTenant/:owner/:property', (req, res) => {
 router.post('/:id', upload.array("images", 7), async (req, res) => {
     try {
         const ownerId = req.params.id;
-        let images = [];
-        req.files.forEach(element => {
-            const file = {
-                fileName: element.originalname,
-                filePath: element.path,
-            }
-            images.push(file);
-        });
-        const { location, built, squareFeet, rent, capacity, parkingStalls, pets, utilities, bed, bath, post, description, tenant, amenities } = req.body;
-        const price = await stripe.prices.create({
-            unit_amount: rent * 100,
-            currency: 'usd',
-            recurring: {interval: 'month'},
-            product_data: {
-                name: location,
-                metadata: { 
-                    ownerId,
-                    location,
-                    built,
-                    squareFeet,
-                    capacity,
-                    parkingStalls,
-                    pets,
-                    utilities,
-                    bed,
-                    bath,
-                    post,
-                    description
+        // Check owner id is valid
+        const owner = await User.User.findById(ownerId);
+        const { userType } = owner;
+        if (userType === "Landlord") {
+            let images = [];
+            req.files.forEach(element => {
+                const file = {
+                    fileName: element.originalname,
+                    filePath: element.path,
                 }
-            },
-        });
-        const newProperty = new Property({
-            location,
-            built,
-            squareFeet,
-            images,
-            amenities,
-            rent,
-            capacity,
-            parkingStalls,
-            pets,
-            utilities,
-            bed,
-            bath,
-            post,
-            description,
-            ownerId,
-            tenant,
-            priceId: price.id
-        });
-        const createProperty = await newProperty.save();
-        res.json(createProperty);
+                images.push(file);
+            });
+            const { location, built, squareFeet, rent, capacity, parkingStalls, pets, utilities, bed, bath, post, description, tenant, amenities } = req.body;
+            const price = await stripe.prices.create({
+                unit_amount: rent * 100,
+                currency: 'usd',
+                recurring: {interval: 'month'},
+                product_data: {
+                    name: location,
+                    metadata: {
+                        ownerId,
+                        location,
+                        built,
+                        squareFeet,
+                        capacity,
+                        parkingStalls,
+                        pets,
+                        utilities,
+                        bed,
+                        bath,
+                        post,
+                        description
+                    }}
+            });
+            const newProperty = new Property({
+                location,
+                built,
+                squareFeet,
+                amenities,
+                images,
+                rent,
+                capacity,
+                parkingStalls,
+                pets,
+                utilities,
+                bed,
+                bath,
+                post,
+                description,
+                ownerId,
+                tenant,
+                priceId: price.id
+            });
+            const createProperty = await newProperty.save();
+            res.json(createProperty);
+        } else { 
+            res.status(404).json({
+                message: "owner does not exist"
+            })
+        }
+       
     } catch(e) {
         res.status(400).json(e);
     }
@@ -194,31 +218,64 @@ router.patch('/update/:ownerId/:id', upload.array('images', 7), async (req, res)
             }
             fileArray.push(file);
         });
-        const { location, built, squareFeet, amenities, rent, capacity, parkingStalls, pets, utilities, bed, bath, post, description, indexToDelete, priceId } = req.body;
+        const { location, built, squareFeet, amenities, rent, capacity, parkingStalls, pets, utilities, bed, bath, post, description, indexToDelete } = req.body;
         const property = await Property.findById(id);
         //Find property by the id and update it
-        const updatedProperty = await Property.findByIdAndUpdate(id, {
-            location,
-            built,
-            squareFeet,
-            images: indexToDelete == null ? imageHelper(fileArray, property.images) : deleteImageHelper(property.images, indexToDelete, fileArray),
-            amenities,
-            rent,
-            capacity,
-            parkingStalls,
-            pets,
-            utilities,
-            bed,
-            bath,
-            post,
-            description,
-            priceId,
-            ownerId
-        })
-        //return the updated property as json
-        res.json(updatedProperty);
+        if (property.priceId) {
+            await stripe.prices.update(
+                property.priceId,
+                {active: false}
+            );
+            const updatePrice = await stripe.prices.create({
+                unit_amount: rent * 100,
+                currency: 'usd',
+                recurring: {interval: 'month'},
+                product_data: {
+                    name: location,
+                    metadata: {
+                        ownerId,
+                        location,
+                        built,
+                        squareFeet,
+                        capacity,
+                        parkingStalls,
+                        pets,
+                        utilities,
+                        bed,
+                        bath,
+                        post,
+                        description
+                    }}
+            });
+            const priceId = updatePrice.id;
+            const updatedProperty = await Property.findByIdAndUpdate(id, {
+                location,
+                built,
+                squareFeet,
+                images: indexToDelete == null ? imageHelper(fileArray, property.images) : deleteImageHelper(property.images, indexToDelete, fileArray),
+                amenities,
+                rent,
+                capacity,
+                parkingStalls,
+                pets,
+                utilities,
+                bed,
+                bath,
+                post,
+                description,
+                priceId,
+                ownerId
+            })
+            //return the updated property as json
+            res.json(updatedProperty);
+        } else { 
+            res.status(404).json({
+                message: "priceId missing"
+            })
+        }
     } catch(e) {
         console.log(e);
+        res.status(400).json(e);
     }
 });
 

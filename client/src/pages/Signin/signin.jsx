@@ -76,6 +76,7 @@ const SignIn = () => {
                 navigate(`/`);
                 dispatch(authActions.actions.login(userInfo._id)); 
                 dispatch(userActions.actions.setUserType(userInfo.userType));
+                dispatch(userActions.actions.setUserData(userInfo));
             })
             .catch(() => Swal.fire("Try Again", "It seems you have entered the wrong password or email", "error"));
     };

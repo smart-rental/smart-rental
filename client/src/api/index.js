@@ -8,6 +8,7 @@ export const createUser = (userInfo) => axios.post(`${url}/users`, userInfo);
 export const getUsers = () => axios.get(`${url}/auth`);
 export const getUser = (userId) => axios.get(`${url}/auth/${userId}`);
 export const validateUser = (userInfo) => axios.post(`${url}/auth`, userInfo);
+export const updateUser = (id, userInfo) => axios.patch(`${url}/users/${id}`, userInfo)
 // Property
 export const addProperty = (id, propertyToAdd) => axios.post(`${url}/property/${id}`, propertyToAdd);
 export const getProperties = (id) => axios.get( `${url}/property/${id}`);
@@ -30,7 +31,12 @@ export const updateIssue = (issueId, issueToEdit) => axios.patch(`${url}/issue/u
 export const retrieveApplication = (propertyId) => axios.get(`${url}/application/${propertyId}`);
 export const addApplication = (propertyId, application) => axios.post(`${url}/application/apply/${propertyId}`, application);
 export const deleteApplication = (applicationId) => axios.delete(`${url}/application/delete/${applicationId}`);
-
+//Stripe
+export const stripeAccountDeletion = (ownerId) => axios.delete(`${url}/connect/delete/${ownerId}`);
+export const stripeAccountCreation = (ownerId) => axios.post(`${url}/connect/${ownerId}`);
+export const stripeAutoPaymentCreation = (userId) => axios.post(`${url}/connect/checkout-session/${userId}`);
+export const stripeAutoPaymentDeletion = (userId) => axios.delete(`${url}/connect/${userId}`);
+export const stripeCheckoutRetrieval = (userId) => axios.get(`${url}/connect/retrieve-checkout-session/${userId}`);
 //Google Maps
 export const getGeocode = (address) => axios.get(`${googleAPIUrl}`, {
     params: {

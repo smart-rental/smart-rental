@@ -98,8 +98,6 @@ const HouseCardMap = () => {
         };
     }, [ownerId, propertyId]);
 
-    console.log(amenities);
-
     return (
         <Container sx={{ width: "100%", height: "93vh", mt: 2 }}>
             <div style={{ width: "100%", display: "flex", justifyContent: "center", alignItems: "center" }}>

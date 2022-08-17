@@ -64,8 +64,7 @@ const AddTenant = () => {
             .then(() => {
                 Swal.fire("Congratulations", "The tenant has been removed", "success").then(reset);
             })
-            .catch((e) => {
-                console.log(e);
+            .catch(() => {
                 Swal.fire("Try Again", "There was an error removing the tenant", "error");
             });
     };
