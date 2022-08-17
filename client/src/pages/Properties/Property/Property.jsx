@@ -29,8 +29,6 @@ const Property = ({property: { _id, location, built, squareFeet, rent, capacity,
         }
     }
 
-    //Move this to the backend
-    //This finds a user that matches the tenant id
     const displayTenant = () => {
         let isTenant = null;
         if (tenant) {

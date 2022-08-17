@@ -1,15 +1,14 @@
 import * as React from "react";
+import { useEffect, useState } from "react";
 import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import { useEffect, useState } from "react";
 import { deleteProperty, getProperties, getUsers } from "../../api";
 import Property from "./Property/Property";
 import Swal from "sweetalert2";
-import { tableCellClasses, TableFooter, TablePagination, Typography } from "@mui/material";
+import { TableFooter, TablePagination, Typography } from "@mui/material";
 import Container from "@mui/material/Container";
 import { useSelector } from "react-redux";
 

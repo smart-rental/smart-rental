@@ -1,12 +1,5 @@
 import React, { useState } from "react";
-import {
-    Grid,
-    Paper,
-    Avatar,
-    TextField,
-    Button,
-    Typography
-} from "@mui/material";
+import { Avatar, Button, Grid, TextField, Typography } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
 import HouseIcon from "@mui/icons-material/House";
 import Swal from "sweetalert2";

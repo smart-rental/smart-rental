@@ -8,10 +8,8 @@ const Houses = () => {
     const [properties, setProperties] = useState([]);
     const [numberOfPages, setNumberOfPages] = useState(0);
     const [pageNumber, setPageNumber] = useState(0);
-    const [loading, setLoading] = useState(false);
     const pages = new Array(numberOfPages).fill(null).map((v, i) => i);
     useEffect(() => {
-        setLoading(true);
         getAllProperties(pageNumber)
             .then((res) => {
                 setProperties(res.data.property);
@@ -26,30 +24,30 @@ const Houses = () => {
 
     const handlePageChange = (event, value) => {
         setPageNumber(value - 1);
-    }
-    
+    };
+
     return (
         <>
-            <Grid container 
-                  style={{marginTop: "20px"}} 
-                  justifyContent="center" 
+            <Grid container
+                  style={{ marginTop: "20px" }}
+                  justifyContent="center"
                   alignItems="center"
                   direction="column"
                   spacing={2}
             >
-                    {properties ? properties.map((propertyInfo, index) => {
-                        return (
-                            <Grid item minWidth={1000} key={index}>
-                                <HouseCard propertyInfo={propertyInfo}/>
-                            </Grid>
-                        );
-                    }) : ""}
+                {properties ? properties.map((propertyInfo, index) => {
+                    return (
+                        <Grid item minWidth={1000} key={index}>
+                            <HouseCard propertyInfo={propertyInfo}/>
+                        </Grid>
+                    );
+                }) : ""}
                 <Grid item>
-                    <Pagination onChange={handlePageChange} count={pages.length} variant="outlined" color="primary" />
+                    <Pagination onChange={handlePageChange} count={pages.length} variant="outlined" color="primary"/>
                 </Grid>
             </Grid>
         </>
-    )
-}
+    );
+};
 
 export default Houses;

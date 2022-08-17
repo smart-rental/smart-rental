@@ -1,12 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-    Grid,
-    Paper,
-    Avatar,
-    TextField,
-    Button,
-    Typography
-} from "@mui/material";
+import { Avatar, Button, Grid, TextField, Typography } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
 import HouseIcon from "@mui/icons-material/House";
 import Swal from "sweetalert2";
@@ -29,11 +22,6 @@ const EditTenant = () => {
                 console.log(e);
             });
     }, [ownerId, propertyId]);
-
-    const paperStyle = {
-        padding: 20,
-        margin: "20px auto"
-    };
 
     const avatarStyle = {
         backgroundColor: "#26a69a"

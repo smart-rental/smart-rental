@@ -1,18 +1,7 @@
 import React, { useEffect, useState } from "react";
-import {
-    Card,
-    CardContent,
-    Divider,
-    Grid,
-    List,
-    ListItem,
-    ListItemIcon,
-    ListItemText,
-    Stack,
-    Typography
-} from "@mui/material";
+import { Divider, List, ListItem, ListItemIcon, ListItemText, Stack, Typography } from "@mui/material";
 import { useParams } from "react-router-dom";
-import { getPropertyByID, getUser, getUsers } from "../../../api";
+import { getPropertyByID, getUser } from "../../../api";
 import Gallery from "../../../components/Gallery/Gallery";
 import Map from "../../../components/Map/Map";
 import PlaceIcon from "@mui/icons-material/Place";

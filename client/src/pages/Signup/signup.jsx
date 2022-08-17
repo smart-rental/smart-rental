@@ -1,18 +1,21 @@
 import React, { useState } from "react";
 import {
-    Grid,
-    Paper,
     Avatar,
     Button,
-    Typography,
+    FormControl,
+    FormControlLabel,
+    FormLabel,
+    Grid,
+    Paper,
     Radio,
-    FormControl, FormControlLabel, RadioGroup, FormLabel, TextField
+    RadioGroup,
+    TextField,
+    Typography
 } from "@mui/material";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import IconButton from "@mui/material/IconButton";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
-import { useNavigate } from "react-router-dom";
 import { createUser, getUsers } from "../../api";
 import Swal from "sweetalert2";
 import classes from "./styles";
@@ -20,7 +23,7 @@ import { useDispatch } from "react-redux";
 import authActions from "../../Store/slices/auth-slice";
 import userActions from "../../Store/slices/users-slice";
 import PhoneInput from "react-phone-input-2";
-import 'react-phone-input-2/lib/material.css'
+import "react-phone-input-2/lib/material.css";
 
 const Signup = () => {
     const { paper, avatar, link, topMargin } = classes;
@@ -95,8 +98,6 @@ const Signup = () => {
                 }
             });
     };
-
-    console.log(values.phoneNumber.length);
 
     return (
         <form onSubmit={submitLogin}>
