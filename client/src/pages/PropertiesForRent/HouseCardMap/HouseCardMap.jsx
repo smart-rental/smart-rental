@@ -141,7 +141,7 @@ const HouseCardMap = () => {
             <Typography variant="h6" component="h2" sx={{ mt: 2 }}>
                 Property Information
             </Typography>
-            <List component={Stack} direction="row" spacing={4} alignItems="center" justifyConten="center">
+            <List component={Stack} direction="row" spacing={4} alignItems="center" justifyContent="center">
                 <ListItem>
                     <ListItemIcon>
                         <PeopleOutlineIcon/>

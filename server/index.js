@@ -42,6 +42,10 @@ mongoose.connection.once('open', () => {
     console.log("MongoDB server has established a connection");
 });
 
+if (process.env.NODE_ENV === "production") { 
+    app.use(express.static('client/build'));
+}
+
 mongoose.connect(CONNECTION_URL)
     .then(() => app.listen(PORT, () => console.log(`Server Running on Port: http://localhost:${PORT}`)))
     .catch((error) => console.log(`${error} did not connect`));

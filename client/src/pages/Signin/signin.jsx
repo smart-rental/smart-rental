@@ -2,11 +2,7 @@ import React, { useEffect, useState } from "react";
 import {
     Avatar,
     Button,
-    FormControl,
     Grid,
-    InputAdornment,
-    InputLabel,
-    OutlinedInput,
     Paper, TextField,
     Typography
 } from "@mui/material";
@@ -22,7 +18,7 @@ import userActions from "../../Store/slices/users-slice";
 import Swal from "sweetalert2";
 
 const SignIn = () => {
-    const { paper, avatar, link, btnStyle, formControl } = classes;
+    const { paper, avatar, link, btnStyle } = classes;
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const [values, setValues] = useState({

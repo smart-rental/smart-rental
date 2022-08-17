@@ -5,10 +5,8 @@ import {
     Avatar,
     Button,
     Typography,
-    InputAdornment,
-    OutlinedInput,
     Radio,
-    InputLabel, FormControl, FormControlLabel, RadioGroup, FormLabel, TextField
+    FormControl, FormControlLabel, RadioGroup, FormLabel, TextField
 } from "@mui/material";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { Link } from "react-router-dom";
@@ -25,7 +23,7 @@ import PhoneInput from "react-phone-input-2";
 import 'react-phone-input-2/lib/material.css'
 
 const Signup = () => {
-    const { paper, avatar, link, topMargin, formControl } = classes;
+    const { paper, avatar, link, topMargin } = classes;
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const [values, setValues] = useState({
