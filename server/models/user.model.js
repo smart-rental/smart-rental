@@ -6,7 +6,7 @@ import passwordComplexity from "joi-password-complexity";
 const userModel = mongoose.Schema({
     name: { type: String, required: true },
     email: { type: String, required: true },
-    phoneNumber: { type: Number, required: true },
+    phoneNumber: { type: String, required: true },
     password: { type: String, required: true },
     userType: { type: String, required: true },
     stripe_account: { type: String }
@@ -22,7 +22,7 @@ export const validate = (data) => {
     const schema = joi.object({
         name: joi.string().required().label("name"),
         email: joi.string().required().email({ tlds: { allow: true } }),
-        phoneNumber: joi.number().required().label("phoneNumber"),
+        phoneNumber: joi.string().required().label("phoneNumber"),
         password: passwordComplexity().required().label("password"),
         userType: joi.string().required().label("usertype"),
     });

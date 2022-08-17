@@ -19,13 +19,13 @@ const Properties = () => {
     const [users, setUsers] = useState([]);
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
-    const handleChangePage = (event, newPage) => { 
+    const handleChangePage = (event, newPage) => {
         setPage(newPage);
-    }
-    const handleChangeRowsPerPage = (event) => { 
+    };
+    const handleChangeRowsPerPage = (event) => {
         setRowsPerPage(parseInt(event.target.value, 10));
         setPage(0);
-    }
+    };
     const landlordId = useSelector((state) => state.auth.isLoggedIn);
     useEffect(() => {
         getProperties(landlordId)
@@ -33,7 +33,8 @@ const Properties = () => {
                 setProperties(res.data);
             })
             .catch((e) => {
-                console.log(e);});
+                console.log(e);
+            });
         getUsers()
             .then((res) => {
                 setUsers(res.data);
@@ -56,17 +57,13 @@ const Properties = () => {
         <Container maxWidth="125rem">
             {properties === [] ?
                 <Typography variant="h4" align="center"><b>No properties to manage</b></Typography>
-                : 
+                :
                 <>
                     <TableContainer>
-                        <Table sx={{
-                            [`& .${tableCellClasses.root}`]: {
-                                borderBottom: "0.5px solid"
-                            }
-                        }} aria-label="simple table">
+                        <Table aria-label="simple table">
                             <TableHead>
                                 <TableRow>
-                                    <TableCell style={{ borderBottom: "none" }} align="center" colSpan={30}>
+                                    <TableCell style={{borderBottom: "none"}} align="center" colSpan={30}>
                                         <Typography variant="h4">
                                             <b>Manage Properties</b>
                                         </Typography>
@@ -88,17 +85,15 @@ const Properties = () => {
                                     <TableCell align="center"></TableCell>
                                 </TableRow>
                             </TableHead>
-                                <TableBody>
-                                    {properties
-                                        .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                                        .map((property) => (
-                                            <Property property={property} landlordId={landlordId} users={users}
-                                                      removeProperty={removeProperty}
-                                                      key={property._id}/>
-                                        ))}
-                                </TableBody>
+                            {properties
+                                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                .map((property) => (
+                                    <Property property={property} landlordId={landlordId} users={users}
+                                              removeProperty={removeProperty}
+                                              key={property._id}/>
+                                ))}
                             <TableFooter>
-                                <TablePagination count={properties.length}
+                                <TablePagination sx={{borderBottom: "none"}} count={properties.length}
                                                  onPageChange={(event, page) => handleChangePage(event, page)}
                                                  onRowsPerPageChange={handleChangeRowsPerPage}
                                                  page={page}

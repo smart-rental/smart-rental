@@ -11,6 +11,7 @@ import Kebab from "../../../components/Kebab/Kebab";
 import DescriptionIcon from '@mui/icons-material/Description';
 import BugReportIcon from '@mui/icons-material/BugReport';
 import { Chip } from "@mui/material";
+import TableBody from "@mui/material/TableBody";
 
 const Property = ({property: { _id, location, built, squareFeet, rent, capacity, parkingStalls, pets, utilities, bed, bath, tenant, rent_payment_status }, landlordId, removeProperty, users}) => {
     const checkOrX = (bool) => {
@@ -18,7 +19,6 @@ const Property = ({property: { _id, location, built, squareFeet, rent, capacity,
     }
     
     const renderPaymentStatus = () => {
-        console.log(rent_payment_status);
         switch(rent_payment_status) {
             case "paid":
                 return (<Chip label={rent_payment_status} color="success"/>)
@@ -74,30 +74,33 @@ const Property = ({property: { _id, location, built, squareFeet, rent, capacity,
     }
 
     return(
-        <TableRow
-            sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-        >
-            <TableCell align="center" component="th" scope="row">
-                {location}
-            </TableCell>
-            <TableCell align="center">{dateToString()}</TableCell>
-            <TableCell align="center">{squareFeet}</TableCell>
-            <TableCell align="center">${rent}</TableCell>
-            <TableCell align="center">{capacity}</TableCell>
-            <TableCell align="center">{parkingStalls}</TableCell>
-            <TableCell align="center">{bed}</TableCell>
-            <TableCell align="center">{bath}</TableCell>
-            <TableCell align="center">{checkOrX(pets)}</TableCell>
-            <TableCell align="center">{utilities}</TableCell>
-            <TableCell align="center">{renderPaymentStatus()}</TableCell>
-            <TableCell align="center"><DeleteForeverIcon style={{color: "#cc0000"}} onClick={() => {
-                removeProperty(_id);}}/></TableCell>
-            <TableCell align="center">
-                <Kebab
-                    options={options}
-                />
-            </TableCell>
-        </TableRow>
+        <TableBody>
+            <TableRow
+                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+            >
+                <TableCell align="center" component="th" scope="row">
+                    {location}
+                </TableCell>
+                <TableCell align="center">{dateToString()}</TableCell>
+                <TableCell align="center">{squareFeet}</TableCell>
+                <TableCell align="center">${rent}</TableCell>
+                <TableCell align="center">{capacity}</TableCell>
+                <TableCell align="center">{parkingStalls}</TableCell>
+                <TableCell align="center">{bed}</TableCell>
+                <TableCell align="center">{bath}</TableCell>
+                <TableCell align="center">{checkOrX(pets)}</TableCell>
+                <TableCell align="center">{utilities}</TableCell>
+                <TableCell align="center">{renderPaymentStatus()}</TableCell>
+                <TableCell align="center"><DeleteForeverIcon style={{color: "#cc0000"}} onClick={() => {
+                    removeProperty(_id);}}/></TableCell>
+                <TableCell align="center">
+                    <Kebab
+                        options={options}
+                    />
+                </TableCell>
+            </TableRow>
+        </TableBody>
+        
     );
 }
 

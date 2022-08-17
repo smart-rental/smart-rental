@@ -16,21 +16,25 @@ const Home = () => {
             }}>
                 <Grid container alignItems="center" justifyContent="center" spacing={10}>
                     <Grid item>
-                        <Typography fontFamily="Noto Sans" variant="h4">
+                        <Typography sx={{mb: 2}} fontFamily="Noto Sans" variant="h4">
                             Your one stop shop for all your rental needs
                         </Typography>
                         <Typography fontFamily="Noto Sans">
-                            Manage your rental properties for Free
+                            Manage your rental properties for Free.
                         </Typography>
                         <Typography fontFamily="Noto Sans">
-                            One of the easiest ways to <span style={{color: "darkblue"}}>market your rental property</span>,
+                            One of the easiest ways to <span
+                            style={{ color: "darkblue" }}>market your rental property</span>,
                             <br/>
-                             <span style={{color: "darkblue"}}>manage issues from tenants</span>, and <span style={{color: "darkblue"}}>collect rents online</span>
+                            <span style={{ color: "darkblue" }}>manage issues from tenants</span>, and <span
+                            style={{ color: "darkblue" }}>collect rents online</span>.
                         </Typography>
                         <Typography fontFamily="Noto Sans">
-                            Easily manage properties right from home
+                            Easily manage properties right from home.
                         </Typography>
-                        <Button variant="contained" onClick={() => {navigate("/signup")}}>
+                        <Button variant="contained" sx={{mt: 2}} onClick={() => {
+                            navigate("/signup");
+                        }}>
                             <Typography fontFamily="Noto Sans">
                                 Create my free account
                             </Typography>
@@ -44,7 +48,7 @@ const Home = () => {
                                 height: 500,
                                 width: 700,
                                 maxHeight: { xs: 233, md: 500 },
-                                maxWidth: { xs: 350, md: 700 },
+                                maxWidth: { xs: 350, md: 700 }
                             }}
                             src="../../../images/wfh.png"
                         />
@@ -62,12 +66,12 @@ const Home = () => {
             }}>
                 <Grid>
                     <Grid item>
-                        <Typography style={{color: "white"}} fontFamily="Noto Sans" variant="h4">
+                        <Typography style={{ color: "white" }} fontFamily="Noto Sans" variant="h4">
                             Say GoodBye to vacant homes!
                         </Typography>
-                        <Typography style={{color: "white"}} variant="h5" fontFamily="Noto Sans">
+                        <Typography style={{ color: "white" }} variant="h5" fontFamily="Noto Sans">
                             Create professional rental listings instantly.
-                            Manage hundreds of properties easily. 
+                            Manage hundreds of properties easily.
                         </Typography>
                     </Grid>
                     <Grid item>
@@ -78,7 +82,7 @@ const Home = () => {
                                 height: 500,
                                 width: 700,
                                 maxHeight: { xs: 233, md: 500 },
-                                maxWidth: { xs: 350, md: 600 },
+                                maxWidth: { xs: 350, md: 600 }
                             }}
                             src="../../../images/rentFamily.png"
                         />
@@ -98,35 +102,34 @@ const Home = () => {
                         <Typography variant="h4" fontFamily="Noto Sans">
                             Renters
                         </Typography>
-                        <List>
-                            <ListItem>
+                        <ul>
+                            <li>
                                 <Typography fontFamily="Noto Sans">
                                     Find hundreds of properties
                                 </Typography>
-                            </ListItem>
-                            <ListItem>
+                            </li>
+                            <li>
                                 <Typography fontFamily="Noto Sans">
-                                    Easily create and manage issues through our kanban style board to quickly address plumbing, electricity, or anything else
+                                    Easily create and manage issues through our kanban style board to quickly address
+                                    plumbing, electricity, or anything else
                                 </Typography>
-                            </ListItem>
-                            <ListItem>
-                                <Typography  fontFamily="Noto Sans">
+                            </li>
+                            <li>
+                                <Typography fontFamily="Noto Sans">
                                     Never miss a rental payment again with our auto payment feature
                                 </Typography>
-                            </ListItem>
-                            <ListItem>
-                                <Typography  fontFamily="Noto Sans">
+                            </li>
+                            <li>
+                                <Typography fontFamily="Noto Sans">
                                     Applying to homes has never been more easier!
                                 </Typography>
-                            </ListItem>
-                            <ListItem>
-                                <Button variant="contained" onClick={() => navigate("/house")}>
-                                    <Typography fontFamily="Noto Sans">
-                                        Start finding your dream home
-                                    </Typography>
-                                </Button>
-                            </ListItem>
-                        </List>
+                            </li>
+                        </ul>
+                        <Button variant="contained" onClick={() => navigate("/house")}>
+                            <Typography fontFamily="Noto Sans">
+                                Start finding your dream home
+                            </Typography>
+                        </Button>
                     </Grid>
                     <Grid item>
                         <Box
@@ -136,7 +139,7 @@ const Home = () => {
                                 height: 500,
                                 width: 700,
                                 maxHeight: { xs: 233, md: 500 },
-                                maxWidth: { xs: 350, md: 600 },
+                                maxWidth: { xs: 350, md: 600 }
                             }}
                             src="../../../images/kanban.png"
                         />

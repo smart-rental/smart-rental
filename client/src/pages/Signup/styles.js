@@ -2,7 +2,7 @@ const styles = ({
     paper: {
         padding: 20,
         height: "70vh",
-        width: 280,
+        width: 340,
         margin: "20px auto"
     },
 

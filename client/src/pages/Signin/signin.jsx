@@ -7,16 +7,16 @@ import {
     InputAdornment,
     InputLabel,
     OutlinedInput,
-    Paper,
+    Paper, TextField,
     Typography
 } from "@mui/material";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { Link, useNavigate } from "react-router-dom";
 import IconButton from "@mui/material/IconButton";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
-import { getUser, getUsers, validateUser } from "../../api";
+import { getUsers, validateUser } from "../../api";
 import classes from "./styles";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import authActions from "../../Store/slices/auth-slice";
 import userActions from "../../Store/slices/users-slice";
 import Swal from "sweetalert2";
@@ -55,9 +55,10 @@ const SignIn = () => {
         event.preventDefault();
     };
 
-    const handleChange = (prop) => (event) => {
-        setValues({ ...values, [prop]: event.target.value });
-    };
+    const handleChange = (event) => { 
+        const { name, value } = event.target;
+        setValues(prevState => ({...prevState, [name]: value}));
+    }
 
     const submitLogin = (e) => {
         e.preventDefault();
@@ -70,10 +71,7 @@ const SignIn = () => {
         //Call the backend
         validateUser(userCredentials)
             .then(() => {
-                getUser(userInfo._id).then((user) => {
-                    user.userType === "Landlord" ? navigate(`/landlord`) : navigate(`/tenant`);
-                })
-                navigate(`/`);
+                navigate(`/profile/${userInfo._id}`);
                 dispatch(authActions.actions.login(userInfo._id)); 
                 dispatch(userActions.actions.setUserType(userInfo.userType));
                 dispatch(userActions.actions.setUserData(userInfo));
@@ -89,28 +87,17 @@ const SignIn = () => {
                         <Avatar style={avatar}><LockOutlinedIcon/></Avatar>
                         <Typography variant="h5" fontFamily="Noto Sans">Sign in</Typography>
                     </Grid>
-                    <FormControl style={formControl} fullWidth>
-                        <InputLabel htmlFor="outlined-adornment-password">Email</InputLabel>
-                        <OutlinedInput variant="standard" value={values.email} onChange={handleChange("email")}
-                                       label="Email" placeholder="Enter email" fullWidth required/>
-                    </FormControl>
-                    <FormControl fullWidth>
-                        <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
-                        <OutlinedInput variant="standard" value={values.password} onChange={handleChange("password")}
-                                       label="Password" placeholder="Enter password"
-                                       type={values.showPassword ? "text" : "password"} endAdornment={
-                            <InputAdornment position="end">
-                                <IconButton
-                                    aria-label="toggle password visibility"
-                                    onClick={handleClickShowPassword}
-                                    onMouseDown={handleMouseDownPassword}
-                                    edge="end"
-                                >
-                                    {values.showPassword ? <VisibilityOff/> : <Visibility/>}
-                                </IconButton>
-                            </InputAdornment>
-                        } fullWidth required/>
-                    </FormControl>
+                    <TextField sx={{mt: 2}} label="Email" name="email" type="email" value={values.email} onChange={handleChange} fullWidth InputLabelProps={{ shrink: true }}/>
+                    <TextField sx={{mt: 2}} label="Password" name="password" value={values.password} type={values.showPassword ? "text" : "password"} onChange={handleChange} fullWidth InputLabelProps={{ shrink: true }} InputProps={{endAdornment:
+                            <IconButton
+                                aria-label="toggle password visibility"
+                                onClick={handleClickShowPassword}
+                                onMouseDown={handleMouseDownPassword}
+                                edge="end"
+                            >
+                                {values.showPassword ? <VisibilityOff/> : <Visibility/>}
+                            </IconButton>
+                    }}/>
                     <Button type="submit" color="primary" variant="contained" style={btnStyle} fullWidth>
                         <Typography
                             fontFamily="Noto Sans"

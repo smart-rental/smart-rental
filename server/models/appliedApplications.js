@@ -5,7 +5,7 @@ const appliedApplicationsModel = mongoose.Schema({
     name: {type: String, required: true},
     email: {type: String, required: true},
     occupation: {type: String, required: true},
-    phoneNumber: {type: Number, required: true},
+    phoneNumber: {type: String, required: true},
     monthlyIncome: {type: Number, required: true},
     animals: {type: Number, required: true},
     vehicles: {type: Number, required: true},

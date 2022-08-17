@@ -6,6 +6,7 @@ import Typography from "@mui/material/Typography";
 import { addApplication } from "../../api";
 import { useParams } from "react-router-dom";
 import Swal from "sweetalert2";
+import PhoneInput from "react-phone-input-2";
 
 const EasyApplyModal = ({ handleClose, open }) => {
     const { propertyId } = useParams();
@@ -106,8 +107,14 @@ const EasyApplyModal = ({ handleClose, open }) => {
                     </Stack>
                     <Stack direction="row" spacing={1} sx={{mt: 2}}>
                         <TextField name="email" value={email} onChange={handleChange} fullWidth InputLabelProps={{ shrink: true }} label="Email" type="email"/>
-                        <TextField name="phoneNumber" value={phoneNumber} onChange={handleChange} fullWidth InputLabelProps={{ shrink: true }} label="Phone Number" type="number"/>
-                    </Stack>
+                        <PhoneInput
+                            country={'us'}
+                            style={{width: 400}}
+                            value={phoneNumber}
+                            disableDropdown
+                            onlyCountries={['us']}
+                            onChange={phone => setApplication((prevState) => ({...prevState, ["phoneNumber"]: phone}))}
+                        />                    </Stack>
                     <Typography variant="h6" component="h2" sx={{mt: 2}}>
                         Personal Information
                     </Typography>

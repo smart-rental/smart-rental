@@ -8,7 +8,7 @@ import {
     InputAdornment,
     OutlinedInput,
     Radio,
-    InputLabel, FormControl, FormControlLabel, RadioGroup, FormLabel
+    InputLabel, FormControl, FormControlLabel, RadioGroup, FormLabel, TextField
 } from "@mui/material";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { Link } from "react-router-dom";
@@ -21,6 +21,8 @@ import classes from "./styles";
 import { useDispatch } from "react-redux";
 import authActions from "../../Store/slices/auth-slice";
 import userActions from "../../Store/slices/users-slice";
+import PhoneInput from "react-phone-input-2";
+import 'react-phone-input-2/lib/material.css'
 
 const Signup = () => {
     const { paper, avatar, link, topMargin, formControl } = classes;
@@ -47,14 +49,15 @@ const Signup = () => {
         event.preventDefault();
     };
 
-    const handleChange = (prop) => (event) => {
-        setValues({ ...values, [prop]: event.target.value });
+    const handleChange = (event) => {
+        const { name, value } = event.target;
+        setValues((prevState) => ({...prevState, [name]: value}));
     };
 
     const retrieveNewUser = (userLogin) => {
         getUsers().then((response) => {
             let userInfo = response.data.find(users => users.email === userLogin.email);
-            navigate(`/`);
+            navigate(`/profile/${userInfo}`);
             dispatch(authActions.actions.login(userInfo._id));
             dispatch(userActions.actions.setUserType(userInfo.userType));
         });
@@ -95,6 +98,8 @@ const Signup = () => {
             });
     };
 
+    console.log(values.phoneNumber.length);
+
     return (
         <form onSubmit={submitLogin}>
             <Grid>
@@ -103,67 +108,46 @@ const Signup = () => {
                         <Avatar style={avatar}><LockOutlinedIcon/></Avatar>
                         <Typography variant="h5" fontFamily="Noto Sans">Sign up</Typography>
                     </Grid>
-                    <FormControl style={formControl} fullWidth>
-                        <InputLabel htmlFor="outlined-adornment-password">Email</InputLabel>
-                        <OutlinedInput variant="standard" value={values.email} onChange={handleChange("email")}
-                                       label="Email" placeholder="Enter email" fullWidth required/>
-                    </FormControl>
-                    <FormControl style={formControl} fullWidth>
-                        <InputLabel htmlFor="outlined-adornment-password">Name</InputLabel>
-                        <OutlinedInput variant="standard" value={values.name} onChange={handleChange("name")}
-                                       label="Name" placeholder="Enter name" fullWidth required/>
-                    </FormControl>
-                    <FormControl style={formControl} fullWidth>
-                        <InputLabel htmlFor="outlined-adornment-password">Phone</InputLabel>
-                        <OutlinedInput variant="standard" value={values.phoneNumber}
-                                       onChange={handleChange("phoneNumber")} label="Email"
-                                       placeholder="Enter phone number xxxxxxxxxx" fullWidth required/>
-                    </FormControl>
-                    <FormControl style={formControl} fullWidth>
-                        <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
-                        <OutlinedInput variant="standard" value={values.password} onChange={handleChange("password")}
-                                       label="Password" placeholder="Enter password"
-                                       type={values.showPassword ? "text" : "password"} endAdornment={
-                            <InputAdornment position="end">
-                                <IconButton
-                                    aria-label="toggle password visibility"
-                                    onClick={handleClickShowPassword}
-                                    onMouseDown={handleMouseDownPassword}
-                                    edge="end"
-                                >
-                                    {values.showPassword ? <VisibilityOff/> : <Visibility/>}
-                                </IconButton>
-                            </InputAdornment>
-                        } fullWidth required/>
-                    </FormControl>
-                    <FormControl style={formControl} fullWidth>
-                        <OutlinedInput variant="standard" value={values.confirmPassword}
-                                       onChange={handleChange("confirmPassword")} label="Password"
-                                       placeholder="Re-enter password" type={values.showPassword ? "text" : "password"}
-                                       endAdornment={
-                                           <InputAdornment position="end">
-                                               <IconButton
-                                                   aria-label="toggle password visibility"
-                                                   onClick={handleClickShowPassword}
-                                                   onMouseDown={handleMouseDownPassword}
-                                                   edge="end"
-                                               >
-                                                   {values.showPassword ? <VisibilityOff/> : <Visibility/>}
-                                               </IconButton>
-                                           </InputAdornment>
-                                       } fullWidth required/>
-                    </FormControl>
-                    <FormControl>
-                        <FormLabel id="demo-controlled-radio-buttons-group">UserType</FormLabel>
+                    <TextField label="Name" sx={{mt: 2}} values={values.name} name="name" onChange={handleChange} fullWidth InputLabelProps={{ shrink: true }}/>
+                    <TextField label="Email" sx={{mt: 2}} values={values.email} name="email" type="email" onChange={handleChange} fullWidth InputLabelProps={{ shrink: true }}/>
+                    <TextField label="Password" sx={{mt: 2}} values={values.password} name="password" onChange={handleChange} fullWidth InputLabelProps={{ shrink: true }} InputProps={{endAdornment:
+                            <IconButton
+                                aria-label="toggle password visibility"
+                                onClick={handleClickShowPassword}
+                                onMouseDown={handleMouseDownPassword}
+                                edge="end"
+                            >
+                                {values.showPassword ? <VisibilityOff/> : <Visibility/>}
+                            </IconButton>
+                    }}/>
+                    <TextField label="Re-Enter Password" sx={{mt: 2}} values={values.confirmPassword} name="confirmPassword" onChange={handleChange} fullWidth InputLabelProps={{ shrink: true }} InputProps={{endAdornment:
+                            <IconButton
+                                aria-label="toggle password visibility"
+                                onClick={handleClickShowPassword}
+                                onMouseDown={handleMouseDownPassword}
+                                edge="end"
+                            >
+                                {values.showPassword ? <VisibilityOff/> : <Visibility/>}
+                            </IconButton>
+                    }}/>
+                    <PhoneInput
+                        country={'us'}
+                        style={topMargin}
+                        value={values.phoneNumber}
+                        disableDropdown
+                        onlyCountries={['us']}
+                        onChange={phone => setValues((prevState) => ({...prevState, ["phoneNumber"]: phone}))}
+                    />
+                    <FormControl sx={{mt: 2}}>
+                        <FormLabel>User Type</FormLabel>
                         <RadioGroup
-                            aria-labelledby="demo-controlled-radio-buttons-group"
-                            name="controlled-radio-buttons-group"
-                            value={values.userType}
                             row
-                            onChange={handleChange("userType")}
+                            name="userType"
+                            value={values.userType}
+                            onChange={handleChange}
                         >
-                            <FormControlLabel value="Landlord" control={<Radio/>} label="Landlord"/>
-                            <FormControlLabel value="Tenant" control={<Radio/>} label="Tenant"/>
+                            <FormControlLabel value="Landlord" control={<Radio />} label="Landlord" />
+                            <FormControlLabel value="Tenant" control={<Radio />} label="Tenant" />
                         </RadioGroup>
                     </FormControl>
                     <Button type="submit" color="primary" variant="contained" style={topMargin}
