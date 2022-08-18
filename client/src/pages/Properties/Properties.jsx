@@ -8,13 +8,15 @@ import TableRow from "@mui/material/TableRow";
 import { deleteProperty, getProperties, getUsers } from "../../api";
 import Property from "./Property/Property";
 import Swal from "sweetalert2";
-import { TableFooter, TablePagination, Typography } from "@mui/material";
+import { Backdrop, CircularProgress, TableFooter, TablePagination, Typography } from "@mui/material";
 import Container from "@mui/material/Container";
 import { useSelector } from "react-redux";
+import TableBody from "@mui/material/TableBody";
 
 
 const Properties = () => {
     const [properties, setProperties] = useState([]);
+    const [loading, setLoading] = useState(true);
     const [users, setUsers] = useState([]);
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -27,17 +29,22 @@ const Properties = () => {
     };
     const landlordId = useSelector((state) => state.auth.isLoggedIn);
     useEffect(() => {
-        getProperties(landlordId)
-            .then((res) => {
-                setProperties(res.data);
-            })
-            .catch((e) => {
+        let isMounted = true;
+        const property = async () => {
+            try {
+                const result = await getProperties(landlordId);
+                const userResult = await getUsers();
+                setProperties(result.data);
+                setUsers(userResult.data);
+                setLoading(false);
+            } catch (e) {
                 console.log(e);
-            });
-        getUsers()
-            .then((res) => {
-                setUsers(res.data);
-            });
+            }
+        };
+        property();
+        return () => {
+            isMounted = false;
+        };
     }, [landlordId]);
 
     const removeProperty = (propertyId) => {
@@ -54,15 +61,17 @@ const Properties = () => {
 
     return (
         <Container maxWidth="125rem">
-            {properties === [] ?
-                <Typography variant="h4" align="center"><b>No properties to manage</b></Typography>
+            {loading ?
+                <Backdrop open={loading}>
+                    <CircularProgress color="primary"/>
+                </Backdrop>
                 :
                 <>
                     <TableContainer>
                         <Table aria-label="simple table">
                             <TableHead>
                                 <TableRow>
-                                    <TableCell style={{borderBottom: "none"}} align="center" colSpan={30}>
+                                    <TableCell style={{ borderBottom: "none" }} align="center" colSpan={30}>
                                         <Typography variant="h4">
                                             <b>Manage Properties</b>
                                         </Typography>
@@ -84,15 +93,17 @@ const Properties = () => {
                                     <TableCell align="center"></TableCell>
                                 </TableRow>
                             </TableHead>
-                            {properties
-                                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                                .map((property) => (
-                                    <Property property={property} landlordId={landlordId} users={users}
-                                              removeProperty={removeProperty}
-                                              key={property._id}/>
-                                ))}
+                            <TableBody>
+                                {properties
+                                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                    .map((property) => (
+                                        <Property property={property} landlordId={landlordId} users={users}
+                                                  removeProperty={removeProperty}
+                                                  key={property._id}/>
+                                    ))}
+                            </TableBody>
                             <TableFooter>
-                                <TablePagination sx={{borderBottom: "none"}} count={properties.length}
+                                <TablePagination sx={{ borderBottom: "none" }} count={properties.length}
                                                  onPageChange={(event, page) => handleChangePage(event, page)}
                                                  onRowsPerPageChange={handleChangeRowsPerPage}
                                                  page={page}
