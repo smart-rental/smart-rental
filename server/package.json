@@ -13,10 +13,7 @@
     "stripe": "^9.8.0"
   },
   "scripts": {
-    "start": "nodemon index.js",
-    "build": "cd client && npm run build",
-    "install-client": "cd client && npm install",
-    "heroku-postbuild": "npm run install-client && npm run build"
+    "start": "nodemon index.js"
   },
   "devDependencies": {
     "bcrypt": "^5.0.1",
