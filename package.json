@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "",
   "main": "server/index.js",
+  "engines": {
+    "node": "16.3.0"
+  },
   "scripts": {
     "build-client": "cd client && npm run build",
     "install-client": "cd client && npm install --legacy-peer-deps",
