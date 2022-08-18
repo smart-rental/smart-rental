@@ -7,7 +7,7 @@ import deleteImageHelper from "../middleware/deleteImageHelper.js";
 import Stripe from "stripe";
 import TenantCheckoutSessionModel from "../models/tenantCheckoutSession.model.js";
 
-const stripe = new Stripe('sk_test_51LAq93DVsFX5e9sJojJMIflKiw2CKP82HnyA9VxRKvuOVQ1dioE2UEKi6rBVPYefFmdWCrMG81PYs6SGHtqiPBWo00aPOfzEyN', {
+const stripe = new Stripe(process.env.STRIPE_KEY, {
     apiVersion: "2020-08-27"
 });
 

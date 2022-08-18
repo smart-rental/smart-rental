@@ -35,16 +35,12 @@ app.use('/api/connect', connectRouter);
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use("*", (req, res) => { res.status(404).json({ error: " Page Not found "})});
 
-const CONNECTION_URL = process.env.MONGOLAB_URI || "mongodb+srv://gavpeng:gavpeng7447@cluster0.vq4nk.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
+const CONNECTION_URL = process.env.MONGOLAB_URI;
 const PORT = process.env.PORT || 5000;
 
 mongoose.connection.once('open', () => {
     console.log("MongoDB server has established a connection");
 });
-
-if (process.env.NODE_ENV === "production") { 
-    app.use(express.static(path.join(__dirname, "client/build")));
-}
 
 mongoose.connect(CONNECTION_URL)
     .then(() => app.listen(PORT, () => console.log(`Server Running on Port: http://localhost:${PORT}`)))
