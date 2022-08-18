@@ -20,7 +20,6 @@ export const editProperty = (ownerId, id, propertyToEdit) => axios.patch( `${url
 export const addTenant = (ownerId, propertyId, tenantToAdd) => axios.post(`${url}/property/addTenant/${ownerId}/${propertyId}`, tenantToAdd);
 export const deleteTenant = (ownerId, propertyId) => axios.post(`${url}/property/deleteTenant/${ownerId}/${propertyId}`);
 //Issue
-export const retrieveAllIssues = () => axios.get(`${url}/issue`);
 export const retrieveIssues = (tenantId) => axios.get(`${url}/issue/${tenantId}`);
 export const retrieveIssue = (issueId) => axios.get(`${url}/issue/oneIssue/${issueId}`);
 export const retrieveIssueFromProperty = (propertyId) => axios.get(`${url}/issue/property/${propertyId}`);
@@ -36,7 +35,6 @@ export const stripeAccountDeletion = (ownerId) => axios.delete(`${url}/connect/d
 export const stripeAccountCreation = (ownerId) => axios.post(`${url}/connect/${ownerId}`);
 export const stripeAutoPaymentCreation = (userId) => axios.post(`${url}/connect/checkout-session/${userId}`);
 export const stripeAutoPaymentDeletion = (userId) => axios.delete(`${url}/connect/${userId}`);
-export const stripeCheckoutRetrieval = (userId) => axios.get(`${url}/connect/retrieve-checkout-session/${userId}`);
 //Google Maps
 export const getGeocode = (address) => axios.get(`${googleAPIUrl}`, {
     params: {

@@ -5,9 +5,8 @@
   "main": "server/index.js",
   "scripts": {
     "build-client": "cd client && npm run build",
-    "react-router-dom-download": "cd client && npm install -S react-router-dom --legacy-peer-deps",
     "install-client": "cd client && npm install --legacy-peer-deps",
-    "heroku-postbuild": "npm run install-client && npm run react-router-dom-download && npm run build-client"
+    "heroku-postbuild": "npm run install-client && npm run build-client"
   },
   "repository": {
     "type": "git",
