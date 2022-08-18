@@ -35,7 +35,7 @@ app.use('/api/connect', connectRouter);
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use("*", (req, res) => { res.status(404).json({ error: " Page Not found "})});
 
-const CONNECTION_URL = process.env.MONGOLAB_URI;
+const CONNECTION_URL = process.env.MONGOLAB_URI || "mongodb+srv://gavpeng:gavpeng7447@cluster0.vq4nk.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
 const PORT = process.env.PORT || 5000;
 
 mongoose.connection.once('open', () => {
