@@ -6,6 +6,9 @@ import imageHelper from "../middleware/imageHelper.js";
 import deleteImageHelper from "../middleware/deleteImageHelper.js";
 import Stripe from "stripe";
 import TenantCheckoutSessionModel from "../models/tenantCheckoutSession.model.js";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const stripe = new Stripe(process.env.STRIPE_KEY, {
     apiVersion: "2020-08-27"

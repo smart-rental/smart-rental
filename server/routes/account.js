@@ -3,6 +3,9 @@ import express from "express";
 import User from "../models/user.model.js";
 import Property from "../models/properties.model.js";
 import TenantCheckoutSessionModel from "../models/tenantCheckoutSession.model.js";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const stripe = new Stripe(process.env.STRIPE_KEY, {
     apiVersion: "2020-08-27"
@@ -60,12 +63,11 @@ router.post("/checkout-session/:userId", async (req, res) => {
                 res.status(400).json({ belongToProperty: false });
             }
         } else {
-            res.json({
+            res.status(400).json({
                 message: "stripe account created"
             });
         }
     } catch (e) {
-        console.log(e);
         res.status(400).json(e);
     }
 });
@@ -99,7 +101,7 @@ router.delete("/:userId", async (req, res) => {
 router.post("/:userId", async (req, res) => {
     try {
         const { userId } = req.params;
-        const user = await User.User.findOne({ userId });
+        const user = await User.User.findOne({ _id: userId });
         const { _id, name, phoneNumber, email, userType, stripe_account } = user;
         if (userType === "Landlord" && stripe_account === undefined) {
             const account = await stripe.accounts.create({
@@ -145,7 +147,7 @@ router.post("/:userId", async (req, res) => {
                 account
             });
         } else {
-            res.json({
+            res.status(400).json({
                 success: false,
                 message: "stripe account already created"
             });
@@ -159,7 +161,7 @@ router.post("/:userId", async (req, res) => {
 router.delete("/delete/:userId", async (req, res) => {
     try {
         const { userId } = req.params;
-        const user = await User.User.findOne({ userId });
+        const user = await User.User.findOne({ _id: userId });
         const { userType, stripe_account } = user;
         if (userType === "Landlord" && stripe_account !== undefined) {
             await stripe.accounts.del(stripe_account);
