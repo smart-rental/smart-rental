@@ -20,7 +20,7 @@ const propertiesModel = mongoose.Schema({
     ownerId: { type: String, required: true },
     rent_payment_status: { type: String, required: true, default: "n/a" },
     tenant: { type: mongoose.Schema.Types.ObjectId, ref: User.User }
-});
+}, { timeStamp: true });
 
 let Properties = mongoose.model('Properties', propertiesModel);
 

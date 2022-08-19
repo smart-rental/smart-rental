@@ -11,7 +11,8 @@ router.route("/:propertyId").get(async (req, res) => {
         const { propertyId } = req.params;
         const applications = await AppliedApplications.find({ propertyId })
             .limit(PAGE_SIZE)
-            .skip(PAGE_SIZE * page);
+            .skip(PAGE_SIZE * page)
+            .sort({"timeStamp": -1});
         res.json({
             applications,
             totalPages: Math.ceil(total/PAGE_SIZE)
