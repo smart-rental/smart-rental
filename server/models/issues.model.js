@@ -5,7 +5,7 @@ const issuesModel = mongoose.Schema({
     propertyId: { type: String, required: true },
     issueType: { type: String, required: true },
     issueImage: [Object],
-    issueDescription: { type: String, required: true },
+    issueDescription: { type: String },
     status: { type: String, required: true, default: "Requested" },
     timeStamp: {type: Date, default: new Date(Date.now()).toDateString() }
 });

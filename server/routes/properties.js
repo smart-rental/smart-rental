@@ -70,18 +70,19 @@ router.get('/:ownerId', async (req, res) => {
     try {
         const {ownerId} = req.params;
         const properties = await Property.find({ownerId});
-        //Updates the 
         const propertiesWithTenants =  properties.filter((property) => (property.tenant !== undefined));
         propertiesWithTenants.map(async (property) => {
             const tenantCheckoutSession = await TenantCheckoutSessionModel.findOne({ tenantId: property.tenant });
-            const { checkoutSessionId } = tenantCheckoutSession;
-            const session = await stripe.checkout.sessions.retrieve(
-                checkoutSessionId
-            );
-            const { payment_status } = session;
-            await Property.findOneAndUpdate({ tenant: property.tenant }, {
-                rent_payment_status: payment_status
-            });
+            if (tenantCheckoutSession) {
+                const { checkoutSessionId } = tenantCheckoutSession;
+                const session = await stripe.checkout.sessions.retrieve(
+                    checkoutSessionId
+                );
+                const { payment_status } = session;
+                await Property.findOneAndUpdate({ tenant: property.tenant }, {
+                    rent_payment_status: payment_status
+                });
+            }
         });
         const updatedProperties = await Property.find({ownerId});
         res.json(updatedProperties);
