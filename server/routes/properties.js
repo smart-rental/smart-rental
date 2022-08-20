@@ -2,10 +2,10 @@ import Property from "../models/properties.model.js";
 import User from "../models/user.model.js";
 import { upload } from "../middleware/propertyImageHelper.js";
 import express from "express";
-import imageHelper from "../middleware/imageHelper.js";
-import deleteImageHelper from "../middleware/deleteImageHelper.js";
+import imageUploader from "../middleware/imageUploader.js";
 import Stripe from "stripe";
 import TenantCheckoutSessionModel from "../models/tenantCheckoutSession.model.js";
+import cloudinary from "../utils/Cloudinary.js";
 import dotenv from "dotenv";
 
 dotenv.config();
@@ -127,19 +127,19 @@ router.post('/deleteTenant/:owner/:property', (req, res) => {
 router.post('/:id', upload.array("images", 7), async (req, res) => {
     try {
         const ownerId = req.params.id;
+        const { location, built, squareFeet, rent, capacity, parkingStalls, pets, utilities, bed, bath, post, description, tenant, amenities } = req.body;
         // Check owner id is valid
         const owner = await User.User.findById(ownerId);
         const { userType } = owner;
         if (userType === "Landlord") {
-            let images = [];
-            req.files.forEach(element => {
-                const file = {
-                    fileName: element.originalname,
-                    filePath: element.path,
-                }
-                images.push(file);
-            });
-            const { location, built, squareFeet, rent, capacity, parkingStalls, pets, utilities, bed, bath, post, description, tenant, amenities } = req.body;
+            let result = [];
+            for (const image of req.files) {
+                const res = await cloudinary.uploader.upload(image.path, {folder: "properties"});
+                result.push({
+                    public_id: res.public_id,
+                    secure_url: res.secure_url
+                })
+            }
             const price = await stripe.prices.create({
                 unit_amount: rent * 100,
                 currency: 'usd',
@@ -166,7 +166,7 @@ router.post('/:id', upload.array("images", 7), async (req, res) => {
                 built,
                 squareFeet,
                 amenities,
-                images,
+                images: result,
                 rent,
                 capacity,
                 parkingStalls,
@@ -182,13 +182,13 @@ router.post('/:id', upload.array("images", 7), async (req, res) => {
             });
             const createProperty = await newProperty.save();
             res.json(createProperty);
-        } else { 
+        } else {
             res.status(404).json({
                 message: "owner does not exist"
             })
         }
-       
     } catch(e) {
+        console.log(e)
         res.status(400).json(e);
     }
 });
@@ -199,8 +199,13 @@ router.post('/:id', upload.array("images", 7), async (req, res) => {
 router.delete('/:id', async (req, res) => {
     try {
         const { id } = req.params;
-        const deletedProperty = await Property.findByIdAndDelete(id);
-        res.json(deletedProperty);
+        const property = await Property.findById(id);
+        const { images } = property;
+        for (const image of images) {
+            await cloudinary.uploader.destroy(image.public_id);
+        }
+        await property.remove();
+        res.json(property);
     } catch (e) {
         console.log(e);
     }
@@ -213,14 +218,6 @@ router.patch('/update/:ownerId/:id', upload.array('images', 7), async (req, res)
     try {
         const { id, ownerId } = req.params;
         //store new files
-        let fileArray = [];
-        req.files.forEach(element => {
-            const file = {
-                fileName: element.originalname,
-                filePath: element.path,
-            }
-            fileArray.push(file);
-        });
         const { location, built, squareFeet, amenities, rent, capacity, parkingStalls, pets, utilities, bed, bath, post, description, indexToDelete } = req.body;
         const property = await Property.findById(id);
         //Find property by the id and update it
@@ -255,7 +252,7 @@ router.patch('/update/:ownerId/:id', upload.array('images', 7), async (req, res)
                 location,
                 built,
                 squareFeet,
-                images: indexToDelete == null ? imageHelper(fileArray, property.images) : deleteImageHelper(property.images, indexToDelete, fileArray),
+                images: await imageUploader(property.images, indexToDelete, req.files),
                 amenities,
                 rent,
                 capacity,
@@ -277,8 +274,7 @@ router.patch('/update/:ownerId/:id', upload.array('images', 7), async (req, res)
             })
         }
     } catch(e) {
-        console.log(e);
-        res.status(400).json(e);
+        res.status(500).json(e);
     }
 });
 

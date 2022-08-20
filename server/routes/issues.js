@@ -4,7 +4,7 @@ import express from "express";
 import mongoose from "mongoose";
 import { upload } from "../middleware/issueImageHelper.js";
 import imageHelper from "../middleware/imageHelper.js";
-import deleteImageHelper from "../middleware/deleteImageHelper.js";
+import deleteImageHelper from "../middleware/imageUploader.js";
 
 const router = express.Router();
 
