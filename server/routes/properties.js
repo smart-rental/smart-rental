@@ -111,15 +111,14 @@ router.post('/addTenant/:owner/:property', async (req, res) => {
 /**
  * Delete a tenant from a property
  */
-router.post('/deleteTenant/:owner/:property', (req, res) => {
-    Property.findByIdAndUpdate(req.params.property, { $unset: {tenant: 1} })
-        .then((Property) => { 
-            res.json(Property);
-        })
-        .catch((e) => {
-            console.log(e);
-        });
-    
+router.post('/deleteTenant/:owner/:propertyId', async (req, res) => {
+    const { propertyId } = req.params;
+    try {
+        const property = await Property.findByIdAndUpdate(propertyId, {$unset: {tenant: 1}});
+        res.json(property);
+    } catch(e) { 
+        res.status(400).json(e);
+    }
 });
 
 /**

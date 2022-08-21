@@ -8,33 +8,46 @@ import imageUploader from "../middleware/imageUploader.js";
 const router = express.Router();
 
 //retrieve all issues
-router.route("/").get((req, res) => {
-    Issue.find()
-        .then(Issue => res.json(Issue))
-        .catch(e => res.status(400).json(`Error: ${e}`));
+router.get("/", async (req, res) => {
+    try {
+        const issue = await Issue.find();
+        res.json(issue);
+    } catch (e) { 
+        res.status(400).json(e);
+    }
 });
 
 //retrieve all tenant issues
-router.route("/:tenantId").get((req, res) => {
-    Issue.find({ tenantId: req.params.tenantId })
-        .then(Issue => res.json(Issue))
-        .catch(e => res.status(400).json(`Error: ${e}`));
+router.get("/:tenantId", async (req, res) => {
+    const { tenantId } = req.params;
+    try {
+        const issue = await Issue.find({ tenantId });
+        res.json(issue);
+    } catch (e) { 
+        res.status(400).json(e);
+    }
 });
 
 //retrieve information about one issue
-router.route("/oneIssue/:issueId").get((req, res) => {
+router.get("/oneIssue/:issueId", async (req, res) => {
     const { issueId } = req.params;
-    Issue.findById(issueId)
-        .then(Issue => res.json(Issue))
-        .catch(e => res.status(400).json(`Error: ${e}`));
+    try {
+        const issue = await Issue.findById(issueId);
+        res.json(issue);
+    } catch (e) { 
+        res.status(400).json(e);
+    }
 });
 
 //retrieve all issues associated with a property
-router.route("/property/:propertyId").get((req, res) => {
+router.get("/property/:propertyId", async (req, res) => {
     const { propertyId } = req.params;
-    Issue.find({ propertyId })
-        .then(Issue => res.json(Issue))
-        .catch(e => res.status(400).json(`Error: ${e}`));
+    try {
+        const issue = await Issue.find({propertyId});
+        res.json(issue);
+    } catch (e) { 
+        res.status(400).json(e);
+    }
 });
 
 //create a new issue

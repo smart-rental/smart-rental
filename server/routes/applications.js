@@ -3,7 +3,7 @@ import express from "express";
 
 const router = express.Router();
 
-router.route("/:propertyId").get(async (req, res) => { 
+router.get("/:propertyId", async (req, res) => { 
     try {
         const PAGE_SIZE = 12;
         const page = parseInt(req.query.page || "0");
@@ -22,7 +22,7 @@ router.route("/:propertyId").get(async (req, res) => {
     }
 });
 
-router.route("/apply/:propertyId").post(async (req, res) => {
+router.post("/apply/:propertyId", async (req, res) => {
     try {
         const {propertyId} = req.params;
         const {name, email, message, occupation, phoneNumber, monthlyIncome, animals, vehicles, occupants, dob} = req.body;
@@ -46,7 +46,7 @@ router.route("/apply/:propertyId").post(async (req, res) => {
     }
 });
 
-router.route("/delete/:id").delete(async (req, res) => { 
+router.delete("/delete/:id", async (req, res) => { 
    try {
        const {id} = req.params;
        await AppliedApplications.findByIdAndRemove(id);
