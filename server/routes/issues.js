@@ -1,7 +1,6 @@
 import Issue from "../models/issues.model.js";
 import Property from "../models/properties.model.js";
 import express from "express";
-import { upload } from "../middleware/issueImageHelper.js";
 import cloudinary from "../utils/Cloudinary.js";
 import imageUploader from "../middleware/imageUploader.js";
 
@@ -51,19 +50,19 @@ router.get("/property/:propertyId", async (req, res) => {
 });
 
 //create a new issue
-router.post("/:tenantId", upload.array("issueImage", 5), async (req, res) => {
+router.post("/:tenantId", async (req, res) => {
     const { tenantId } = req.params;
-    const { issueType, issueDescription } = req.body;
+    const { issueType, issueDescription, issueImage } = req.body;
     try {
-        let result = []; 
-        for (const image of req.files) { 
-            const imageData = await cloudinary.uploader.upload(image.path, {folder: "issues"});
+        const property = await Property.findOne({tenant: tenantId});
+        let result = [];
+        for (const image of issueImage) {
+            const imageData = await cloudinary.uploader.upload(image, {folder: "issues"});
             result.push({
                 public_id: imageData.public_id,
                 secure_url: imageData.secure_url
             })
         }
-        const property = await Property.findOne({tenant: tenantId});
         const newIssue = new Issue({
             tenantId,
             propertyId: property._id,
@@ -74,7 +73,6 @@ router.post("/:tenantId", upload.array("issueImage", 5), async (req, res) => {
         const createIssue = await newIssue.save();
         res.json(createIssue);
     } catch (e) {
-        console.log(e);
         res.status(404).json("Error: user does not belong to a property");
     }
 });
@@ -96,15 +94,15 @@ router.delete("/:tenantId/:id", async (req, res) => {
 });
 
 //update issue image
-router.patch("/update/:id", upload.array("issueImage", 5), async (req, res) => {
+router.patch("/update/:id", async (req, res) => {
     const { id } = req.params;
-    const { propertyId, issueType, issueDescription, indexToDelete, status } = req.body;
+    const { propertyId, issueType, issueDescription, imagesToDelete, issueImage, status } = req.body;
     try {
         const issue = await Issue.findById(id);
         const updatedIssue = await Issue.findByIdAndUpdate(id, {
             propertyId,
             issueType,
-            issueImage: await imageUploader(issue.issueImage, indexToDelete, req.files),
+            issueImage: await imageUploader(issue.issueImage, imagesToDelete, issueImage),
             issueDescription,
             status
         });

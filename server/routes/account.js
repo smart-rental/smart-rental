@@ -36,8 +36,8 @@ router.post("/checkout-session/:userId", async (req, res) => {
                     }],
                     mode: "subscription",
                     customer: id,
-                    success_url: "http://localhost:3000/",
-                    cancel_url: "http://localhost:3000/",
+                    success_url: "https://master--stellular-cheesecake-e776c3.netlify.app/",
+                    cancel_url: "https://master--stellular-cheesecake-e776c3.netlify.app/",
                     subscription_data: {
                         application_fee_percent: 123 * 0.10,
                         transfer_data: {
@@ -132,8 +132,8 @@ router.post("/:userId", async (req, res) => {
             // Creating an account link
             const accountLink = await stripe.accountLinks.create({
                 account: id,
-                refresh_url: "http://localhost:3000/",
-                return_url: `http://localhost:3000/profile/${_id}`,
+                refresh_url: "https://master--stellular-cheesecake-e776c3.netlify.app/",
+                return_url: `https://master--stellular-cheesecake-e776c3.netlify.app/`,
                 collect: "eventually_due",
                 type: "account_onboarding"
             });
