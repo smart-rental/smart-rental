@@ -173,7 +173,6 @@ router.post("/:id", async (req, res) => {
                         bed,
                         bath,
                         post,
-                        description
                     }
                 }
             });
@@ -276,7 +275,6 @@ router.patch("/update/:ownerId/:id", async (req, res) => {
                         bed,
                         bath,
                         post,
-                        description
                     }
                 }
             });
