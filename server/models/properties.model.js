@@ -3,7 +3,7 @@ import User from "./user.model.js";
 
 const propertiesModel = mongoose.Schema({
     location: { type: String, required: true },
-    built: { type: Date, required: true },
+    built: { type: String, required: true },
     squareFeet: { type: Number, required: true },
     images: [Object],
     amenities: [String],
